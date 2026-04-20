@@ -7,6 +7,7 @@ __pycache__/
 .coverage
 htmlcov/
 outputs/
+outputs_*/
 *.joblib
 *.pkl
 *.log

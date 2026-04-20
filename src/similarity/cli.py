@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .data import inspect_dataset, load_submissions
+from .experiments import run_comparison_experiment
 from .modeling import predict_pair_similarity, score_pair_frame, train_model
 from .pairs import build_pair_frame, iter_activity_pairs
 from .report import write_html_report, write_json
@@ -139,6 +140,42 @@ def command_compare_files(args: argparse.Namespace) -> None:
     _print_json(predict_pair_similarity(code_a, code_b, args.model))
 
 
+def command_compare_models(args: argparse.Namespace) -> None:
+    """运行规则基线、逻辑回归和随机森林的对比实验。"""
+
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    pair_frame = _build_training_frame(args)
+    training_pairs_path = output_dir / "comparison_training_pairs.csv"
+    pair_frame.to_csv(training_pairs_path, index=False, encoding="utf-8-sig")
+    summary = run_comparison_experiment(
+        pair_frame,
+        output_dir=output_dir,
+        random_state=args.random_state,
+        baseline_threshold=args.baseline_threshold,
+    )
+    write_json(
+        output_dir / "comparison_config.json",
+        {
+            "command": "compare-models",
+            "data_dir": str(args.data_dir),
+            "high_threshold": args.high_threshold,
+            "low_threshold": args.low_threshold,
+            "baseline_threshold": args.baseline_threshold,
+            "max_pairs_per_question": args.max_pairs_per_question,
+            "question_id": args.question_id,
+        },
+    )
+    _print_json(
+        {
+            "training_pairs": str(training_pairs_path),
+            "comparison_csv": str(output_dir / "comparison_metrics.csv"),
+            "comparison_json": str(output_dir / "comparison_metrics.json"),
+            "methods": summary["method"].tolist(),
+        }
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     """构建命令行参数解析器。"""
 
@@ -162,6 +199,11 @@ def build_parser() -> argparse.ArgumentParser:
     pipeline_parser.add_argument("--threshold", type=float, default=0.85, help="输出高相似代码对的模型概率阈值")
     pipeline_parser.add_argument("--top-k", type=int, default=100, help="HTML 报告展示的最高相似代码对数量")
     pipeline_parser.set_defaults(func=command_run_pipeline)
+
+    compare_models_parser = subparsers.add_parser("compare-models", help="对比规则基线、逻辑回归和随机森林")
+    _add_common_training_args(compare_models_parser)
+    compare_models_parser.add_argument("--baseline-threshold", type=float, default=0.85, help="规则基线判定为相似的阈值")
+    compare_models_parser.set_defaults(func=command_compare_models)
 
     compare_parser = subparsers.add_parser("compare-files", help="比较两个 Java 文件")
     compare_parser.add_argument("left")
