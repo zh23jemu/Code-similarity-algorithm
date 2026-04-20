@@ -25,11 +25,14 @@ def iter_activity_pairs(
     question_id: str | None = None,
     max_pairs_per_question: int = 2000,
     random_state: int = 42,
+    cross_user_only: bool = False,
 ) -> list[CodePair]:
     """按题目生成代码对，并对大题目进行抽样以控制计算量。
 
     数据集中某些题目提交量很大，完全两两组合会产生数十万代码对。
     这里先枚举同题代码对，再用固定随机种子抽样，保证实验可复现。
+    如果启用 `cross_user_only`，会排除同一用户自己的多次提交，
+    使实验更接近“不同学生之间的代码相似度检测”场景。
     """
 
     random = Random(random_state)
@@ -38,7 +41,11 @@ def iter_activity_pairs(
     for activity, items in grouped.items():
         if question_id and activity != question_id:
             continue
-        candidates = [CodePair(activity=activity, left=left, right=right) for left, right in combinations(items, 2)]
+        candidates = [
+            CodePair(activity=activity, left=left, right=right)
+            for left, right in combinations(items, 2)
+            if not cross_user_only or left.user_id != right.user_id
+        ]
         if max_pairs_per_question > 0 and len(candidates) > max_pairs_per_question:
             candidates = random.sample(candidates, max_pairs_per_question)
         pairs.extend(candidates)

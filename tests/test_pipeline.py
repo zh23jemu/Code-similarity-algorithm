@@ -23,3 +23,16 @@ def test_training_pipeline_on_small_samples(tmp_path: Path):
     assert result.metrics_path.exists()
     prediction = predict_pair_similarity(submissions[0].code, submissions[1].code, result.model_path)
     assert 0.0 <= prediction["model_similarity"] <= 1.0
+
+
+def test_cross_user_pair_filter_excludes_same_user():
+    submissions = [
+        Submission("1", "u1", "q1", "class A {}"),
+        Submission("2", "u1", "q1", "class B {}"),
+        Submission("3", "u2", "q1", "class C {}"),
+    ]
+
+    pairs = iter_activity_pairs(submissions, cross_user_only=True)
+
+    assert pairs
+    assert all(pair.left.user_id != pair.right.user_id for pair in pairs)

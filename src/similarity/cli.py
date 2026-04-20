@@ -9,6 +9,7 @@ from .experiments import run_comparison_experiment
 from .modeling import predict_pair_similarity, score_pair_frame, train_model
 from .pairs import build_pair_frame, iter_activity_pairs
 from .report import write_html_report, write_json
+from .review import create_review_sample, summarize_manual_review
 
 
 def _print_json(data: dict[str, object]) -> None:
@@ -32,6 +33,7 @@ def _build_training_frame(args: argparse.Namespace):
         question_id=args.question_id,
         max_pairs_per_question=args.max_pairs_per_question,
         random_state=args.random_state,
+        cross_user_only=args.cross_user_only,
     )
     return build_pair_frame(
         pairs,
@@ -82,6 +84,7 @@ def command_predict(args: argparse.Namespace) -> None:
         question_id=args.question_id,
         max_pairs_per_question=args.max_pairs_per_question,
         random_state=args.random_state,
+        cross_user_only=args.cross_user_only,
     )
     pair_frame = build_pair_frame(pairs, include_unlabeled=True)
     scored = score_pair_frame(pair_frame, args.model)
@@ -176,6 +179,32 @@ def command_compare_models(args: argparse.Namespace) -> None:
     )
 
 
+def command_create_review_sample(args: argparse.Namespace) -> None:
+    """从相似代码对结果中导出人工复核抽样表。"""
+
+    sample = create_review_sample(
+        similar_pairs_path=args.similar_pairs,
+        output_path=args.output,
+        top_k=args.top_k,
+        random_k=args.random_k,
+        random_state=args.random_state,
+    )
+    _print_json({"review_sample": str(args.output), "rows": int(len(sample))})
+
+
+def command_summarize_review(args: argparse.Namespace) -> None:
+    """统计人工复核表，并生成论文分析段落。"""
+
+    summary = summarize_manual_review(args.review_sample, args.output_dir)
+    _print_json(
+        {
+            "summary_csv": str(Path(args.output_dir) / "manual_review_summary.csv"),
+            "analysis_md": str(Path(args.output_dir) / "manual_review_analysis.md"),
+            "summary": summary,
+        }
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     """构建命令行参数解析器。"""
 
@@ -211,6 +240,19 @@ def build_parser() -> argparse.ArgumentParser:
     compare_parser.add_argument("--model", default="outputs/model.joblib")
     compare_parser.add_argument("--encoding", default="utf-8")
     compare_parser.set_defaults(func=command_compare_files)
+
+    review_parser = subparsers.add_parser("create-review-sample", help="从高相似结果中生成可人工复核的抽样表")
+    review_parser.add_argument("--similar-pairs", default="outputs/similar_pairs.csv")
+    review_parser.add_argument("--output", default="outputs/manual_review_sample.csv")
+    review_parser.add_argument("--top-k", type=int, default=50)
+    review_parser.add_argument("--random-k", type=int, default=50)
+    review_parser.add_argument("--random-state", type=int, default=42)
+    review_parser.set_defaults(func=command_create_review_sample)
+
+    summarize_review_parser = subparsers.add_parser("summarize-review", help="统计人工复核结果并生成论文分析段落")
+    summarize_review_parser.add_argument("--review-sample", default="outputs/manual_review_sample.csv")
+    summarize_review_parser.add_argument("--output-dir", default="outputs")
+    summarize_review_parser.set_defaults(func=command_summarize_review)
     return parser
 
 
@@ -225,6 +267,7 @@ def _add_common_training_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--low-threshold", type=float, default=0.35)
     parser.add_argument("--model-type", choices=["random_forest", "logistic_regression"], default="random_forest")
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--cross-user-only", action="store_true", help="只构造不同用户之间的代码对")
 
 
 def _add_common_prediction_args(parser: argparse.ArgumentParser) -> None:
@@ -238,6 +281,7 @@ def _add_common_prediction_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--threshold", type=float, default=0.85)
     parser.add_argument("--top-k", type=int, default=100)
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--cross-user-only", action="store_true", help="只预测不同用户之间的代码对")
 
 
 def main(argv: list[str] | None = None) -> None:
