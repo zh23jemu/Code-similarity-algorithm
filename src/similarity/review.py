@@ -11,6 +11,84 @@ REVIEW_COLUMNS = [
     "review_note",
 ]
 
+DEFAULT_STRATA_BINS = [
+    ("high", 0.85, 1.0),
+    ("medium", 0.60, 0.85),
+    ("low", 0.0, 0.60),
+]
+
+
+def _normalize_strata_counts(
+    stratified_counts: dict[str, int] | None,
+    top_k: int,
+    random_k: int,
+) -> dict[str, int] | None:
+    """统一整理分层抽样参数。
+
+    兼容旧版 `top_k + random_k` 调用方式，同时支持显式传入
+    `high / medium / low` 三层抽样数量。
+    """
+
+    if stratified_counts is None:
+        return None
+    normalized = {
+        "high": max(0, int(stratified_counts.get("high", 0))),
+        "medium": max(0, int(stratified_counts.get("medium", 0))),
+        "low": max(0, int(stratified_counts.get("low", 0))),
+    }
+    if sum(normalized.values()) == 0:
+        return None
+    return normalized
+
+
+def _sample_stratum(frame: pd.DataFrame, sample_size: int, random_state: int) -> pd.DataFrame:
+    """对单个分层区间执行稳定抽样。
+
+    当某一层数据量不足时，直接返回该层全部样本，避免人工验证因为
+    抽样数量超限而失败。
+    """
+
+    if sample_size <= 0 or frame.empty:
+        return frame.head(0).copy()
+    if len(frame) <= sample_size:
+        return frame.copy()
+    return frame.sample(n=sample_size, random_state=random_state)
+
+
+def _build_stratified_sample(
+    frame: pd.DataFrame,
+    score_column: str,
+    stratified_counts: dict[str, int],
+    random_state: int,
+) -> pd.DataFrame:
+    """基于分数区间生成高/中/低分层人工复核样本。
+
+    分层抽样的目标不是继续放大高分样本，而是让人工复核覆盖高分、
+    中间模糊区间与低分区间，从而帮助论文更客观地讨论误报与漏报风险。
+    """
+
+    sampled_frames: list[pd.DataFrame] = []
+    used_indices: set[int] = set()
+    for offset, (stratum_name, lower_bound, upper_bound) in enumerate(DEFAULT_STRATA_BINS):
+        sample_size = stratified_counts.get(stratum_name, 0)
+        if sample_size <= 0:
+            continue
+        if stratum_name == "high":
+            mask = frame[score_column].between(lower_bound, upper_bound, inclusive="both")
+        else:
+            mask = frame[score_column].between(lower_bound, upper_bound, inclusive="left")
+        candidates = frame[mask & ~frame.index.isin(used_indices)].copy()
+        sampled = _sample_stratum(candidates, sample_size, random_state + offset)
+        if sampled.empty:
+            continue
+        sampled["review_stratum"] = stratum_name
+        sampled_frames.append(sampled)
+        used_indices.update(sampled.index.tolist())
+
+    if not sampled_frames:
+        return frame.head(0).copy()
+    return pd.concat(sampled_frames, ignore_index=True)
+
 
 def create_review_sample(
     similar_pairs_path: str | Path,
@@ -18,6 +96,8 @@ def create_review_sample(
     top_k: int = 50,
     random_k: int = 50,
     random_state: int = 42,
+    score_column: str = "model_similarity",
+    stratified_counts: dict[str, int] | None = None,
 ) -> pd.DataFrame:
     """从高相似结果中生成可人工复核的抽样表。
 
@@ -25,11 +105,25 @@ def create_review_sample(
     `review_decision` 可填写 `similar`、`not_similar` 或 `uncertain`；
     `reviewer` 填写复核人；`review_note` 记录原因。这样论文中可以
     补充“人工抽样检查 Top 结果”的可信度分析。
+
+    若传入 `stratified_counts`，则改用高/中/低分层抽样；此时建议输入
+    完整打分结果 `scored_pairs.csv`，便于人工样本覆盖不同风险区间。
     """
 
     frame = pd.read_csv(similar_pairs_path)
+    if score_column not in frame.columns:
+        raise ValueError(f"复核样本文件缺少分数字段: {score_column}")
+
+    normalized_strata = _normalize_strata_counts(stratified_counts, top_k=top_k, random_k=random_k)
     if frame.empty:
         sample = frame.copy()
+    elif normalized_strata is not None:
+        sample = _build_stratified_sample(
+            frame=frame,
+            score_column=score_column,
+            stratified_counts=normalized_strata,
+            random_state=random_state,
+        )
     else:
         sorted_frame = frame.sort_values("model_similarity", ascending=False)
         top_sample = sorted_frame.head(top_k)
@@ -53,6 +147,7 @@ def create_review_sample(
         "right_user_id",
         "model_similarity",
         "base_similarity",
+        "review_stratum",
         *REVIEW_COLUMNS,
     ]
     ordered_columns = [column for column in preferred_columns if column in sample.columns]

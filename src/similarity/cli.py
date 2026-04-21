@@ -90,11 +90,13 @@ def command_predict(args: argparse.Namespace) -> None:
     )
     pair_frame = build_pair_frame(pairs, include_unlabeled=True)
     scored = score_pair_frame(pair_frame, args.model)
+    scored_path = output_dir / "scored_pairs.csv"
+    scored.to_csv(scored_path, index=False, encoding="utf-8-sig")
     similar = scored[scored["model_similarity"] >= args.threshold].sort_values("model_similarity", ascending=False)
     similar_path = output_dir / "similar_pairs.csv"
     similar.to_csv(similar_path, index=False, encoding="utf-8-sig")
     write_html_report(output_dir / "report.html", similar, metrics=None, top_k=args.top_k)
-    _print_json({"similar_pairs": str(similar_path), "count": int(len(similar))})
+    _print_json({"scored_pairs": str(scored_path), "similar_pairs": str(similar_path), "count": int(len(similar))})
 
 
 def command_run_pipeline(args: argparse.Namespace) -> None:
@@ -108,6 +110,8 @@ def command_run_pipeline(args: argparse.Namespace) -> None:
 
     result = train_model(pair_frame, output_dir=output_dir, model_type=args.model_type, random_state=args.random_state)
     scored = score_pair_frame(pair_frame, result.model_path)
+    scored_path = output_dir / "scored_pairs.csv"
+    scored.to_csv(scored_path, index=False, encoding="utf-8-sig")
     similar = scored[scored["model_similarity"] >= args.threshold].sort_values("model_similarity", ascending=False)
     similar_path = output_dir / "similar_pairs.csv"
     similar.to_csv(similar_path, index=False, encoding="utf-8-sig")
@@ -131,6 +135,7 @@ def command_run_pipeline(args: argparse.Namespace) -> None:
             "training_pairs": str(training_pairs_path),
             "model": str(result.model_path),
             "metrics": str(result.metrics_path),
+            "scored_pairs": str(scored_path),
             "similar_pairs": str(similar_path),
             "report": str(output_dir / "report.html"),
         }
@@ -184,14 +189,29 @@ def command_compare_models(args: argparse.Namespace) -> None:
 def command_create_review_sample(args: argparse.Namespace) -> None:
     """从相似代码对结果中导出人工复核抽样表。"""
 
+    stratified_counts = None
+    if args.high_k or args.medium_k or args.low_k:
+        stratified_counts = {
+            "high": args.high_k,
+            "medium": args.medium_k,
+            "low": args.low_k,
+        }
     sample = create_review_sample(
         similar_pairs_path=args.similar_pairs,
         output_path=args.output,
         top_k=args.top_k,
         random_k=args.random_k,
         random_state=args.random_state,
+        score_column=args.score_column,
+        stratified_counts=stratified_counts,
     )
-    _print_json({"review_sample": str(args.output), "rows": int(len(sample))})
+    _print_json(
+        {
+            "review_sample": str(args.output),
+            "rows": int(len(sample)),
+            "sampling_mode": "stratified" if stratified_counts else "top_and_random",
+        }
+    )
 
 
 def command_summarize_review(args: argparse.Namespace) -> None:
@@ -398,6 +418,10 @@ def build_parser() -> argparse.ArgumentParser:
     review_parser.add_argument("--output", default="outputs/manual_review_sample.csv")
     review_parser.add_argument("--top-k", type=int, default=50)
     review_parser.add_argument("--random-k", type=int, default=50)
+    review_parser.add_argument("--high-k", type=int, default=0, help="分层抽样时高分层样本数，通常建议输入 scored_pairs.csv")
+    review_parser.add_argument("--medium-k", type=int, default=0, help="分层抽样时中分层样本数")
+    review_parser.add_argument("--low-k", type=int, default=0, help="分层抽样时低分层样本数")
+    review_parser.add_argument("--score-column", default="model_similarity", help="分层抽样使用的分数字段")
     review_parser.add_argument("--random-state", type=int, default=42)
     review_parser.set_defaults(func=command_create_review_sample)
 
