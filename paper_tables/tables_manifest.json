@@ -1,0 +1,7 @@
+{
+  "question_distribution": "paper_tables\\table_question_distribution.csv",
+  "label_distribution": "paper_tables\\table_label_distribution.csv",
+  "model_comparison": "paper_tables\\table_model_comparison.csv",
+  "high_similarity_activity_distribution": "paper_tables\\table_high_similarity_activity_distribution.csv",
+  "manual_review_summary": "paper_tables\\table_manual_review_summary.csv"
+}

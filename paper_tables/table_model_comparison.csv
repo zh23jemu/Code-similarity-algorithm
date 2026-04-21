@@ -1,0 +1,4 @@
+﻿method,train_samples,test_samples,positive_samples,negative_samples,baseline_threshold,accuracy,precision,recall,f1,roc_auc,confusion_matrix
+rule_baseline,0,17025,2927,65172,0.9,1.0,1.0,1.0,1.0,1.0,"[[16293, 0], [0, 732]]"
+logistic_regression,51074,17025,2927,65172,,1.0,1.0,1.0,1.0,1.0,"[[16293, 0], [0, 732]]"
+random_forest,51074,17025,2927,65172,,1.0,1.0,1.0,1.0,1.0,"[[16293, 0], [0, 732]]"
