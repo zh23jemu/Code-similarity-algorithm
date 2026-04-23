@@ -2,11 +2,17 @@ from __future__ import annotations
 
 import json
 import shutil
+import tempfile
+import zipfile
 from pathlib import Path
+import re
 
 import pandas as pd
 from docx import Document
+from docx.enum.section import WD_SECTION
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 from docx.enum.text import WD_BREAK
+from docx.shared import Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
@@ -23,7 +29,7 @@ QUESTION_SPLIT_PATH = PROJECT_ROOT / "outputs_question_split" / "question_split_
 def normalize_text(raw_text: str) -> str:
     """去除 Markdown 痕迹并做轻量文本清洗。"""
 
-    return raw_text.replace("**", "").strip()
+    return raw_text.replace("**", "").replace("`", "").strip()
 
 
 def markdown_to_sections(markdown_text: str) -> list[tuple[int, str]]:
@@ -51,11 +57,12 @@ def markdown_to_sections(markdown_text: str) -> list[tuple[int, str]]:
 
 
 def clear_document_body(doc: Document) -> None:
-    """清空模板中的正文元素，但保留最后的节属性定义。"""
+    """清空模板中的示例正文，但保留封面/节属性等模板骨架。"""
 
     body = doc._element.body
     children = list(body)
-    for child in children[:-1]:
+    preserve_prefix = 2 if len(children) >= 2 else 0
+    for child in children[preserve_prefix:-1]:
         body.remove(child)
 
 
@@ -63,6 +70,128 @@ def add_paragraph_with_style(doc: Document, text: str, style_name: str) -> None:
     paragraph = doc.add_paragraph(style=style_name)
     if text:
         paragraph.add_run(text)
+
+
+def preferred_body_style(doc: Document) -> str:
+    """优先使用与模板示例一致的正文样式。"""
+
+    return "Normal"
+
+
+def strip_section_number(title: str) -> str:
+    """将草稿中的 1.1 / 2.3 等编号去掉，更贴近模板二级标题格式。"""
+
+    parts = title.split(" ", 1)
+    candidate = parts[0]
+    if candidate.count(".") == 1 and candidate.replace(".", "").isdigit():
+        return parts[1] if len(parts) > 1 else title
+    return title
+
+
+def set_cell_text(cell, text: str, bold: bool = False) -> None:
+    """按模板正文风格设置图示单元格文本。"""
+
+    cell.text = ""
+    paragraph = cell.paragraphs[0]
+    paragraph.alignment = 1
+    run = paragraph.add_run(text)
+    run.bold = bold
+    run.font.name = "仿宋"
+    run._element.rPr.rFonts.set(qn("w:eastAsia"), "仿宋")
+    run.font.size = Pt(10.5)
+    cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+
+
+def shade_cell(cell, fill: str) -> None:
+    """给 Word 表格单元格添加浅色底纹，形成可编辑示意图。"""
+
+    tc_pr = cell._tc.get_or_add_tcPr()
+    shd = OxmlElement("w:shd")
+    shd.set(qn("w:fill"), fill)
+    tc_pr.append(shd)
+
+
+def add_diagram_table(doc: Document, rows: list[list[str]], caption: str, source: str, header: bool = False) -> None:
+    """使用模板内可编辑表格生成论文示意图。"""
+
+    if not rows:
+        return
+    table = doc.add_table(rows=len(rows), cols=max(len(row) for row in rows))
+    table.style = "Table Grid"
+    for row_index, row in enumerate(rows):
+        for col_index, value in enumerate(row):
+            cell = table.rows[row_index].cells[col_index]
+            set_cell_text(cell, value, bold=header and row_index == 0)
+            shade_cell(cell, "D9EAF7" if row_index == 0 and header else "F4F9FC")
+    add_paragraph_with_style(doc, caption, "Caption")
+    add_paragraph_with_style(doc, f"数据来源：{source}", "annotation text")
+
+
+def add_system_flow_figure(doc: Document) -> None:
+    """插入系统整体流程图。"""
+
+    add_diagram_table(
+        doc,
+        [
+            ["数据读取", "代码预处理", "特征提取", "弱监督标注", "模型训练", "相似度预测", "报告与复核"],
+            ["读取 Java 提交并按题目分组", "注释清理、字面量与标识符归一化", "计算词法、序列、结构和长度特征", "依据基础相似度生成伪标签", "训练逻辑回归与随机森林模型", "输出模型相似概率与高相似代码对", "生成表格、报告和人工复核样本"],
+        ],
+        "图1. 系统整体流程图",
+        "根据本文系统设计整理",
+        header=True,
+    )
+
+
+def add_module_figure(doc: Document) -> None:
+    """插入系统功能模块图。"""
+
+    add_diagram_table(
+        doc,
+        [
+            ["代码相似度检测系统"],
+            ["数据加载模块", "预处理模块", "特征工程模块"],
+            ["样本构造模块", "模型训练模块", "预测报告模块"],
+            ["对比实验模块", "严格评估模块", "人工复核模块"],
+        ],
+        "图2. 系统主要功能模块图",
+        "根据本文系统实现整理",
+    )
+
+
+def add_feature_figure(doc: Document) -> None:
+    """插入特征体系图。"""
+
+    add_diagram_table(
+        doc,
+        [
+            ["特征类别", "代表特征", "作用说明"],
+            ["词法相似度", "Token Jaccard、关键字余弦、运算符余弦", "反映代码词汇和语言构造的重合程度"],
+            ["序列相似度", "Token 序列相似度", "反映语句顺序和实现流程的一致性"],
+            ["结构相似度", "结构 Token、方法数、循环数、分支数", "描述程序控制结构和组织方式"],
+            ["规模差异", "Token 数量、代码行数", "刻画两份代码在整体规模上的接近程度"],
+            ["基础相似度", "多项规则特征加权融合", "用于弱监督标签构造和结果解释"],
+        ],
+        "图3. 代码相似度特征体系图",
+        "根据本文特征工程设计整理",
+        header=True,
+    )
+
+
+def add_evaluation_figure(doc: Document) -> None:
+    """插入实验验证思路图。"""
+
+    add_diagram_table(
+        doc,
+        [
+            ["验证层次", "实验内容", "主要目的"],
+            ["伪标签一致性评估", "规则基线、逻辑回归、随机森林对比", "检验模型对弱监督标签体系的拟合情况"],
+            ["严格泛化评估", "跨用户过滤、按题目划分、移除 base_similarity", "降低同源特征和随机切分带来的偏乐观风险"],
+            ["人工辅助复核", "高分样本复核与分层抽样机制", "补充自动指标之外的人工判断依据"],
+        ],
+        "图4. 实验验证思路图",
+        "根据本文实验设计整理",
+        header=True,
+    )
 
 
 def add_reference_list(doc: Document) -> None:
@@ -131,7 +260,15 @@ def add_toc_field(paragraph) -> None:
 def insert_tables_if_needed(doc: Document, text: str) -> None:
     """在对应段落后插入论文实验表。"""
 
-    if text.endswith("题目提交数量分布见表1，训练样本标签分布见表2。"):
+    if text.endswith("系统整体流程如图1所示。"):
+        add_system_flow_figure(doc)
+    elif text.endswith("系统主要功能模块如图2所示。"):
+        add_module_figure(doc)
+    elif text.endswith("本文所构建的特征体系如图3所示。"):
+        add_feature_figure(doc)
+    elif text.endswith("整体实验验证思路如图4所示。"):
+        add_evaluation_figure(doc)
+    elif text.endswith("题目提交数量分布见表1，训练样本标签分布见表2。"):
         question_table = PAPER_TABLES_DIR / "table_question_distribution.csv"
         label_table = PAPER_TABLES_DIR / "table_label_distribution.csv"
         if question_table.exists():
@@ -140,7 +277,7 @@ def insert_tables_if_needed(doc: Document, text: str) -> None:
         if label_table.exists():
             df = pd.read_csv(label_table)
             add_table_from_dataframe(doc, df, "表2. 训练样本标签分布", "本系统跨用户训练样本统计")
-    elif text.endswith("模型对比结果见表3。"):
+    elif "表3" in text and "模型对比" in text:
         compare_table = PAPER_TABLES_DIR / "table_model_comparison.csv"
         if compare_table.exists():
             df = pd.read_csv(compare_table)
@@ -183,6 +320,49 @@ def insert_tables_if_needed(doc: Document, text: str) -> None:
             add_table_from_dataframe(doc, df, "表6. 高分样本人工辅助复核统计结果", "本系统高分样本人工辅助复核结果")
 
 
+def restore_template_section_properties(template_path: Path, output_path: Path) -> None:
+    """把模板中的节属性、页眉页脚引用恢复到输出文档。
+
+    python-docx 在新增节或重写正文时，可能改写 `sectPr` 中的
+    `headerReference/footerReference/type` 等配置，导致页眉页脚与模板
+    不完全一致。这里直接把模板中的 `sectPr` 结构覆盖到输出文档，
+    尽量保证最终版式与模板保持一致。
+    """
+
+    sect_pattern = re.compile(r"(<w:sectPr[\s\S]*?</w:sectPr>)")
+    with zipfile.ZipFile(template_path, "r") as template_zip:
+        template_document_xml = template_zip.read("word/document.xml").decode("utf-8")
+        template_sect_blocks = sect_pattern.findall(template_document_xml)
+
+    with zipfile.ZipFile(output_path, "r") as output_zip:
+        file_map = {name: output_zip.read(name) for name in output_zip.namelist()}
+    output_document_xml = file_map["word/document.xml"].decode("utf-8")
+    output_matches = list(sect_pattern.finditer(output_document_xml))
+
+    if not template_sect_blocks or not output_matches:
+        return
+
+    replace_count = min(len(template_sect_blocks), len(output_matches))
+    rebuilt_parts: list[str] = []
+    last_index = 0
+    for match_index, match in enumerate(output_matches):
+        rebuilt_parts.append(output_document_xml[last_index : match.start()])
+        if match_index < replace_count:
+            rebuilt_parts.append(template_sect_blocks[match_index])
+        else:
+            rebuilt_parts.append(match.group(0))
+        last_index = match.end()
+    rebuilt_parts.append(output_document_xml[last_index:])
+    file_map["word/document.xml"] = "".join(rebuilt_parts).encode("utf-8")
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
+        temp_path = Path(tmp_file.name)
+    with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_DEFLATED) as new_zip:
+        for name, data in file_map.items():
+            new_zip.writestr(name, data)
+    shutil.move(str(temp_path), output_path)
+
+
 def build_document() -> None:
     if not TEMPLATE_PATH.exists():
         raise FileNotFoundError(f"找不到模板文件: {TEMPLATE_PATH}")
@@ -201,38 +381,60 @@ def build_document() -> None:
 
     filtered_sections = [(level, text) for level, text in sections if text not in {title_cn, title_en}]
 
-    # 摘要部分
-    add_paragraph_with_style(doc, title_cn, "摘要、参考文献、注释")
+    chinese_abstract_parts: list[str] = []
+    chinese_keywords = ""
+    english_abstract_parts: list[str] = []
+    english_keywords = ""
+    body_sections: list[tuple[int, str]] = []
+
+    mode = "before_abstract"
     for level, text in filtered_sections:
         if level == 2 and text == "摘要":
+            mode = "chinese_abstract"
             continue
         if level == 2 and text == "Abstract":
-            doc.add_paragraph("")
-            add_paragraph_with_style(doc, title_en, "摘要、参考文献、注释")
+            mode = "english_abstract"
             continue
-        if level == 2 and text == "第一章 绪论":
-            break
-        if text:
-            add_paragraph_with_style(doc, text, "Normal")
-        else:
-            doc.add_paragraph("")
+        if level == 2 and text.startswith("第") and "章" in text:
+            mode = "body"
+        if mode == "chinese_abstract":
+            if not text:
+                continue
+            if text.startswith("关键词"):
+                chinese_keywords = text
+            else:
+                chinese_abstract_parts.append(text)
+            continue
+        if mode == "english_abstract":
+            if not text:
+                continue
+            if text.startswith("Keywords"):
+                english_keywords = text
+            else:
+                english_abstract_parts.append(text)
+            continue
+        if mode == "body":
+            body_sections.append((level, text))
 
-    # 目录页
-    doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
-    add_paragraph_with_style(doc, "目录", "一级标题")
-    toc_paragraph = doc.add_paragraph(style="Normal")
-    add_toc_field(toc_paragraph)
+    for _ in range(2):
+        doc.add_paragraph("")
+    add_paragraph_with_style(doc, title_cn, "摘要、参考文献、注释")
+    add_paragraph_with_style(doc, f"摘  要：{' '.join(chinese_abstract_parts)}", "Normal")
+    add_paragraph_with_style(doc, chinese_keywords, "Normal")
+    doc.add_paragraph("")
+    doc.add_paragraph("")
+    add_paragraph_with_style(doc, title_en, "摘要、参考文献、注释")
+    add_paragraph_with_style(doc, f"Abstract: {' '.join(english_abstract_parts)}", "Normal")
+    add_paragraph_with_style(doc, english_keywords, "Normal")
+    for _ in range(3):
+        doc.add_paragraph("")
 
-    # 新页开始正文
-    doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
+    # 新节开始正文，尽量贴近模板的双节结构
+    doc.add_section(WD_SECTION.NEW_PAGE)
 
     chapter_index = 0
     in_body = False
-    for level, text in filtered_sections:
-        if level == 2 and text == "摘要":
-            continue
-        if level == 2 and text == "Abstract":
-            continue
+    for level, text in body_sections:
         if level == 2 and text.startswith("第") and "章" in text:
             in_body = True
             chapter_index += 1
@@ -243,7 +445,7 @@ def build_document() -> None:
         if not in_body:
             continue
         if level == 3:
-            add_paragraph_with_style(doc, text, "二级标题")
+            add_paragraph_with_style(doc, strip_section_number(text), "二级标题")
         elif level == 1:
             continue
         else:
@@ -257,12 +459,14 @@ def build_document() -> None:
                 )
                 add_reference_list(doc)
                 break
-            style_name = "Normal" if text else "Body Text"
+            if not text:
+                continue
+            style_name = preferred_body_style(doc)
             add_paragraph_with_style(doc, text, style_name)
-            if text:
-                insert_tables_if_needed(doc, text)
+            insert_tables_if_needed(doc, text)
 
     doc.save(OUTPUT_PATH)
+    restore_template_section_properties(TEMPLATE_PATH, OUTPUT_PATH)
 
 
 if __name__ == "__main__":
