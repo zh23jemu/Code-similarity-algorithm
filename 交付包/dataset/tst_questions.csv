@@ -1,0 +1,3829 @@
+"question"~"statement"~"tests"
+"bst_height"~" # BST Height
+
+    The height of a tree is the size of the longest path between the root and all the leaves.
+
+    Write a program that reads the numbers to be added to a BST and
+    prints the height of the tree resulting from these insertions.
+
+
+    ## Input
+
+    Your program should read only one line containing (in order) the elements to be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+    You can assume that at least one value is read.
+
+    ## Output
+
+    Your program should print the value of the tree's height.
+
+## Execution examples
+    
+        $ javac Solution.java; java Solution
+
+        10 8 1 9 20 18 25
+        2"~"['input: |\n        10 8 1 9 20 18 25\n    output: |\n        2', 'input: |\n        1 2 3 4 5 6 7 8\n    output: |\n        7', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n    output: |\n        6', 'input: |\n        100 80 200 90 150 85 170 160\n    output: |\n        4', 'input: |\n        100 80 200 90 150 85 170 160 83 84\n    output: |\n        5', 'input: |\n        10\n    output: |\n        0', 'input: |\n        10 -1\n    output: |\n        1']"
+"tree_height"~"# Height of a Tree
+    
+    Although trees such as BSTs and AVLs have a root, a node is considered the “point of origin” of the tree,
+    not every tree is rooted. For this problem, let's consider a tree that has no root
+    (unrooted).
+    
+    The height of a tree is the greatest distance from a given node to any other node. Where the distance is
+    defined by the number of edges that must be traversed to get from one node to another.
+    
+    To make it clearer, look at the example below.
+
+    ![Tree](http://www.dsc.ufcg.edu.br/~jarthur/figuras_tst_eda/mari_tree_height.png)
+    
+The height of the tree above is 3, which is the distance between nodes 2 and 5.
+    
+    Write a program that reads the definition of an undirected tree and prints the height of the tree and the
+
+    nodes that define this height (i.e. the two furthest nodes and the distance between them).
+    
+    **Tip: ** think first about how to find the farthest node from a given node, and then how to generalize to find
+    the two most distant nodes (height).
+    
+    **Obs: ** It is guaranteed that there is only one solution, i.e. there are only two nodes whose distance is maximum.
+
+    ## Input
+
+    The first line will contain a single integer N, the number of nodes in the tree.
+    Each node is identified with a value from 0 to N-1. The next N-1 lines (think a bit about why N-1?) will
+    contain 2 integers representing the edges of the tree. Each edge is represented by two nodes A and B (0 <= A, B <= N-1).
+
+    ## Output
+
+    Your program should print a line in the output containing “from -> X to -> Y height -> H”, without quotes where
+    H is the height of the tree, X and Y (X <= Y) are nodes such that the distance between X and Y is equal to the height.
+    
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        5
+        0 1
+        0 2
+        0 3
+        2 4
+        from -> 1 to -> 4 height -> 3
+
+    ## Restrictions"~"['input: |\n        1\n    output: |\n        from -> 0 to -> 0 height -> 0', 'input: |\n        10\n        0 1\n        1 3\n        2 3\n        0 7\n        3 4\n        3 5\n        5 6\n        6 8\n        5 9\n    output: |\n        from -> 7 to -> 8 height -> 6', 'input: |\n        5\n        0 1\n        0 2\n        0 3\n        2 4\n    output: |\n        from -> 1 to -> 4 height -> 3', 'input: |\n        3\n        0 1\n        1 2\n\n    output: |\n        from -> 0 to -> 2 height -> 2']"
+"similar_trees"~"# Similar trees
+
+    Two trees are said to be similar when they have the same node structure, regardless of their
+    their values. 
+    
+    In this activity you have to implement an algorithm that builds two binary trees 
+    and compares them, giving the result of whether they are similar (have the same node structure).
+    of nodes).
+
+    ## Input
+
+    The first line will contain an integer n, 0 < n < 30, indicating the size of the two trees (number of elements in each).
+    of elements in each). The following n lines will contain the elements of the first tree, which must be
+be inserted according to the order of entry. The next n lines contain the elements
+
+    of the second tree.
+
+    ## Output
+
+    Your program should only print one line containing “Similar trees.” if the trees have
+    otherwise it should print “Trees with different structures”.
+
+    ## Example of execution
+
+    $ javac Solution.java; java Solution
+    3
+    2
+    1
+    3
+    1
+    2
+    3
+    Trees with different structures.
+
+    $ javac Solution.java; java Solution
+    1
+    4
+    20
+    Similar trees.
+
+    ## Restrictions"~"['input: |\n      3\n      2\n      1\n      3\n      1\n      2\n      3\n  output: |\n      Trees with different structures.', 'input: |\n      1\n      3\n      20\n  output: |\n      Similar trees.', 'input: |\n      5\n      1\n      2\n      3\n      4\n      5\n      10\n      11\n      12\n      13\n      14\n      15\n  output: |\n      Similar trees.', 'input: |\n      6\n      10\n      5\n      1\n      30\n      20\n      25\n      15\n      7\n      2\n      20\n      19\n      18\n  output: |\n      Trees with different structures.', 'input: |\n      5\n      10\n      5\n      1\n      30\n      20\n      15\n      7\n      2\n      20\n      19\n  output: |\n      Similar trees.', 'input: |\n      7\n      15\n      7\n      2\n      20\n      17\n      19\n      16\n      10\n      5\n      1\n      30\n      20\n      25\n      17\n  output: |\n      Similar trees.']"
+"balance"~"# Balance in Binary Search Trees
+
+    *The balance of a node in a BST is the difference between the height of the subtree on the left
+    and the height of the subtree on the right. Write a program that reads integers 
+    to be added to a BST and prints out the pre-order routing of the
+    nodes together with their respective balances.
+
+    ## Input
+
+    Your program should read a line containing the numbers to be added (in sequence) to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+## Output
+
+    Your program should print the pre-order routing and the respective balances of the nodes.
+
+    ## Execution examples
+        $ javac Solution.java; java Solution
+        100 200 210 90 95 70 1
+        100,1 90,1 70,1 1,0 95,0 200,-1 210,0"~"['input: |\n        100 200 210 90 95 70 1\n    output: |\n        100,1 90,1 70,1 1,0 95,0 200,-1 210,0', 'input: |\n        1 2 3 4 5 6 7 8\n    output: |\n        1,-7 2,-6 3,-5 4,-4 5,-3 6,-2 7,-1 8,0', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n    output: |\n        100,-3 80,-2 90,1 85,0 200,-3 150,-1 170,0 300,-4 400,3 350,2 320,-1 330,0', 'input: |\n        10 9 8\n    output: |\n        10,2 9,1 8,0', 'input: |\n        10\n    output: |\n        10,0', 'input: |\n        10 -1\n    output: |\n        10,1 -1,0']"
+"bfs"~"# Width Forwarding (BFS)
+
+    There are several ways of traversing a binary search tree. 
+    Breadth-first search (BFS) is a way of visiting
+    a graph in width. For binary search trees, this means that the nodes
+    will be visited by levels.
+
+    Write a program that reads the numbers to be added to a BST and
+    prints the result of width routing in that tree.
+
+
+    ## Input
+
+Your program should read only one line of input. 
+    This line will contain (in order) the elements to be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the result of the breadth-first search in the tree read.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10 8 20 1 9 18 25"~"['input: |\n        9\n    output: |\n        9', 'input: |\n        1 2 3 4 5 6 7 8\n    output: |\n        1 2 3 4 5 6 7 8', 'input: |\n        10 8 1 9 20 18 25\n    output: |\n        10 8 20 1 9 18 25', 'input: |\n        10 9 8 7\n    output: |\n        10 9 8 7', 'input: |\n        10 110 90 9 8 7\n    output: |\n        10 9 110 8 90 7', 'input: |\n        10 110 90 9 8 7 3 6 91\n    output: |\n        10 9 110 8 90 7 91 3 6']"
+"right_bfs"~"# Right-to-left  breadth-first search (BFS)
+
+    There are several ways of traversing a binary search tree. 
+    Breadth-first search (BFS) is a way of visiting
+    a graph in width. For binary search trees, this means that the nodes
+    will be visited in levels (from left to right in each level).
+
+    Write a program that reads the numbers to be added to a BST and
+    prints the result of width routing in that tree. However, 
+the nodes in the levels must be printed from right to left. 
+
+
+    ## Input
+
+    Your program should read only one line of input. 
+    This line will contain (in order) the elements that should be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the result of the width routing from right
+    to the left in the read tree.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10 20 8 25 18 9 1"~"['input: |\n        9\n    output: |\n        9', 'input: |\n        1 2 3 4 5 6 7 8\n    output: |\n        1 2 3 4 5 6 7 8', 'input: |\n        10 8 1 9 20 18 25\n    output: |\n        10 20 8 25 18 9 1', 'input: |\n        10 9 8 7\n    output: |\n        10 9 8 7', 'input: |\n        10 110 90 9 8 7\n    output: |\n        10 110 9 90 8 7', 'input: |\n        10 110 90 9 8 7 3 6 91\n    output: |\n        10 110 9 90 8 91 7 3 6']"
+"bubble_sort_step_by_step"~" # Bubble step by step
+    
+    Implement BubbleSort. 
+    
+    ## Input
+    
+    Your program should read from the input only one line containing a sequence of space-separated integers.
+    
+    ## Output
+    
+    Your program should print the contents of the array at each iteration of Bubble. Your program should stop as soon as it prints
+    the sorted sequence.
+    
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3 1 8 4 7 11 2
+        1 3 4 7 8 2 11
+        1 3 4 7 2 8 11
+        1 3 4 2 7 8 11
+        1 3 2 4 7 8 11
+        1 2 3 4 7 8 11
+    
+    ## Restrictions
+    
+    You cannot use any collection or method from the Collections framework. Your implementation must be based on arrays."~"['input: |\n        3 1 8 4 7 11 2\n    type: io\n    output: |\n        1 3 4 7 8 2 11\n        1 3 4 7 2 8 11\n        1 3 4 2 7 8 11\n        1 3 2 4 7 8 11\n        1 2 3 4 7 8 11', 'input: |\n        3 2 1\n    type: io\n    output: |\n        2 1 3\n        1 2 3', 'input: |\n        3 2 1 1\n    type: io\n    output: |\n        2 1 1 3\n        1 1 2 3', ' input: |\n        1 1 1\n    type: io\n    output: |\n        1 1 1', 'input: |\n        5 3 2 1\n    type: io\n    output: |\n        3 2 1 5\n        2 1 3 5\n        1 2 3 5']"
+"build_heap"~"# Build Heap
+
+    Write a program that reads a sequence from standard input and transforms it into a heap.
+    
+    *A heap can be represented as an array that is filled by
+    by walking through a level (from left to right) in a Heap. For example, the array
+    [30, 10, 9, 7] represents a heap with root 30, whose left and right children are 10 and 9 respectively.
+    Finally, 7 is the child to the left of 10. 
+
+    Assume that it is already complete or nearly complete from left to right.
+
+    ## Input
+
+    Your program should read a line containing a sequence of 
+    integers separated by a space.
+    
+    ## Output
+
+    Your program should print the reordered sequence after applying the build heap algorithm we saw in class.
+
+    ## Execution examples
+
+        javac MySolution.java; java MySolution
+        23 27 45 2 49 26
+        [49, 27, 45, 2, 23, 26]
+
+        javac MySolution.java; java MySolution
+        11 8 1 4 3
+        [11, 8, 1, 4, 3]
+    
+    ## Tip
+
+    Use Arrays.toString() to make it easier to print the heap in the output."~"['input: |\n        23 27 45 2 49 26\n    output: |\n        [49, 27, 45, 2, 23, 26]', 'input: |\n        11 8 1 4 3\n    output: |\n        [11, 8, 1, 4, 3]', 'input: |\n        0 1 2\n    output: |\n        [2, 1, 0]', 'input: |\n        2 4 1 7 6 3\n    output: |\n        [7, 6, 3, 4, 2, 1]', 'input: |\n        4 1 3 2 16 9 10 14 8 7\n    output: |\n        [16, 14, 10, 8, 7, 9, 3, 2, 4, 1]']"
+"binary_search"~"# Binary Search
+
+    Implement a program that reads an ordered sequence of integers and a number N and checks if N 
+    is in the sequence read. Your program should do a binary search in the sequence.
+
+    ## Input
+
+    Your program should read two lines from the input: the first is a line containing a sequence 
+    of space-separated integers, while the second is a number N to be 
+    to be searched for in the sequence.
+
+    ## Output
+
+    Your program must print (separately on each line) the indexes visited up to the 
+    end of the algorithm. If it doesn't find N, it should print the last index as -1. 
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3 5 8 10 12 18 20
+        99
+        3
+        5
+        6
+        -1
+        $
+
+
+        $ javac Solution.java; java Solution
+        3 5 8 10 12 18
+        3
+        2
+        0 
+        $
+
+
+    ## Restrictions
+
+    You cannot use any collection or method from the Collections framework. Your 
+    implementation must be based on arrays."~"['input: |\n        3 5 8 10 12 18 20\n        99\n    output: |\n        3\n        5\n        6\n        -1', 'input: |\n        3 5 8 10 12 18\n        3\n    output: |\n        2\n        0', 'input: |\n        1 1 1\n        1\n    output: |\n        1', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        0\n    output: |\n        5\n        2\n        0', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        10\n    output: |\n        5\n        8\n        9\n        10', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        3\n    output: |\n        5\n        2\n        3', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        8\n    output: |\n        5\n        8']"
+"recursive_binary_search"~"# Recursive Binary Search
+
+    Implement a program that reads an ordered sequence of integers and a number N and checks if N 
+    is in the sequence read. Your program must perform a binary search on the sequence.
+
+    *Your program must be recursive.
+
+    ## Input
+
+    Your program must read two lines from the input: the first is a line containing a sequence 
+    of space-separated integers, while the second is a number N to be 
+    to be searched in the sequence.
+
+    ## Output
+
+    Your program must print (separately on each line) the indexes visited up to the 
+    end of the algorithm. If it doesn't find N, it should print the last index as -1. 
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3 5 8 10 12 18 20
+        99
+        3
+        5
+        6
+        -1
+        $
+
+
+        $ javac Solution.java; java Solution
+        3 5 8 10 12 18
+        3
+        2
+        0 
+        $
+
+
+    ## Restrictions
+
+    You cannot use any collection or method from the Collections framework. Your 
+    implementation must be based on arrays."~"['input: |\n        3 5 8 10 12 18 20\n        99\n    output: |\n        3\n        5\n        6\n        -1', 'input: |\n        3 5 8 10 12 18\n        3\n    output: |\n        2\n        0', 'input: |\n        1 1 1\n        1\n    output: |\n        1', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        0\n    output: |\n        5\n        2\n        0', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        10\n    output: |\n        5\n        8\n        9\n        10', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        3\n    output: |\n        5\n        2\n        3', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        8\n    output: |\n        5\n        8']"
+"bst_search"~"# Search in Binary Search Trees
+
+    Write a program that reads the numbers to be added to a BST and
+    a number to be searched for in that tree. Your program should print
+    the path taken until find the element. 
+
+    ## Input
+
+    Your program should read two lines of input. 
+    The first line will contain (in order) the elements to be added to the tree.
+    The second will contain the element to be searched for.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the path taken to find the element. If it doesn't
+    found, it should print the path to the last leaf visited.
+
+    ## Execution examples
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        1
+        [10, 8, 1]
+
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        16
+        [10, 20, 18]"~"['input: |\n        10 8 1 9 20 18 25\n        1\n    output: |\n        [10, 8, 1]', 'input: |\n        10 8 1 9 20 18 25\n        16\n    output: |\n        [10, 20, 18]', 'input: |\n        1 2 3 4 5 6 7 8\n        1\n    output: |\n        [1]', 'input: |\n        1 2 3 4 5 6 7 8\n        3\n    output: |\n        [1, 2, 3]', 'input: |\n        10 9 8 7\n        6\n    output: |\n        [10, 9, 8, 7]', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        330\n    output: |\n        [100, 200, 300, 400, 350, 320, 330]', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        90\n    output: |\n        [100, 80, 90]', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        83\n    output: |\n        [100, 80, 90, 85]']"
+"recursive_linear_search"~" # Recursive Linear Search
+
+    Implement a program that reads a sequence of integers and a number N and 
+    checks if N is in the sequence read.
+    Your program should do a recursive linear search to solve the problem.
+
+    ## Input
+
+    Your program should read two lines from the input: the first is a line containing a sequence of 
+    integers separated by a space, while the second is a number N to be searched for in the sequence.
+
+    ## Output
+
+    Your program should print the first index at which N appears.
+
+    If it doesn't find N, it should print -1. 
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        3 5 8 10 12 18 20
+        99
+        -1
+        $
+
+
+        $ javac Solution.java; java Solution
+        3 5 8 10 12 18
+        3
+        0
+
+
+    ## Restrictions
+
+    You cannot use any collection or method from the Collections framework. 
+    Your implementation must be based on arrays.
+    You **must use recursion**."~"['input: |\n        3 5 8 10 12 18 20\n        99\n    output: |\n        -1', 'input: |\n        3 5 8 10 12 18\n        3\n    output: |\n        0', 'input: |\n        1 1 1\n        1\n    output: |\n        0', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        0\n    output: |\n        0', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        10\n    output: |\n        10', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        3\n    output: |\n        3', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        8\n    output: |\n        8']"
+"check_tree"~"# Is it a tree?
+    
+    As you may know, a tree is a graph that has certain properties: it does not contain cycles and it is connected (from one node
+    you can reach all the others using only edges).
+    
+    In this activity you will have to implement an algorithm that, given an undirected and unweighted graph
+    prints True if the graph is a tree and False otherwise.
+    
+    ## Input
+
+    The first line will contain two integers N and M, respectively the number of nodes in the graph and the number of edges.
+    Each node is identified with a value from 0 to N-1. The next M lines are the edges, each line will contain 2 integers,
+    nodes A and B (0 <= A, B <= N-1), identifying that there is an edge between A and B.
+    
+    ## Output
+
+    Your program should print only one line containing True if the graph is a tree and False otherwise.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3 2
+        1 2
+        0 2
+        True
+
+    ## Constraints."~"['input: |\n        2 1\n        0 1\n    output: |\n        True', 'input: |\n        2 3\n        0 1\n        0 1\n        0 1\n    output: |\n       False', 'input: |\n        3 2\n        1 2\n        0 2\n    output: |\n        True', 'input: |\n        4 3\n        1 2\n        0 2\n        1 0\n    output: |\n        False', 'input: |\n        4 3\n        2 1\n        0 1\n        0 3\n    output: |\n       True']"
+"count_leaves"~"# Count leaves in Binary Search Trees
+
+    Implement a program that counts how many leaf nodes 
+    there are in a binary search tree.
+
+
+    ## Input
+
+    Your program should read only one line of input. 
+    This line will contain (in order) the elements that should be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the number of leaf nodes in the tree.
+
+    ## Running example
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        4"~"['input: |\n        10 8 1 9 20 18 25\n    output: |\n        4', 'input: |\n        10\n    output: |\n        1', 'input: |\n        10 8 9\n    output: |\n        1', 'input: |\n        10 8 9 1 12\n    output: |\n        3', 'input: |\n        10 8\n    output: |\n        1', 'input: |\n        10\n    output: |\n        1']"
+"count_internal_nodes_bst"~"# Counts internal nodes in Binary Search Trees
+
+    An internal node in a binary search tree is any non-leaf node, that is, it has at least 1 child.
+
+    Implement a program that counts how many internal nodes there are in a binary search tree.
+
+
+    ## Input
+
+    Your program should only read one line of input. 
+    This line will contain (in order) the elements that must be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the number of internal nodes in the tree.
+
+    ## Running example
+    
+        $ javac Solution.java; javasolution
+        10 8 1 9 20 18 25
+        3"~"['input: |\n        10 8 1 9 20 18 25\n    output: |\n        3', 'input: |\n        10\n    output: |\n        0', 'input: |\n        10 8 9\n    output: |\n        2', 'input: |\n        10 8 9 1 12\n    output: |\n        2', 'input: |\n        10 8\n    output: |\n        1', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n    output: |\n        9']"
+"negative_counting_sort"~"# Counting sort step by step (for negative numbers)
+    
+    Sort an array of positive and negative integers using counting sort.
+    
+    ## Input
+    
+    Your program should read three lines from the input: one containing a sequence of integers separated 
+    and another containing k (the largest element of the array) and another containing the smallest element of the array. 
+    
+    Consider that this element is always negative.
+    
+    ## Output
+    
+    Your program should print the status of the count array at various times:
+        - i) print the contents of the count array at each modification made to it during the frequency calculation;
+        - ii) print a sentence 'Cumulative count array - ' followed by the count array having already stored the cumulative.
+        - iii) print the count vector at the end of the algorithm's execution;
+        - iv) print the sorted sequence.
+    
+    ## Observations and Restrictions
+    
+    Welcome to the real world. Here, arrays start at position 0. This means that your count vector must have k + 1 elements.
+    You can't use a collection (ArrayList, LinkedList etc) or any method from the Collections framework (Arrays.sort, for example). Your implementation must be based on arrays.
+    
+    ## Execution examples
+        $ javac Solution.java; java Solution
+        3 1 1 6 4 -2 7
+        7
+        -2
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
+        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0]
+        [0, 0, 0, 2, 0, 1, 0, 0, 0, 0]
+        [0, 0, 0, 2, 0, 1, 0, 0, 1, 0]
+        [0, 0, 0, 2, 0, 1, 1, 0, 1, 0]
+        [1, 0, 0, 2, 0, 1, 1, 0, 1, 0]
+        [1, 0, 0, 2, 0, 1, 1, 0, 1, 1]
+        Cumulative counting vector - [1, 1, 1, 3, 3, 4, 5, 5, 6, 7]
+        [0, 1, 1, 1, 3, 3, 4, 5, 5, 6]
+        [-2, 1, 1, 3, 4, 6, 7]
+        $
+    
+        $ javac Solution.java; java Solution
+        2 2 -4 9 3 2 1 5
+        9
+        -4
+        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0]
+        [1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0]
+        [1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1]
+        [1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1]
+        [1, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 1]
+        [1, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 1]
+        [1, 0, 0, 0, 0, 1, 3, 1, 0, 1, 0, 0, 0, 1]
+        Cumulative counting vector - [1, 1, 1, 1, 1, 2, 5, 6, 6, 7, 7, 7, 7, 8]
+        [0, 1, 1, 1, 1, 1, 2, 5, 6, 6, 7, 7, 7, 7]
+        [-4, 1, 2, 2, 2, 3, 5, 9]
+        $"~"['input: |\n        3 1 1 6 4 -2 7\n        7\n        -2\n    type: io\n    output: |\n        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0]\n        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0]\n        [0, 0, 0, 2, 0, 1, 0, 0, 0, 0]\n        [0, 0, 0, 2, 0, 1, 0, 0, 1, 0]\n        [0, 0, 0, 2, 0, 1, 1, 0, 1, 0]\n        [1, 0, 0, 2, 0, 1, 1, 0, 1, 0]\n        [1, 0, 0, 2, 0, 1, 1, 0, 1, 1]\n        Cumulative counting vector - [1, 1, 1, 3, 3, 4, 5, 5, 6, 7]\n        [0, 1, 1, 1, 3, 3, 4, 5, 5, 6]\n        [-2, 1, 1, 3, 4, 6, 7]', 'input: |\n        2 2 -4 9 3 2 1 5\n        9\n        -4\n    type: io\n    output: |\n        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]\n        [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0]\n        [1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0]\n        [1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1]\n        [1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1]\n        [1, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 0, 1]\n        [1, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 1]\n        [1, 0, 0, 0, 0, 1, 3, 1, 0, 1, 0, 0, 0, 1]\n        Cumulative counting vector - [1, 1, 1, 1, 1, 2, 5, 6, 6, 7, 7, 7, 7, 8]\n        [0, 1, 1, 1, 1, 1, 2, 5, 6, 6, 7, 7, 7, 7]\n        [-4, 1, 2, 2, 2, 3, 5, 9]', 'input: |\n        -1 0 0 0\n        0\n        -1\n    type: io\n    output: |\n        [1, 0]\n        [1, 1]\n        [1, 2]\n        [1, 3]\n        Cumulative counting vector - [1, 4]\n        [0, 1]\n        [-1, 0, 0, 0]', 'input: |\n        0 0 0 0 0\n        0\n        0\n    type: io\n    output: |\n        [1]\n        [2]\n        [3]\n        [4]\n        [5]\n        Cumulative counting vector - [5]\n        [0]\n        [0, 0, 0, 0, 0]']"
+"counting_sort_step_by_step"~"# Counting sort step by step
+    
+    Sort an array of integers whose values are in the range [0..k] using Counting Sort.
+    
+    ## Input
+    
+    Your program should read two lines from the input: one containing a sequence of space-separated integers and the other containing k (the largest element in the array).
+    
+    ## Output
+    
+    Your program should print the status of the counting array at various times:
+        - i) print the contents of the count array at each modification made to it during the frequency calculation;
+        - ii) print a sentence 'Cumulative count array - ' followed by the count array having already stored the cumulative.
+        - iii) print the count vector at the end of the algorithm's execution;
+        - iv) print the sorted sequence.
+    
+    ## Observations and Restrictions
+    
+    Welcome to the real world. Here, arrays start at position 0. This means that your count vector must have k + 1 elements.
+    You can't use a collection (ArrayList, LinkedList etc) or any method from the Collections framework (Arrays.sort, for example). Your implementation must be based on arrays.
+    
+    ## Execution examples
+    
+        $ javac Solution.java; java Solution
+        3 1 1 6 4 7
+        7
+        0 0 0 1 0 0 0 0
+        0 1 0 1 0 0 0 0
+        0 2 0 1 0 0 0 0
+        0 2 0 1 0 0 1 0
+        0 2 0 1 1 0 1 0
+        0 2 0 1 1 0 1 1
+        Cumulative counting vector - 0 2 2 3 4 5 6
+        0 0 2 2 3 4 4 5
+        1 1 3 4 6 7
+        $
+    
+        $ javac Solution.java; java Solution
+        2 2 4 3 2 1 5
+        5
+        0 0 1 0 0 0
+        0 0 2 0 0 0
+        0 0 2 0 1 0
+        0 0 2 1 1 0
+        0 0 3 1 1 0
+        0 1 3 1 1 0
+        0 1 3 1 1 1
+        Cumulative counting vector - 0 1 4 5 6 7
+        0 0 1 4 5 6
+        1 2 2 2 3 4 5
+        $"~"['input: |\n        3 1 1 6 4 7\n        7\n    type: io\n    output: |\n        0 0 0 1 0 0 0 0\n        0 1 0 1 0 0 0 0\n        0 2 0 1 0 0 0 0\n        0 2 0 1 0 0 1 0\n        0 2 0 1 1 0 1 0\n        0 2 0 1 1 0 1 1\n        Cumulative counting vector - 0 2 2 3 4 4 5 6\n        0 0 2 2 3 4 4 5\n        1 1 3 4 6 7', 'input: |\n        2 2 4 3 2 1 5\n        5\n    type: io\n    output: |\n        0 0 1 0 0 0\n        0 0 2 0 0 0\n        0 0 2 0 1 0\n        0 0 2 1 1 0\n        0 0 3 1 1 0\n        0 1 3 1 1 0\n        0 1 3 1 1 1\n        Cumulative counting vector - 0 1 4 5 6 7\n        0 0 1 4 5 6\n        1 2 2 2 3 4 5', 'input: |\n        1 1 1 1 1\n        1\n    type: io\n    output: |\n        0 1\n        0 2\n        0 3\n        0 4\n        0 5\n        Cumulative counting vector - 0 5\n        0 0\n        1 1 1 1 1', 'input: |\n        0 5 1 2 3\n        5\n    type: io\n    output: |\n        1 0 0 0 0 0\n        1 0 0 0 0 1\n        1 1 0 0 0 1\n        1 1 1 0 0 1\n        1 1 1 1 0 1\n        Cumulative counting vector - 1 2 3 4 4 5\n        0 1 2 3 4 4\n        0 1 2 3 5']"
+"two_add_up"~"# Two add up
+    
+    Write a program that reads an unordered sequence of integers and 
+    an integer, and returns whether there are two numbers in the array that add up to the given number.
+
+    # Input
+    
+    Your program will read two lines from the input: the first line consisting of a list 
+    of space-separated integers and the second line consists of the sum to be considered.
+
+    # Output
+    
+    In the output, your program should print the two numbers in the sequence whose sum is equal to the sum read 
+    from the standard input or -1 otherwise. 
+    Consider that if there is a pair of elements whose sum is as expected, this pair is unique.
+
+    # Execution example
+
+        javac Solucao.java; java Solucao
+        1 3 2 5
+        6
+        1 5
+
+        javac Solucao.java; java Solucao
+        2 3 5 0 1
+        4
+        3 1
+ 
+        javac Solution.java; java Solution
+        1 5 2 3 5
+        11
+        -1"~"['input: |\n        1 3 2 5\n        6\n    output: |\n        1 5', 'input: |\n        2 3 5 0 1\n        4\n    output: |\n        3 1', 'input: |\n        1 5 2 3 5\n        11\n    output: |\n        -1', 'input: |\n        1 5\n        6\n    output: |\n        1 5']"
+"down_n"~"# Down-n
+    
+    Write a program that prints the 
+    **n** smallest elements of a sequence.
+
+    ## Input
+
+    Your program should read two lines of standard input. The first
+    is a sequence of space-separated integers and the 
+    second an integer **n** representing the number of elements to be printed.
+    
+
+    Important: you can consider that n is always greater than or equal to 1 and less than or
+    equal to the number of elements in the sequence.
+
+    ## Output
+
+    Your program should print the n smallest elements of the sequence read in ascending order.
+
+    ## Example
+    
+        javac Solution.java; java Solution
+        9 3 1 7 34 22 101 7 300 1 45
+        3
+        1 1 3
+
+        javac Solution.java; java Solution
+        9 3 1 7 34 22 101 7 300 1 45
+        4
+        1 1 3 7
+
+    ## Tip
+
+    Use Arrays.toString().
+    
+    ## Restrictions
+    
+    You may not use auxiliary arrays.
+
+    You may not use Arrays.sort or any ready-made
+    method from sorting libraries. If you need to, implement it.
+
+    Your program should only manipulate the array of integers. You can't use functions like:
+    
+        - insert
+        - remove
+        - pop
+        - any sorting function"~"['input: |\n        9 3 1 7 34 22 101 7 300 1 45\n        3\n    output: |\n        1 1 3', 'input: |\n        9 3 1 7 34 22 101 7 300 1 45\n        4\n    output: |\n        1 1 3 7', 'input: |\n        1 2 3\n        3\n    output: |\n        1 2 3', 'input: |\n        1 9 3 2\n        1\n    output: |\n        1']"
+"element_at_stack"~"# Element at Stack
+    
+    Write a program that returns the element at a given index of a stack.
+    
+    ## Input
+
+    Your program should read two lines of standard input. One line representing the elements
+    to be added to the stack in sequence and one line representing the index to be inspected.
+    
+    You can only use push, pop and other auxiliary structure. The stack must
+    retain its initial configuration after the execution of your algorithm. You cannot use `array[index]`
+    to access an arbitrary position in the array.
+  
+    Important: you must consider that the element at the top is at index 0, below it is the element
+    at index 1 and so on. 
+
+    ## Output
+
+    Your program should print the element present at the index read. If the index is invalid, print `index invalid`.
+    
+
+    ## Examples
+    
+        javac Solution.java; java Solution
+        8 2 3 4 1 5 33 21
+        0
+        8
+       
+        javac Solution.java; java Solution
+        8 2 3 4 1 5 33 21
+        2
+        3
+
+        javac Solution.java; java Solution
+        8 2 3
+        5
+        invalid index
+
+    ## Restrictions
+    
+    You can only use the standard methods of the stack interface (e.g. `peek`, `push`, `pop`, `isEmpty` etc) and other auxiliary structure. 
+    The stack must retain its initial configuration after your algorithm is executed.
+    
+    
+    If your stack is based on arrays, you can't access an arbitrary index using stack[index], for example. All access must be done via pop, push and peek."~"['input: |\n        9 6 4 2 89 43 5 42 5\n        0\n    output: |\n        9', 'input: |\n        327 123\n        84\n    output: |\n        invalid index', 'input: |\n        3\n        2\n    output: |\n        invalid index', 'input: |\n        8 8 8 8 8 8 8 8\n        3\n    output: |\n        8', 'input: |\n        1 2 3 4 5\n        4\n    output: |\n        5', 'input: |\n        874 47 472 474 724\n        2\n    output: |\n        472']"
+"leftover_element"~"# Leftover element
+
+    Consider two arrays of unordered integers, one containing n elements and the other containing n+1 elements. 
+    The second array contains exactly the same elements as the first, except for a single integer. Write 
+    a program that prints the number that is left over.
+
+    # Input
+    
+    Your program will read two lines from the input, one for each sequence of integers.
+
+    # Output
+    
+    In the output, your program should print the only number that is in the second sequence, but is not in the first.
+
+    # Execution example
+
+        javac Solucao.java; java Solucao
+        1 13 3 4 5
+        1 13 3 4 5 6 
+        6
+
+        javac Solution.java; java Solution
+        1 7 6
+        6 4 7 1
+        4"~"['input: |\n        1 2 3 4 5\n        1 2 3 4 5 6 \n    output: |\n        6', 'input: |\n        1 7 6\n        6 4 7 1\n    output: |\n        4', 'input: |\n        9 6 3\n        6 3 9 1\n    output: |\n        1', 'input: |\n        1 5\n        9 1 5\n    output: |\n        9']"
+"duplicate_elements"~"# Checking for duplicate elements
+
+    Write a program that receives a sequence and checks whether or not it has duplicate elements. 
+
+    ## Restrictions
+
+    It is not allowed to use any Collections method or any data structure other than an array.
+
+    ## Input
+
+    Your program receives any sequence, with the elements separated by a space.
+
+    ## Output
+
+    Your program must print true if the sequence has duplicate elements and false otherwise.
+
+    ## Execution examples
+
+        javac Solucao.java; java Solucao
+        1 5 6 8 8 4 2 0
+        true
+
+        javac Solucao.java; java Solucao
+        1 6 8 7 9 5
+        false"~"['input: |\n        1 5 6 8 8 4 2 0\n    output: |\n        true', 'input: |\n        1 6 8 7 9 5\n    output: |\n        false', 'input: |\n        8\n    output: |\n        false', 'input: |\n        1 5 6 8 9 4 5 1\n    output: |\n        true', 'input: |\n        9 8 5 5 4 6\n    output: |\n        true']"
+"routing_bst"~"# Routing in Binary Search Trees
+
+    There are several ways of traversing a binary search tree. 
+    Some of them stand out: pre-order, in-order and post-order.
+    
+    Write a program that reads the numbers to be added and prints on the output 
+    the result of each of these routing algorithms.
+
+    To do this, of course, you will have to implement the insertion algorithm in binary search trees. 
+    
+    **Tip: ** I suggest you save your implementation of the insertion method for 
+    future issues related to binary search trees.
+
+    ## Input
+
+    Your program should read only one line of input. 
+    This line will contain (in order) the elements that should be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print 3 lines in the output. 
+    Each line is the result of pre-order, in-order and post-order routing, respectively.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        [10, 8, 1, 9, 20, 18, 25]
+        [1, 8, 9, 10, 18, 20, 25]
+        [1, 9, 8, 18, 25, 20, 10]"~"['input: |\n        9 2 4 3 1 -9\n    output: |\n        [9, 2, 1, -9, 4, 3]\n        [-9, 1, 2, 3, 4, 9]\n        [-9, 1, 3, 4, 2, 9]', 'input: |\n        1 2 3 4 5 6 7 8\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        [8, 7, 6, 5, 4, 3, 2, 1]', 'input: |\n        10 8 1 9 20 18 25\n    output: |\n        [10, 8, 1, 9, 20, 18, 25]\n        [1, 8, 9, 10, 18, 20, 25]\n        [1, 9, 8, 18, 25, 20, 10]', 'input: |\n        10 9 8\n    output: |\n        [10, 9, 8]\n        [8, 9, 10]\n        [8, 9, 10]', 'input: |\n        10 110 90 9 -8 7\n    output: |\n        [10, 9, -8, 7, 110, 90]\n        [-8, 7, 9, 10, 90, 110]\n        [7, -8, 9, 90, 110, 10]']"
+"find_element"~"# Find element 
+    
+    Write a program that checks if an element is contained in a
+    list of integers. 
+    
+    ## Input
+    The program must read from the input an integer N and a sequence of integers.
+    
+    
+    ## Output
+    
+    The program should print on the output whether the number N is present in the sequence
+    sequence. The message should be: yes or no.
+    
+    ## Example of execution
+    
+        python solution.py
+        7
+        1 5 3 2 88 9 2
+        no
+    
+        python solution.py
+        7
+        1 5 7 2 88 9 2
+        yes"~"['input: |\n        7\n        1 5 3 2 88 9 2\n    type: io\n    output: |\n        no', 'input: |\n        7\n        1 5 7 2 88 9 2\n    type: io\n    output: |\n        yes', 'input: |\n        -5\n        1 -2 -5 -8 -9 12\n    type: io\n    output: |\n        yes', 'input: |\n        4\n        4 4 4 4 4 4 4 4\n    type: io\n    output: |\n        yes', 'input: |\n        500\n        499 -500\n    type: io\n    output: |\n        no', 'input: |\n        4\n        2\n    type: io\n    output: |\n        no', 'input: |\n        2\n        1 1 1 1 1 1 2\n    type: io\n    output: |\n        yes']"
+"find_first_negative"~"# Find First Negative
+
+    Write a **recursive** program that finds the first negative number of
+    a sequence.
+
+
+    Your program should read a sequence from the input and print the first negative element.
+
+    For example, if the input is,
+
+        1 -8 4 5 -2 3 7 90
+
+    the output should be -8.
+
+
+    ## Input
+
+    Your program should read a sequence of space-separated integers.
+
+    ## Output
+
+    Print the first negative value. If there isn't one, print “-”.
+
+    ## Example
+
+        javac Solution.java; java Solution
+        5 7 8 19 -4 67 -89 -99
+        -4
+
+        javac Solution.java; java Solution
+        5 7 8 19 6 89 2
+        -"~"['input: |\n        5 7 8 19 -4 67 -89 -99\n    output: |\n        -4', 'input: |\n        5 7 8 19 6 89 2\n    output: |\n        -', 'input: |\n        -10\n    output: |\n        -10', 'input: |\n        8\n    output: |\n        -', 'input: |\n        1 2 3 4 5 -6\n    output: |\n        -6']"
+"recursive_break_finder"~"# Recursive “break” finder
+
+    Write a **recursive** program that finds the element that breaks an ordered sequence.
+    Your program should return the index of this element. If there is no element
+    that breaks the sequence, it should print -1.
+
+    The element that “breaks” a sequence in ascending order is the one that is not ordered
+    according to the previous ones. For example, in the sequence
+
+        1 2 4 5 3 7 90
+
+    The element that breaks is element 3, which is at index 4. Note that the sequence is
+    ordered up to it and the value 3 “breaks” this ordering.
+
+    *Important!* There is only one element that breaks the sequence. As said before, 
+    as soon as you find it, return the index of that element.
+
+    ## Input
+
+    Your program should read a sequence of space-separated integers.
+
+    ## Output
+
+    It should print the index of the element that breaks the sequence or -1 if there is no such element.
+
+    ## Example
+
+        javac Solution.java; java Solution
+        5 7 8 19 -4 67 89 99
+        4
+
+        javac Solution.java; java Solution
+        5 7 8 19 67 89 99
+        -1
+
+    ## Functions that are not allowed
+    Your program should only manipulate the array of integers.
+
+        - insert
+        - remove
+        - pop
+        - any sorting function"~"['input: |\n        5 7 8 19 -4 67 89 99\n    output: |\n        4', 'input: |\n        5 7 8 19 67 89 99\n    output: |\n        -1', 'input: |\n        10\n    output: |\n        -1', 'input: |\n        0 1 2 5 7 9 2\n    output: |\n        6']"
+"equals_bst"~"# Equals BST
+
+    Implement a program that checks if two binary search trees are equal.
+    
+
+    ## Input
+
+    Your program should read two lines from the standard input. The first line
+    will contain (in order) the elements that should be added to the first tree.
+    The second line will contain (in order) the elements that should be added to the second 
+    tree. 
+
+    ## Output
+
+    Your program should print true if the two trees are equal or false otherwise.
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        10 8 1
+        1 8 10
+        false
+
+        10 12 1
+        10 1 12
+        true"~"['input: |\n        10 8 1\n        1 8 10\n    output: |\n        false', 'input: |\n        10 12 1\n        10 1 12\n    output: |\n        true', 'input: |\n        10 1 1 1 1 1 1 1 1\n        1 10 1 1 1 1 1 1 1\n    output: |\n        false', 'input: |\n        1 2 3 4 5 6 7 8 9\n        1 2 3 4 5 6 7 8 9\n    output: |\n        true', 'input: |\n        10 8 12 1 19 67 90\n        10 8 12 1 19 67 90\n    output: |\n        true', 'input: |\n        10 8 12 1 19 67 9\n        10 8 12 1 19 67 999\n    output: |\n        false']"
+"order_statistic"~"# Order statistic
+
+    The i-th order statistic of a sequence of integers is the i-th smallest element of that sequence. 
+    For example, in the sequence [4,5,9,1,2,6,8], the number 4 is the third order statistic, 
+    because 4 is the third smallest number. 
+
+    Write a program that prints out the order statistic of the first element of a sequence.
+    Although the tests only check that your program prints the order statistic of the first element, 
+    at the end of the execution of your algorithm, the first element must divide the sequence in such a way that 
+    that the elements smaller than it are to its left and the elements larger than it are to its right.
+
+    Assume that the sequence has no repeated elements.
+
+    ## Input
+
+        javac Solution.java ; java Solution
+        4 5 9 1 2 6 8
+        3
+    
+        javac Solution.java ; java Solution
+        6 2 1 9 3
+        4
+
+    ## Restrictions
+
+    It is not allowed to sort the array.
+    It is not allowed to use auxiliary collections."~"['input: |\n        4 5 9 1 2 6 8\n    output: |\n        3', 'input: |\n        6 2 1 9 3\n    output: |\n        4', 'input: |\n        1 2 3 4\n    output: |\n        1', 'input: |\n        4 2 3 1\n    output: |\n        4']"
+"mathematical_expression"~"# Mathematical Expression
+
+    Write a program that reads a mathematical expression with positive integers 
+    integers and print the resulting value of that expression.
+
+    ## Input
+    
+    Your program will read only one line of standard input. This line consists of a string with a well-formed
+    expression.
+
+    ## Output
+    
+    Your program should print the result of evaluating the mathematical expression.
+
+    ## Execution example
+
+        $ javac Solucao.java; java Solucao
+        (1+((2+3)*(4*5)))
+        101
+        $
+
+
+        javac Solution.java; java Solution
+        ((7+4)*(3-4))-(2*3)
+        -17
+
+    ## Tip
+
+    A Stack can help you break down the expression."~"['input: |\n        (1+((2+3)*(4*5)))\n    output: |\n        101', 'input: |\n        ((7+4)*(3-4))-(2*3)\n    output: |\n        -17', 'input: |\n        (1+1)\n    output: |\n        2', 'input: |\n        (7+(3*(1*2)+1)+1)\n    output: |\n        15']"
+"fibonacci"~"# Fibonacci
+
+    Implement a program that receives an integer N. Your program should calculate the nth term of the Fibonacci sequence.
+    
+        Fibonacci formula.
+            * F(0) = 0
+            * F(1) = 1
+            * F(n) = F(n-1) + F(n-2) , for n > 1
+
+
+    *Your program must be recursive.
+
+    ## Input
+
+    Your program must read an integer N from the input.
+
+    ## Output
+
+    Your program should print the result of calculating the Fibonacci sequence. 
+
+    ## Execution example
+
+        $ javac Solution.java; java Solution
+        10
+        55
+        $
+
+
+        $ javac Solution.java; java Solution
+        20
+        6765
+        $"~"['input: |\n        1\n      output: |\n        1', 'input: |\n        0\n      output: |\n        0', 'input: |\n        2\n      output: |\n        1', 'input: |\n        3\n      output: |\n        2', 'input: |\n        4\n      output: |\n        3', 'input: |\n        5\n      output: |\n        5', 'input: |\n        6\n      output: |\n        8', 'input: |\n        7\n      output: |\n        13input: |\n        8\n      output: |\n        21', 'input: |\n        9\n      output: |\n        34', 'input: |\n        10\n      output: |\n        55', 'input: |\n        20\n      output: |\n        6765', 'input: |\n        30\n      output: |\n        832040', 'input: |\n        40\n      output: |\n        102334155']"
+"queue_with_array"~"# Queue with Array
+
+    Implement a queue with limited capacity using an array.
+
+    ## Input
+
+    Your program should read from the input the size of the queue and a series of operations 
+    (add, remove, element and print). 
+    The reading of operations should be terminated with the word `“end”`.
+
+    ## Output
+
+    Your program should print the contents of the queue whenever a **print** operation is read.
+    If the queue is empty, print `“empty”`.
+    
+    Your program should print the initial element of the queue when it reads the **element** operation.
+ 
+    If the queue is empty and the **remove** operation is read, print `“empty”`.
+
+    If the queue is full and the **add** operation is read, print `“full”`.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3
+        print
+        empty
+        add 2
+        element
+        2
+        add 5
+        print
+        2 5
+        remove
+        print
+        5
+        add 11
+        add 18
+        add 20
+        full   
+        remove
+        remove
+        remove
+        remove
+        empty
+        end
+        
+    ## Restrictions and Observations
+
+    You cannot use any collection or method from the Collections framework. 
+    Your implementation must be based on arrays.
+
+    Tip: Create the Queue class to organize your code. However, remember that there can't be another
+    class in your file. Therefore, your main must be in this class.
+
+    Remember: tst will only test the input and output of your program. This
+    means that you must build the main that reads the data from the standard input, manipulates your Queue and
+    prints what is expected in the output."~"['input: |\n        3\n        print\n        add 2\n        element\n        add 5\n        print\n        remove\n        print \n        add 11\n        add 18\n        add 20\n        remove\n        remove\n        remove\n        remove\n        end\n    output: |\n        empty\n        2\n        2 5\n        5\n        full\n        empty', 'input: |\n        5\n        add 1\n        add 2\n        add 3\n        print\n        end\n    output: |\n        1 2 3', 'input: |\n        3\n        add 1\n        add 2\n        add 3\n        remove\n        print\n        add 4\n        add 5\n        end\n    output: |\n        2 3\n        full', 'input: |\n        5\n        add 1\n        add 2\n        add 3\n        add 4\n        add 5\n        add 6\n        add 7\n        add 8\n        remove\n        element\n        add 6\n        print\n        end\n    output: |\n        full\n        full\n        full\n        2\n        2 3 4 5 6']"
+"filter_linked_list"~"# Filter LinkedList
+
+    Write a program that filters a linked list by removing the elements equal to the one passed as an argument in the
+    standard input.
+    
+    ## Input
+    
+    Your program will read a sequence of integers that should be added (addLast) to a LinkedList. Then, it should read an
+    integer representing the value of the elements to be removed. 
+
+  
+    ## Output
+    
+    In the output, your program should print the list after removing the nodes. If the list is empty, it should print **empty**.
+    
+    ## Restrictions and Remarks
+    
+    - You are not allowed to use auxiliary structures.
+    - You must use your LinkedList implementation. That is, your addLast, your remove, your toString etc.
+    
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        1 13 3 4 5 3 6
+        3
+        1 13 4 5 6
+        
+
+        javac Solution.java; java Solution
+        3 3
+        3
+        empty"~"['input: |\n        1 13 3 4 5 3 6\n        3\n    output: |\n        1 13 4 5 6', 'input: |\n        3 3\n        3\n    output: |\n        empty', 'input: |\n        9 7 3 5 4 3\n        0\n    output: |\n        9 7 3 5 4 3', 'input: |\n        9 7 3 5 4 3\n        9\n    output: |\n        7 3 5 4 3', 'input: |\n        3 4 3 2 6 5 4 2 3\n        3\n    output: |\n        4 2 6 5 4 2']"
+"frequency_element"~"# Frequency of an element in a sequence
+    
+    Write a program that counts the frequency of an element 
+    in a given sequence of integers.
+    
+    ## Input
+    
+    The program must read from the input an integer N and a sequence of integers.
+    
+    ## Output
+    
+    The program should print out the frequency of N in the sequence read.
+    
+    ## Execution example
+    
+        javac Solution.java ; java Solution
+        7
+        1 5 3 2 88 9 2
+        0
+    
+        javac Solution.java ; java Solution
+        7
+        1 5 7 2 88 9 2
+        1"~"['input: |\n        7\n        1 5 3 2 88 9 2\n    type: io\n    output: |\n        0', 'input: |\n        7\n        1 5 7 2 88 9 2\n    type: io\n    output: |\n        1', 'input: |\n        -5\n        1 -2 -5 -8 -9 12\n    type: io\n    output: |\n        1', 'input: |\n        4\n        4 4 4 4 4 4 4 4\n    type: io\n    output: |\n        8', 'input: |\n        500\n        499 -500\n    type: io\n    output: |\n        0', 'input: |\n        4\n        2\n    type: io\n    output: |\n        0', 'input: |\n        2\n        1 1 1 1 1 1 2\n    type: io\n    output: |\n        1']"
+"queue_jumper"~"# Queue Jumper
+    
+    Suppose an array represents a queue to enter a show. However, 
+    the senior citizens (**all people starting at index i**), decided to
+    exercise their right to priority entry. So you have to move (one by one)
+    the elderly to the front of the queue, naturally respecting the order of the elderly.
+
+    ## Entry
+
+    Your program should read 2 lines. The first contains a sequence (representing the queue) of 
+    space-separated integers.
+    
+    The second contains a valid index **i** of the sequence. This index marks the beginning of the seniors in the queue.
+
+    ## Output
+
+    Your program should print the array after making each element from position i take its place at the beginning of the queue. 
+    place at the beginning of the queue.
+
+    For each hole-punch operation performed, you must print the current state of the array. See the input and output examples for
+    a better understanding.
+
+    Assume that the index passed is valid.
+
+
+    ## Restrictions
+
+    It is not allowed to use an array other than the one used to store 
+    the initial sequence.
+
+
+    ## Execution examples
+    
+        javac MinhaSolucao.java; java MinhaSolucao
+        0 1 2 3 4 5 6 7 8
+        4
+        [4, 0, 1, 2, 3, 5, 6, 7, 8]
+        [4, 5, 0, 1, 2, 3, 6, 7, 8]
+        [4, 5, 6, 0, 1, 2, 3, 7, 8]
+        [4, 5, 6, 7, 0, 1, 2, 3, 8]
+        [4, 5, 6, 7, 8, 0, 1, 2, 3]
+        
+        javac MinhaSolucao.java; java MinhaSolucao
+        5 1 7 3 9 10
+        2
+        [7, 5, 1, 3, 9, 10]
+        [7, 3, 5, 1, 9, 10]
+        [7, 3, 9, 5, 1, 10]
+        [7, 3, 9, 10, 5, 1]"~"['input: |\n        0 1 2 3 4 5 6 7 8\n        4\n    output: |\n        [4, 0, 1, 2, 3, 5, 6, 7, 8]\n        [4, 5, 0, 1, 2, 3, 6, 7, 8]\n        [4, 5, 6, 0, 1, 2, 3, 7, 8]\n        [4, 5, 6, 7, 0, 1, 2, 3, 8]\n        [4, 5, 6, 7, 8, 0, 1, 2, 3]', 'input: |\n        5 1 7 3 9 10\n        2\n    output: |\n        [7, 5, 1, 3, 9, 10]\n        [7, 3, 5, 1, 9, 10]\n        [7, 3, 9, 5, 1, 10]\n        [7, 3, 9, 10, 5, 1]', 'input: |\n        0 1 2\n        2\n    output: |\n        [2, 0, 1]', 'input: |\n        9 1 6 2 6\n        3\n    output: |\n        [2, 9, 1, 6, 6]\n        [2, 6, 9, 1, 6]']"
+"hashset"~"# HashSet
+
+    HashSets implement the mathematical notion of a set in Java, i.e. they don't allow repeated elements. 
+    HashSets are very similar to HashTables in terms of implementation, as they can also be based on arrays and 
+    use hash functions to determine where to store the value passed in. 
+    However, one major difference is that they do **not** store key-value pairs, but only the 
+    only the values. 
+
+    Due to the nature of the hash functions we use when building HashSets, collisions are
+    inevitable. That is, for some pair of values, there is a possibility that their
+    their hashes are the same and, consequently, these objects will be mapped to the same
+    position.
+
+    One of the ways to resolve collisions is, if the hash is mapped to an already occupied position the insertion algorithm looks for another free position to insert the value. This strategy is called open addressing collision resolution. 
+    In particular, when the attempt is always to check the next free position in the array, it is said that
+    the strategy uses linear probing.
+
+    Implement a program that reads from the standard input operations on a HashSet 
+    prints its state whenever the put and remove operations are performed.
+    
+    The HashSet must **store integer values** and must resolve 
+    **collisions by open addressing and linear probing. 
+
+    Your HashSet must have the following functions: 
+    
+            - put <value>
+        - remove <value> 
+        - contains <value>
+        
+
+    **To make testing easier, your HashSet will always have the following *base* hash function:
+
+        hash(key) = key % M, where M is the size of the HashSet.
+
+    **If the set is already completely full during an insertion, 
+    simply don't add the new value. However, even if the operation is not performed,
+    print the contents of the set.
+
+     Rehashing is a topic for another issue :)
+
+    ## Input
+
+    Your program should read from the input the size of the table and a series of operations 
+(put, remove and contains). 
+
+        - put: adds a value to the set 
+        - remove: removes the value from the set
+        - contains: checks if the set contains a value passed as a parameter.
+
+    The reading of operations must be terminated with the word `“end”`.
+
+    ## Output
+
+    Your program should print the contents of the HashSet whenever the put and remove operations are performed.
+    When the contains operation is read, your program must print true or false.
+    
+    ## Restrictions
+
+        - Your HashSet must be based on arrays. 
+        - The hash function must always be the same (except for probing): key % M, 
+        where M is the size of the set.
+        - Create the HashSet class to organize your code. 
+    
+    ## Execution example
+        $ javac Solution.java; java Solution
+        5
+        put 0
+        [0, null, null, null, null]
+        put 14
+        [0, null, null, null, 14]
+        put 20
+        [0, 20, null, null, 14]
+        put 0
+        [0, 20, null, null, 14]
+        contains 20
+        true
+        remove 20
+        [0, null, null, null, 14]
+        contains 20
+        false
+        end"~"['input: |\n        5\n        put 0\n        put 14\n        put 20\n        put 0\n        contains 20\n        remove 20\n        contains 20\n        end\n    output: |\n        [0, null, null, null, null]\n        [0, null, null, null, 14]\n        [0, 20, null, null, 14]\n        [0, 20, null, null, 14]\n        true\n        [0, null, null, null, 14]\n        false', 'input: |\n        3\n        remove 9\n        put 6\n        put 7\n        put 8\n        put 9\n        remove 6\n        put 9\n        end\n    output: |\n        [null, null, null]\n        [6, null, null]\n        [6, 7, null]\n        [6, 7, 8]\n        [6, 7, 8]\n        [null, 7, 8]\n        [9, 7, 8]', 'input: |\n        3\n        put 0\n        put 6\n        put 0\n        put 6\n        remove 0\n        remove 6\n        end\n    output: |\n        [0, null, null]\n        [0, 6, null]\n        [0, 6, null]\n        [0, 6, null]\n        [null, 6, null]\n        [null, null, null]', 'input: |\n        3\n        put 0\n        put 1\n        put 2\n        put 0\n        put 66\n        remove 0\n        remove 1\n        remove 2\n        remove 3\n        put 66\n        end\n\n    output: |\n        [0, null, null]\n        [0, 1, null]\n        [0, 1, 2]\n        [0, 1, 2]\n        [0, 1, 2]\n        [null, 1, 2]\n        [null, null, 2]\n        [null, null, null]\n        [null, null, null]\n        [66, null, null]']"
+"sorted_insertion_first"~"# Sorted insertion of the first element of a list
+    
+    Implement a Java program that
+    positions the first element of a sequence
+    in order to sort it. The input sequence is always
+    is always sorted in ascending order (except for the first
+    number).
+
+    ## Input 
+    
+    Your program must read a sequence of integers from the input.
+
+    ## Output
+
+    Your program should print the sorted sequence. 
+
+    Tip: Use Arrays.toString()
+
+    
+    ## Examples
+
+        javac Solution.java; java Solution
+        5 2 6 9 11 13
+        [2, 5, 6, 9, 11, 13]
+    
+        javac Solution.java; java Solution
+        3 1 2 4
+        [1, 2, 3, 4]
+    
+    ## Restrictions
+    
+    It is forbidden to use any sorting methods or auxiliary structures. Your program must 
+    only manipulate the original array.
+    
+        - You may not use *any* list operations (pop, insert, remove etc)
+        - You may not create auxiliary data structures."~"['input: |\n        5 2 6 9 11 13\n    output: |\n        [2, 5, 6, 9, 11, 13]', 'input: |\n        3 1 2 4\n    output: |\n        [1, 2, 3, 4]', 'input: |\n        14 1 2\n    output: |\n        [1, 2, 14]']"
+"sorted_insertion_last"~"# Sorted insertion of the last element in a list
+    
+    Implement a Java program that
+    positions the last element of a sequence
+    in order to sort it. The input sequence is always
+    in ascending order (except for the last
+    number).
+
+    ## Input 
+    
+    Your program must read a sequence of integers from the input.
+
+    ## Output
+
+    Your program should print the sorted sequence. 
+
+    Tip: Use Arrays.toString()
+
+    
+    ## Examples
+
+        javac Solution.java; java Solution
+        2 6 9 11 13 5
+        [2, 5, 6, 9, 11, 13]
+    
+        javac Solution.java; java Solution
+        1 2 4 3
+        [1, 2, 3, 4]
+    
+    ## Restrictions
+    
+    It is forbidden to use any sorting methods or auxiliary structures. Your program must 
+    only manipulate the original array.
+    
+        - You may not use *any* list operations (pop, insert, remove etc)
+        - You may not create auxiliary data structures."~"['input: |\n        2 6 9 11 13 5\n    output: |\n        [2, 5, 6, 9, 11, 13]', 'input: |\n        1 2 4 3\n    output: |\n        [1, 2, 3, 4]', 'input: |\n        1 2 -1\n    output: |\n        [-1, 1, 2]']"
+"recursive_insertion_sort"~"# Insertion Sort recursive
+    
+    Write a program that sorts an array of integers using insertion sort. 
+    However, this time, your implementation must be recursive. 
+
+    Your program should print the status of the array the insertion sorted (except the first one).
+    
+    ## Input
+    
+    Your program will only read one line of input, which consists of a list of space-separated integers.
+    
+    ## Output
+    
+    In the output, print the array at each sorted insertion. Your program
+    should stop as soon as it prints the sorted sequence.
+
+    ## Restrictions
+
+    Your program must use recursion.    
+
+    ## Tip
+
+    Print the array with `Arrays.toString(array)`.
+    
+    ## Execution examples
+    
+        javac Solucao.java; java Solucao
+        5 0 6 2
+        [0, 5, 6, 2]
+        [0, 5, 6, 2]
+        [0, 2, 5, 6]
+    
+        javac Solution.java; java Solution
+        4 3 2 1
+        [3, 4, 2, 1]
+        [2, 3, 4, 1]
+        [1, 2, 3, 4]"~"['input: |\n        5 0 6 2\n    output: |\n        [0, 5, 6, 2]\n        [0, 5, 6, 2]\n        [0, 2, 5, 6]', 'input: |\n        4 3 2 1\n    output: |\n        [3, 4, 2, 1]\n        [2, 3, 4, 1]\n        [1, 2, 3, 4]', 'input: |\n        1 22 5 34 0 12\n    output: |\n        [1, 22, 5, 34, 0, 12]\n        [1, 5, 22, 34, 0, 12]\n        [1, 5, 22, 34, 0, 12]\n        [0, 1, 5, 22, 34, 12]\n        [0, 1, 5, 12, 22, 34]', 'input: |\n        2 3 4 7 9 12\n    output: |\n        [2, 3, 4, 7, 9, 12]\n        [2, 3, 4, 7, 9, 12]\n        [2, 3, 4, 7, 9, 12]\n        [2, 3, 4, 7, 9, 12]\n        [2, 3, 4, 7, 9, 12]', 'input: |\n        36 2 6 3 2 15 0\n    output: |\n        [2, 36, 6, 3, 2, 15, 0]\n        [2, 6, 36, 3, 2, 15, 0]\n        [2, 3, 6, 36, 2, 15, 0]\n        [2, 2, 3, 6, 36, 15, 0]\n        [2, 2, 3, 6, 15, 36, 0]\n        [0, 2, 2, 3, 6, 15, 36]']"
+"invert_array"~"# Invert Array
+
+    Implement a program that inverts the values of an array.
+
+    # Restrictions
+
+    You cannot create another auxiliary array.
+    
+    ## Input
+
+    Your program must read a sequence of numbers from the input. 
+    
+    You must add these elements to an array, invert the elements within the array and then print.
+   
+    ## Output
+
+    Your program should print the values in reverse (from beginning to end).
+    Important! It's not just a matter of printing the values from the end to the beginning, you must
+    swap the values within the array. The final state of the array must be inverted.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        1 2 4
+        4 2 1
+
+        $ javac Solution.java ; java Solution
+        8 2 1 3 0
+        0 3 1 2 8"~"['input: |\n        1 2 4\n    output: |\n        4 2 1', 'input: |\n        8 2 1 3 0\n    output: |\n        0 3 1 2 8', 'input: |\n        0\n    output: |\n        0', 'input: |\n        9 8 3 3 1\n    output: |\n        1 3 3 8 9']"
+"invert_phrase"~"# Invert Phrase
+    
+    Write a program that inverts a sentence list from standard input. The inversion is done by word, but not by
+    character. See the execution examples below.
+
+    ## Input
+    
+    Your program should read a string from the standard input representing the phrase to be inverted.
+
+
+    ## Output
+    
+    In the output, your program should print the inverted phrase.
+
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        hello world
+        world hello
+
+        javac Solucao.java; java Solucao
+        one more example sentence
+        sentence example more one 
+
+    ## Restrictions
+
+    It is not allowed to use the split method.
+    You can use a stack, but it is also possible to implement without this auxiliary data structure."~"['input: |\n        hello world\n    output: |\n        world hello', 'input: |\n        another example sentence\n    output: |\n        sentence example another', 'input: |\n        one more test\n    output: |\n        test more one', 'input: |\n        more\n    output: |\n        more']"
+"invert_stack"~"# Invert Stack
+
+    Implement a program that reads the values that, given a stack as input, inverts the values of that stack.
+
+    # Restrictions
+
+    When manipulating the stack, you can only use the pop, push and isEmpty operations. 
+    When manipulating the queue, you can only use add and remove.
+
+    ## Input
+
+    Your program must read from the input the size of the stack and a sequence of numbers to be added (push) to that stack (the sequence is never greater than the size of the stack).
+    You must add these elements to the stack and then start solving the problem.
+
+    ## Output
+
+    Your program should print the inverted stack.
+
+    ## Running example
+    
+        $ javac Solution.java; java Solution
+        3
+        1 2 4
+        1
+        2
+        4
+
+        $ javac Solution.java ; java Solution
+        5
+        8 2 1 3 0
+        8
+        2
+        1
+        3
+        0
+
+"~"['input: |\n        3\n        1 2 4\n    output: |\n        1\n        2\n        4', 'input: |\n        5\n        8 2 1 3 0\n    output: |\n        8\n        2\n        1\n        3\n        0']"
+"invert_stack_index"~"# Invert Stack Index
+
+    Implement a program that, given a stack as input, inverts the values of that stack up to a given
+    index also read from the input. Consider that the top is at index 0, the element below it at index 1
+    and so on.
+
+    # Restrictions
+
+    When manipulating the stack, you can only use the peek, pop, push and isEmpty operations. 
+    You can use auxiliary structures.
+
+    ## Input
+
+    Your program must read from the input i) the size of the stack; ii) a sequence of numbers to be added (push) to this stack 
+    (the sequence is never larger than the stack size) and iii) the index up to which the inversion is to be made.
+
+    You can assume that the index passed is valid.
+    
+    ## Output
+
+    Your program should print a dash (`-`) and then the inverted stack (from the top to the index passed).
+
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        5
+        1 2 4 8 24
+        2
+        -
+        4
+        8
+        24
+        2
+        1
+        $ javac Solution.java ; java Solution
+        10
+        8 2 1 3 0 7 2 90 12 74
+        6
+        -
+        3
+        0
+        7
+        2
+        90
+        12
+        74
+        1
+        2
+        8"~"['input: |\n        5\n        1 2 4 8 24\n        2\n    output: |\n        -\n        4\n        8\n        24\n        2\n        1', 'input: |\n        10\n        8 2 1 3 0 7 2 90 12 74\n        6\n    output: |\n        -\n        3\n        0\n        7\n        2\n        90\n        12\n        74\n        1\n        2\n        8', 'input: |\n        1\n        8\n        0\n    output: |\n        -\n        8', 'input: |\n        5\n        2 5 24 7 4\n        4\n    output: |\n        -\n        2\n        5\n        24\n        7\n        4']"
+"invert_stack_without_queue"~"# Invert Stack without Queue
+
+    Implement a program that reads the values that, given a stack as input, inverts the values of that stack. However,
+    this time, you can't use a queue as a helper. In fact, there is a way to invert the stack using only a few
+    temporary variables.
+
+    # Restrictions
+
+    When manipulating the stack, you can only use the pop, push and isEmpty operations. 
+    It is forbidden to use auxiliary data structures.
+
+    ## Input
+
+    Your program must read from the input the size of the stack and a sequence of numbers to be added (push) to that stack (the sequence is never greater than the size of the stack).
+    You must add these elements to the stack and then start solving the problem.
+
+    ## Output
+
+    Your program should print the inverted stack.
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        3
+        1 2 4
+        1
+        2
+        4
+
+        $ javac Solution.java ; java Solution
+        5
+        8 2 1 3 0
+        8
+        2
+        1
+        3
+        0"~"['input: |\n        3\n        1 2 4\n    output: |\n        1\n        2\n        4', 'input: |\n        5\n        8 2 1 3 0\n    output: |\n        8\n        2\n        1\n        3\n        0']"
+"is_heap"~"# Is Heap?
+
+    Write a program that reads a sequence from standard input and 
+    checks if the sequence forms a max heap.
+
+    Assume that it is already complete or nearly complete from left to right.
+
+    ## Input
+
+    Your program should read a line containing a sequence of 
+    space-separated integers.
+    
+    ## Output
+
+    Your program should print true if the sequence forms a heap or false otherwise.
+
+    ## Execution examples
+
+        javac MySolution.java; java MySolution
+        11 3 5
+        true
+
+        javac MySolution.java; java MySolution
+        100 90 120
+        false"~"['input: |\n        11 3 5\n    output: |\n        true', 'input: |\n        100 90 120\n    output: |\n        false', 'input: |\n        1 7 3 9 10 2 4 3\n    output: |\n        false', 'input: |\n        0 1 2\n    output: |\n        false', 'input: |\n        100 90 40 30 20 10 8 1 5 -3 -4 -5 -6 -7 -8\n    output: |\n        true']"
+"linked_list"~"# Queue (Linked List)
+
+    Implement a queue based on a linked list **double chained**.
+    Your algorithms should be recursive.
+
+    ## Input
+
+    Your program should read from the input a series of operations 
+    (add, remove, element, search and print). 
+    The reading of operations must end with the word `“end”`.
+
+    ## Output
+
+    Your program should print the contents of the queue whenever a **print** operation is read.
+    If the queue is empty, print `“empty”`.
+    
+    Your program should print the initial element of the queue when it reads the **element** operation. If
+    the list is empty, print “empty”.
+ 
+    If the queue is empty and the **remove** operation is read, print `“empty”`.
+
+    The search operation returns the first position (starting from 0) in which the element appears in the queue.
+    If the queue does not contain the element, print -1.
+
+    ## Execution example
+    
+    $ javac Solution.java; java Solution
+        print
+        empty
+        add 2
+        element
+        2
+        add 5
+        print
+        2 5
+        remove
+        print
+        5
+        add 11
+        add 18
+        add 20
+        search 18
+        2
+        remove
+        print
+        11 18 20
+        remove
+        remove
+        remove
+        remove
+        empty
+        end
+
+        $ javac Solution.java; java Solution
+        search 8
+        -1
+        add 9
+        search 9
+        0
+        add 8
+        search 9
+        0
+        search 8
+        1
+        remove
+        search 9
+        -1
+        end
+        
+        
+    ## Restrictions and Notes
+
+    You cannot use any collection or method from the Collections framework. 
+    Your implementation must be in nodes linked by reference.
+
+    Tip: Create the Queue class to organize your code. 
+
+    Remember: tst will only test the input and output of your program. This
+    means that you must build the main that reads the data from the standard input, manipulates your Queue and
+    prints what is expected in the output."~"['input: |\n        print\n        add 2\n        element\n        add 5\n        print\n        remove\n        print\n        add 11\n        add 18\n        add 20\n        search 18\n        remove\n        print\n        remove\n        remove\n        remove\n        remove\n        end\n    output: |\n        empty\n        2\n        2 5\n        5\n        2\n        11 18 20\n        empty', 'input: |\n        search 8\n        add 9\n        search 9\n        add 8\n        search 9\n        search 8\n        remove\n        search 9\n        end\n    output: |\n        -1\n        0\n        0\n        1\n        -1', 'input: |\n        element\n        add 9\n        element\n        end\n    output: |\n        empty\n        9', 'input: |\n        add 1\n        add 2\n        add 3\n        print\n        remove\n        print\n        search 3\n        end\n    output: |\n        1 2 3\n        2 3\n        1']"
+"adjacency_list"~"# Adjacency List
+    
+    **Note: It is recommended to solve the Adjacency Matrix exercise before this exercise.
+    
+    The adjacency list is a way of representing a graph computationally. Considering a graph with N vertices,
+    each node will have a list (this list can be a linked list, a vector or even other structures such as hashmaps)
+    containing a structure that represents a link from this node to others.
+    
+    To make it clearer, take a look at the example below, which compares an adjacency matrix to an adjacency list. 
+
+    ![Tree](http://www.dsc.ufcg.edu.br/~jarthur/figuras_tst_eda/lista_adj.gif)
+    
+    Unlike the adjacency matrix, where we need to allocate a fixed memory of N x N regardless of the existence of an edge between two nodes.
+    existence of an edge between two nodes. In an adjacency list, we only allocate the necessary memory, initially
+    we allocate a list for each node (N) and as edges are added we allocate more memory.
+    
+    This solution is ideal for sparse graphs, i.e. graphs that don't have many edges compared to the number of vertices.
+    It also offers the opportunity to obtain all the neighbors of a node in O(1), as well as being easy to store more information
+    information about an edge, since the adjacency list can store any structure.
+    
+        It also offers the opportunity to obtain all the neighbors of a node in O(1), and it's easy to store more information about an edge.
+    information about an edge, since the adjacency list can store any structure.
+    
+    Imagine that there could be multiple edges between two nodes A and B, how would you represent this situation in an
+    adjacency matrix? For the adjacency list the solution is much more intuitive, just include multiple edges in the list
+    A (and also in B if the graph is undirected). We can add identifiers to the edges to differentiate them
+    if desired.
+    
+    Without further ado, in this exercise implement an adjacency list.
+    
+    For this problem, we will consider a weighted graph that can contain loops and multiple edges between two nodes.
+    Implement a program that receives the edges of this graph and prints the adjacency list if the graph is directed
+    or undirected.
+    
+    **Tip : ** You can implement the adjacency list as an array of array lists.
+
+    ## Input
+
+    The first line will contain two integers N and M, respectively the number of nodes in the graph and the number of edges.
+    Each node is identified with a value from 0 to N-1. The next M lines are the edges, each line will contain 3 integers A, B and W.
+    A and B are nodes (0 <= A, B <= N-1), where the edge goes from A to B in the case of the directed graph, and connects AB and BA in the case of the undirected graph.
+    undirected graph. W is the weight of this edge. 
+
+    
+    ## Output
+
+    Your program should first print the adjacency list for a directed graph and then for an
+    an undirected graph.
+    
+    An edge in the output below is represented by a pair (B, W), where B is the “end” vertex of the edge and W is the weight of the edge. 
+The “start” vertex can be obtained from the index in the array that stores the lists of each node.
+  
+    Your program should print the output exactly as in the execution example below. Pay attention to the number of spaces
+    and correct spelling.
+    
+    **Obs: ** Beware of loops, for directed graphs if A == B you don't need to add the edge twice.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3 2
+        1 2 100
+        2 0 200
+        Directed graph
+
+        listAdjacency[0] ->
+        listAdjacency[1] -> (2, 100)
+        listAdjacency[2] -> (0, 200)
+        Undirected graph
+        listDeAdjacency[0] -> (2, 200)
+        listAdjacency[1] -> (2, 100)
+        listAdjacency[2] -> (1, 100) (0, 200)
+    ## Constraints
+
+       Use your own adjacency list implementation."~"['input: |\n        1 1\n        0 0 100\n    output: |\n        Directed graph\n        listAdjacency[0] -> (0, 100)\n        Undirected graph\n        listAdjacency[0] -> (0, 100)', 'input: |\n        10 2\n        1 2 100\n        2 0 200\n    output: |\n        Directed graph\n        listAdjacency[0] ->\n        listAdjacency[1] -> (2, 100)\n        listAdjacency[2] -> (0, 200)\n        listAdjacency[3] ->\n        listAdjacency[4] ->\n        listAdjacency[5] ->\n        listAdjacency[6] ->\n        listAdjacency[7] ->\n        listAdjacency[8] ->\n        listDeAdjacency[9] ->\n        Undirected graph\n        listDeAdjacency[0] -> (2, 200)\n        listAdjacency[1] -> (2, 100)\n        listDeAdjacency[2] -> (1, 100) (0, 200)\n        listAdjacency[3] ->\n        listAdjacency[4] ->\n        listAdjacency[5] ->\n        listAdjacency[6] ->\n        listAdjacency[7] ->\n        listAdjacency[8] ->\n        listAdjacency[9] ->', ' input: |\n        3 2\n        1 2 1\n        2 0 1\n    output: |\n        Directed graph\n        listAdjacency[0] ->\n        listAdjacency[1] -> (2, 1)\n        listAdjacency[2] -> (0, 1)\n        Undirected graph\n        listDeAdjacency[0] -> (2, 1)\n        listAdjacency[1] -> (2, 1)\n        listDeAdjacency[2] -> (1, 1) (0, 1)', 'input: |\n        2 3\n        0 0 100\n        1 1 200\n        0 1 300\n    output: |\n        Directed graph\n        listAdjacency[0] -> (0, 100) (1, 300)\n        listAdjacency[1] -> (1, 200)\n        Undirected graph\n        listAdjacency[0] -> (0, 100) (1, 300)\n        listAdjacency[1] -> (1, 200) (0, 300)']"
+"mariana_and_books"~"# Mariana and books
+
+    Mariana loves books, so much so that she has a large collection on her bookshelves and is always
+    adding new books to it. After a while she realized that her bookshelves were
+    starting to get messy, with the books out of order, which made the task of finding a particular book very complicated.
+    which made the task of finding a particular book very complicated, as she couldn't use a binary search, but that's another problem.
+
+    Thinking of making her life easier when searching for books, Mariana decided to create a robot that would organize
+    her bookshelf, as she is a very busy girl and doesn't have time to do this task all the time. When creating the robot, she decided to use insertion sort as the execution algorithm, but she's not sure if it's working as it should.
+
+    To check that the robot complies with the insertion sort algorithm, she wrote down the partial states of the bookshelf in order to the partial states of the shelf in organization to check the execution of the algorithm, and now she needs a program that gives the partial sort states of a given shelf so that it can perform this check.
+
+    You must implement a program that, given an input with the names of the books on that
+    bookshelf, returns the partial states (current state of the array after sorting each element) of
+    following the insertion sort algorithm.
+    
+        The first line contains the name of all n books on the shelf separated by a comma. 0 < n < 20.
+
+    ## Output
+
+    Your program should print one line for each partial state of the algorithm's application to
+    the bookcase, including the initial and final state (bookcase properly organized). The printout
+    of each line must be formatted by separating the names of the books with a comma and a space ”, ”.
+
+    ## Restrictions
+
+    The method compareTo must be used to compare strings.
+
+    ## Exemplo de execução
+
+        $ javac Solution.java; java Solution
+        Deuses Americanos,Lugar Nenhum,Sandman,Crimes ABC,Carrie,O Pequeno Principe,Sherlock,Neuromancer
+        Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC, Carrie, O Pequeno Principe, Sherlock, Neuromancer
+        Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC, Carrie, O Pequeno Principe, Sherlock, Neuromancer
+        Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC, Carrie, O Pequeno Principe, Sherlock, Neuromancer
+        Crimes ABC, Deuses Americanos, Lugar Nenhum, Sandman, Carrie, O Pequeno Principe, Sherlock, Neuromancer
+        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, Sandman, O Pequeno Principe, Sherlock, Neuromancer
+        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, O Pequeno Principe, Sandman, Sherlock, Neuromancer
+        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, O Pequeno Principe, Sandman, Sherlock, Neuromancer
+        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, Neuromancer, O Pequeno Principe, Sandman, Sherlock"~"['input: |\n        Deuses Americanos,Lugar Nenhum,Sandman,Crimes ABC,Carrie,O Pequeno Principe,Sherlock,Neuromancer\n    output: |\n        Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC, Carrie, O Pequeno Principe, Sherlock, Neuromancer\n        Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC, Carrie, O Pequeno Principe, Sherlock, Neuromancer\n        Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC, Carrie, O Pequeno Principe, Sherlock, Neuromancer\n        Crimes ABC, Deuses Americanos, Lugar Nenhum, Sandman, Carrie, O Pequeno Principe, Sherlock, Neuromancer\n        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, Sandman, O Pequeno Principe, Sherlock, Neuromancer\n        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, O Pequeno Principe, Sandman, Sherlock, Neuromancer\n        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, O Pequeno Principe, Sandman, Sherlock, Neuromancer\n        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, Neuromancer, O Pequeno Principe, Sandman, Sherlock', 'input: |\n        Sandman,Crimes ABC,Carrie\n    output: |\n        Sandman, Crimes ABC, Carrie\n        Crimes ABC, Sandman, Carrie\n        Carrie, Crimes ABC, Sandman', 'input: |\n        Carrie,Lugar Nenhum,Deuses Americanos,Sandman,Crimes ABC\n    output: |\n        Carrie, Lugar Nenhum, Deuses Americanos, Sandman, Crimes ABC\n        Carrie, Lugar Nenhum, Deuses Americanos, Sandman, Crimes ABC\n        Carrie, Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC\n        Carrie, Deuses Americanos, Lugar Nenhum, Sandman, Crimes ABC\n        Carrie, Crimes ABC, Deuses Americanos, Lugar Nenhum, Sandman', 'input: |\n        Copo de Colera,Sandman,Minority Report,Brindes de Cianureto,Cronicas de Narnia\n    output: |\n        Copo de Colera, Sandman, Minority Report, Brindes de Cianureto, Cronicas de Narnia\n        Copo de Colera, Sandman, Minority Report, Brindes de Cianureto, Cronicas de Narnia\n        Copo de Colera, Minority Report, Sandman, Brindes de Cianureto, Cronicas de Narnia\n        Brindes de Cianureto, Copo de Colera, Minority Report, Sandman, Cronicas de Narnia\n        Brindes de Cianureto, Copo de Colera, Cronicas de Narnia, Minority Report, Sandman', 'input: |\n        Minority Report,Brindes de Cianureto,Cronicas de Narnia\n    output: |\n        Minority Report, Brindes de Cianureto, Cronicas de Narnia\n        Brindes de Cianureto, Minority Report, Cronicas de Narnia\n        Brindes de Cianureto, Cronicas de Narnia, Minority Report']"
+"adjacency_matrix"~" # Adjacency matrix
+
+    An adjacency matrix is a mathematical way of representing graphs.
+    For any graph with N vertices, an NXN matrix is constructed where
+    the value of M[i][j] represents the weight of the edge between the vertices represented by
+    by row i and column j. For example, for an undirected graph representing
+    in the figure below, we have the following
+    adjacency matrix:
+
+    ![Graph](http://www.dsc.ufcg.edu.br/~jarthur/figuras_tst_eda/grafo_nao_dirigido.png)
+
+              a b c d e f g
+            a 0 8 0 8 0 0 0
+            b 8 0 5 8 0 3 0
+            c 0 5 0 0 0 4 2
+            d 8 8 0 0 3 3 0
+            e 0 0 0 3 0 1 0
+            f 0 3 4 3 1 0 5
+            g 0 0 2 0 0 5 0
+
+    As we can see, the memory usage of an adjacency matrix is not optimized.
+    mainly for two reasons:
+
+        - 1) There is repetition of information. For example, the edges between each
+        pair of nodes are duplicated unnecessarily, as the graph is undirected.
+        For example, the edge between `a` and `b` is represented in the matrix in the first
+        row and second column and in the second row and first column.
+        
+        - 2) Because the matrix is square, you need to reserve space
+        for all possible edges between nodes, even if they don't exist.
+        For example, the edge between `b` and `g` doesn't exist, but you still have to
+        reserve this space in the matrix. For a graph with many nodes and little
+        connected, the waste of memory is considerable.
+
+
+    One way to improve memory usage is to use a hash table to
+    the graph representation. In this table, the keys are the existing
+    existing edges (e. g. `ab`) and the values are the weights of these respective edges
+    (e. g. 8, for `ab`). So you only need to store the existing edges.
+    Also, if you have stored the edge `ab`, this means that you don't need to store
+    edge `ba`, even though it exists, since the graph is undirected.
+
+    Implement a program that reads the nodes of a graph and their adjacency matrix and represents that graph.
+    and represents this graph in a hash table. Your program must
+    be able to receive a query about a given edge and print 
+    its weight or its non-existence.
+
+
+    ## Input
+
+    Your program must read from the standard input a line containing the `N` nodes present
+    in the graph and then a sequence of N lines representing the adjacency matrix.
+
+    After that, your program should read a sequence of edge searches. The read
+    should end when the word `end` is read.
+    
+        ## Output
+
+    Your program should print the weight of each edge searched or `non-existent edge.` if
+    the edge is not present in the graph.
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        a b c d e f g
+        0 8 0 8 0 0 0
+        8 0 5 8 0 3 0
+        0 5 0 0 0 4 2
+        8 8 0 0 3 3 0
+        0 0 0 3 0 1 0
+        0 3 4 3 1 0 5
+        0 0 2 0 0 5 0
+        ab
+        8
+        ba
+        8
+        ac
+        non-existent edge.
+        df
+        3
+        op
+        non-existent edge.
+        end"~"['input: |\n        a b c d e f g\n        0 8 0 8 0 0 0\n        8 0 5 8 0 3 0\n        0 5 0 0 0 4 2\n        8 8 0 0 3 3 0\n        0 0 0 3 0 1 0\n        0 3 4 3 1 0 5\n        0 0 2 0 0 5 0\n        ab\n        ba\n        ac\n        df\n        op\n        end\n    output: |\n        8\n        8\n        non-existent edge.\n        3\n        non-existent edge.', 'input: |\n        a b c\n        0 0 0\n        0 0 0\n        0 0 0\n        a\n        b\n        ab\n        ba\n        ac\n        ca\n        cc\n        aa\n        end\n    output: |\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.', 'input: |\n        a b c d f g h\n        1 2 3 4 5 6 0\n        1 2 3 4 5 6 0\n        1 2 3 4 5 6 0\n        1 2 3 4 5 6 0\n        1 2 3 4 5 6 0\n        1 2 3 4 5 6 0\n        1 2 3 4 5 6 0\n        as\n        ab\n        aa\n        ah\n        bh\n        ch\n        dh\n        hd\n        ha\n        end\n    output: |\n        non-existent edge.\n        2\n        1\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        non-existent edge.\n        4\n        1']"
+"max_bst"~" # Maximum in a binary search tree
+
+    Implement a program that identifies the maximum value in a BST.
+
+    ## Input
+
+    Your program should read only one line of input. 
+    This line will contain (in order) the elements that should be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree and that 
+    the tree has at least one element.
+
+    ## Output
+
+    Your program should print the path taken to the maximum element 
+    of the tree.
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10 20 25"~"['input: |\n        10 8 1 9 20 18 25\n    output: |\n        10 20 25', 'input: |\n        10\n    output: |\n        10', 'input: |\n        10 8 9\n    output: |\n        10', 'input: |\n        10 8 9 1 12\n    output: |\n        10 12', 'input: |\n        10 12 15 16 18\n    output: |\n        10 12 15 16 18', 'input: |\n        10 12 15 11\n    output: |\n        10 12 15']"
+"max_stack"~"# Max Stack
+    
+    Write a program that returns the largest element of a stack. 
+    
+    ## Input
+
+    Your program should read a line from the standard input representing the elements
+    to be added to the stack.
+    
+    You can only use push, pop and other auxiliary structures. The stack must
+    retain its initial configuration after your algorithm has run.
+   
+
+    ## Output
+
+    Your program should print the largest element on the stack.
+    
+
+    ## Examples
+    
+        javac Solution.java; java Solution
+        8 2 3 4 1 5 33 21
+        33
+
+    ## Restrictions
+    
+    You can only use the standard methods of the stack interface (e.g. `peek`, `push`, `pop`, `isEmpty` etc) and other auxiliary structure. 
+    The stack must retain its initial configuration after your algorithm is executed.
+
+    If your stack is based on arrays, you cannot access an arbitrary index using stack[index], for example. All
+    access must be via pop, push and peek."~"['input: |\n        9 6 4 2 89 43 5 42 5\n    output: |\n        89', 'input: |\n        327 123\n    output: |\n        327', 'input: |\n        3\n    output: |\n        3', 'input: |\n        8 8 8 8 8 8 8 8\n    output: |\n        8']"
+"max_stack_index"~" # Max Stack Index
+    
+    Write a program that returns the largest element of a stack considering the values between the top and the index passed in the standard input.
+    
+    ## Input
+
+    Your program should read a line from the standard input representing the elements
+    elements to be added to the stack (one by one and in the order they arrive in the standard input)
+    and an index passed as the limit for the search.
+    
+    You can only use push, pop and other auxiliary structures. The stack must
+    retain its initial configuration after your algorithm has run.
+   
+
+    ## Output
+
+    Your program should print the largest element of the stack, considering the values between the top (index 0)
+    and the index passed in the standard input.
+    
+
+    ## Examples
+    
+        javac Solution.java; java Solution
+        8 2 33 4 1 5 9 21
+        3
+        21
+
+        javac Solution.java; java Solution
+        8 2 33 4 1 5 9 21
+        5
+        33
+
+    ## Restrictions
+    
+    You can only use the standard methods of the stack interface (e.g. `peek`, `push`, `pop`, `isEmpty` etc) and other auxiliary structure. 
+    The stack must retain its initial configuration after your algorithm is executed.
+
+    If your stack is based on arrays, you cannot access an arbitrary index using stack[index], for example. All
+    access must be via pop, push and peek."~"['input: |\n        8 2 33 4 1 5 9 21\n        3\n    output: |\n        21', 'input: |\n        8 2 33 4 1 5 9 21\n        5\n    output: |\n        33', 'input: |\n        8\n        0\n    output: |\n        8', 'input: |\n        8 2 33 4 1 5 9 21\n        7\n    output: |\n        33', 'input: |\n        8 2 33 4 1 5 9 21\n        3\n    output: |\n        21']"
+"best_pivot"~"# Best Pivot
+
+    After watching the lessons on QuickSort, you have a good understanding of the concept of a “good pivot” of a sequence of integers, right? 
+
+    Based on what we saw in class, implement a program that, given a sequence of integers 
+    and the positions (**i** and **j**) of two candidates for partitioning this sequence, determines which is the best choice of pivot (i or j). That is, if seq[i] is a better choice of pivot, your program should print i. Otherwise, it should print j.
+
+    ## Input
+
+    Your program should read 2 lines. The first contains a sequence of space-separated integers. The second contains i and j separated by a space.
+
+    ## Output
+
+    Your program should print **i** if the best pivot choice for the quicksort is the element at 
+    position **i** of the sequence. If the best choice is **j**, your program should print **j**.
+    If there is a tie, print **i**.
+
+    ## Restrictions
+
+    The sequence **cannot be ordered at any time**.
+    The solution must be **O(n)**. 
+    You cannot use any collection from the Collections Framework. You must use arrays.
+
+    ## Execution examples
+
+        javac MySolution.java; java MySolution
+        0 1 2 3 4 5 6 7 8 9 10
+        4 10
+        4
+
+
+        javac MySolution.java; java MySolution
+        5 1 7 3 9 10 2 4 3
+        0 3
+        0"~"['input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        4 10\n    output: |\n        4', 'input: |\n        5 1 7 3 9 10 2 4 3\n        0 3\n    output: |\n        0', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        1 6\n    output: |\n        6', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        0 8\n    output: |\n        8', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        5 6\n    output: |\n        5', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        6 5\n    output: |\n        5', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        6 6\n    output: |\n        6', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        5 5\n    output: |\n        5', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        1 9\n    output: |\n        1', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        4 7\n    output: |\n        4', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n        6 3\n    output: |\n        6', 'input: |\n        4 -1 0 3 10 23 40 23 89\n        0 8\n    output: |\n        0', 'input: |\n        4 -1 0 3 10 23 40 23 89\n        2 8\n    output: |\n        2', 'input: |\n        4 -1 0 3 10 23 40 23 89\n        0 8\n    output: |\n        0', 'input: |\n        -4 -1 0 -3 10 23 40 23 89\n        1 4\n    output: |\n        4', 'input: |\n        2 2 2 2 2 2\n        0 1\n        0\n    output: |\n        0']"
+"merge_sort_step_by_step"~"# MergeSort step by step
+    
+    Write a program that sorts an array of integers using merge sort. 
+
+    Your program should print the status at each step of the algorithm.
+    
+    ## Input
+    
+    Your program will read only one line of input, which consists of a list of space-separated integers.
+    
+    ## Output
+    
+    The output should print the status of the array at each modification, from printing the initial array to the sorted array.
+
+    ## Restrictions
+
+    Your program must print each step of the merge sort, step by step.    
+
+    ## Tip
+
+    Print the array with `Arrays.toString(array)`.
+    
+    ## Execution examples
+        javac Solucao.java; java Solucao
+        1 2 3 4 6 5 
+        [1, 2, 3, 4, 6, 5]
+        [1, 2, 3]
+        [1, 2]
+        [1]
+        [2]
+        [1, 2]
+        [3]
+        [1, 2, 3]
+        [4, 6, 5]
+        [4, 6]
+        [4]
+        [6]
+        [4, 6]
+        [5]
+        [4, 5, 6]
+        [1, 2, 3, 4, 5, 6]
+            
+        javac Solucao.java; java Solucao
+        7 2 3 1 5
+        [7, 2, 3, 1, 5]
+        [7, 2, 3]
+        [7, 2]
+        [7]
+        [2]
+        [2, 7]
+        [3]
+        [2, 3, 7]
+        [1, 5]
+        [1]
+        [5]
+        [1, 5]
+        [1, 2, 3, 5, 7]
+
+        
+        javac Solucao.java; java Solucao
+        38 27 43 3 9 82 10
+        [38, 27, 43, 3, 9, 82, 10]
+        [38, 27, 43, 3]
+        [38, 27]
+        [38]
+        [27]
+        [27, 38]
+        [43, 3]
+        [43]
+        [3]
+        [3, 43]
+        [3, 27, 38, 43]
+        [9, 82, 10]
+        [9, 82]
+        [9]
+        [82]
+        [9, 82]
+        [10]
+        [9, 10, 82]
+        [3, 9, 10, 27, 38, 43, 82]"~"['input: |\n        1 2 3 4 6 5\n    output: |\n        [1, 2, 3, 4, 6, 5]\n        [1, 2, 3]\n        [1, 2]\n        [1]\n        [2]\n        [1, 2]\n        [3]\n        [1, 2, 3]\n        [4, 6, 5]\n        [4, 6]\n        [4]\n        [6]\n        [4, 6]\n        [5]\n        [4, 5, 6]\n        [1, 2, 3, 4, 5, 6]', 'input: |\n        7 2 3 1 5\n    output: |\n        [7, 2, 3, 1, 5]\n        [7, 2, 3]\n        [7, 2]\n        [7]\n        [2]\n        [2, 7]\n        [3]\n        [2, 3, 7]\n        [1, 5]\n        [1]\n        [5]\n        [1, 5]\n        [1, 2, 3, 5, 7]', 'input: |\n        9 3 1 88 2\n    output: |\n        [9, 3, 1, 88, 2]\n        [9, 3, 1]\n        [9, 3]\n        [9]\n        [3]\n        [3, 9]\n        [1]\n        [1, 3, 9]\n        [88, 2]\n        [88]\n        [2]\n        [2, 88]\n        [1, 2, 3, 9, 88]', 'input: |\n        10 9 8 7 6 5 4 3 2 1\n    output: |\n        [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]\n        [10, 9, 8, 7, 6]\n        [10, 9, 8]\n        [10, 9]\n        [10]\n        [9]\n        [9, 10]\n        [8]\n        [8, 9, 10]\n        [7, 6]\n        [7]\n        [6]\n        [6, 7]\n        [6, 7, 8, 9, 10]\n        [5, 4, 3, 2, 1]\n        [5, 4, 3]\n        [5, 4]\n        [5]\n        [4]\n        [4, 5]\n        [3]\n        [3, 4, 5]\n        [2, 1]\n        [2]\n        [1]\n        [1, 2]\n        [1, 2, 3, 4, 5]\n        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]']"
+"min_bst"~"# Minimum in a binary search tree
+
+    Implement a program that identifies the minimum value in a BST.
+
+    ## Input
+
+    Your program should read only one line of input. 
+    This line will contain (in order) the elements that should be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree and that the tree has
+    at least one element.
+
+    ## Output
+
+    Your program should print the path taken to the minimum element 
+    of the tree.
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10 8 1"~"['input: |\n        10 8 1 9 20 18 25\n    output: |\n        10 8 1', 'input: |\n        10\n    output: |\n        10', 'input: |\n        10 8 9\n    output: |\n        10 8', 'input: |\n        10 8 9 1 12\n    output: |\n        10 8 1', 'input: |\n        10 12\n    output: |\n        10']"
+"move_impostor"~"# Move impostor
+    
+    Write a program that finds and moves the impostor of a list of integers. 
+    The impostor is the **first** number that breaks a sequence in ascending order. For example, in the sequence:
+    
+        1 2 4 3 7 90
+    
+    The impostor is element 3.
+    
+    As well as finding the impostor, you must position it in its proper place. 
+    For the example above, your function should
+    change the list to the following: 1 2 3 4 7 90.
+    
+    *There is only one impostor. As said before, it's the first element that breaks an
+    sequence.
+    
+    Here's another example:
+    
+    
+        5 7 8 19 -4 4 1 6 8 12 81 3
+        
+        In this sequence, the impostor is the -4 element. After executing your algorithm, the list should
+        be in this state:
+    
+        -4 5 7 8 19 4 1 6 8 12 81 3
+    
+    ## Input
+
+    Your program should read a sequence of space-separated integers.
+
+    ## Output
+
+    It should print the sequence after identifying the impostor and positioning it correctly.
+
+    ## Example
+    
+        javac Solution.java; java Solution
+        5 7 8 19 -4 4 1 6 8 12 81 3
+        [-4, 5, 7, 8, 19, 4, 1, 6, 8, 12, 81, 3]
+        
+
+
+    ## Tip
+
+    Use Arrays.toString()
+    
+    ## Functions that are NOT allowed
+    Your program should only manipulate the array of integers.
+    
+        - insert
+        - remove
+        - pop
+        - any sorting function"~"['input: |\n        1 2 4 3 7 90\n    output: |\n        [1, 2, 3, 4, 7, 90]', 'input: |\n        5 7 8 19 -4 4 1 6 8 12 81 3\n    output: |\n        [-4, 5, 7, 8, 19, 4, 1, 6, 8, 12, 81, 3]', 'input: |\n        10 14 12 2\n    output: |\n        [10, 12, 14, 2]', 'input: |\n        -1 0 1 2 5 7 9 3\n    output: |\n        [-1, 0, 1, 2, 3, 5, 7, 9]']"
+"move_n"~"# Move N
+    
+    Write a program that finds consecutive values that break a
+    sequence and moves them one by one to their proper positions.
+    
+    The sequence always starts sorted and continues sorted until the first element
+    of the consecutive values to be moved. Here's an example:
+        
+        1 2 4 90 99 101 7 14 21
+
+    Notice that the sequence started in order (1, 2, 4...) until the first
+    element that breaks the sequence is found (7). In this case, you have to move all the elements from 7 (including it) to their proper places.
+    
+    Important: these elements are always in order and always go to the end of the original
+    original sequence.
+
+    Another example. 7 18 33 43 1 12. The elements 1 12 must be moved to their respective
+    positions.
+    
+    You should print the state of the array whenever there is a swap.
+   
+
+    ## Input
+
+    Your program should read a sequence of space-separated integers.
+
+    ## Output
+
+    You must print the array whenever there is a swap.
+    
+    
+
+    ## Example
+    
+        javac Solution.java; java Solution
+        1 2 4 90 99 101 7 14 21
+        [1, 2, 4, 90, 99, 7, 101, 14, 21]
+        [1, 2, 4, 90, 7, 99, 101, 14, 21]
+        [1, 2, 4, 7, 90, 99, 101, 14, 21]
+        [1, 2, 4, 7, 90, 99, 14, 101, 21]
+        [1, 2, 4, 7, 90, 14, 99, 101, 21]
+        [1, 2, 4, 7, 14, 90, 99, 101, 21]
+        [1, 2, 4, 7, 14, 90, 99, 21, 101]
+    
+        [1, 2, 4, 7, 14, 90, 21, 99, 101]
+        [1, 2, 4, 7, 14, 21, 90, 99, 101]
+
+    ## Tip
+
+    Use Arrays.toString()
+    
+    ## Constraints
+    
+    You cannot use ready-made sorting methods. If you need to, implement them.
+    
+    Your program should only manipulate the array of integers.
+    You can't use:
+        - insert
+        - remove
+        - pop
+        - any sorting function"~"['input: |\n        1 2 4 90 99 101 7 14 21\n    output: |\n        [1, 2, 4, 90, 99, 7, 101, 14, 21]\n        [1, 2, 4, 90, 7, 99, 101, 14, 21]\n        [1, 2, 4, 7, 90, 99, 101, 14, 21]\n        [1, 2, 4, 7, 90, 99, 14, 101, 21]\n        [1, 2, 4, 7, 90, 14, 99, 101, 21]\n        [1, 2, 4, 7, 14, 90, 99, 101, 21]\n        [1, 2, 4, 7, 14, 90, 99, 21, 101]\n        [1, 2, 4, 7, 14, 90, 21, 99, 101]\n        [1, 2, 4, 7, 14, 21, 90, 99, 101]', 'input: |\n        1 -7 -5 -2 4 90 99 101\n    output: |\n        [-7, 1, -5, -2, 4, 90, 99, 101]\n        [-7, -5, 1, -2, 4, 90, 99, 101]\n        [-7, -5, -2, 1, 4, 90, 99, 101]', 'input: |\n        1 2 3 4 5 6 -3 -2 -1\n    output: |\n        [1, 2, 3, 4, 5, -3, 6, -2, -1]\n        [1, 2, 3, 4, -3, 5, 6, -2, -1]\n        [1, 2, 3, -3, 4, 5, 6, -2, -1]\n        [1, 2, -3, 3, 4, 5, 6, -2, -1]\n        [1, -3, 2, 3, 4, 5, 6, -2, -1]\n        [-3, 1, 2, 3, 4, 5, 6, -2, -1]\n        [-3, 1, 2, 3, 4, 5, -2, 6, -1]\n        [-3, 1, 2, 3, 4, -2, 5, 6, -1]\n        [-3, 1, 2, 3, -2, 4, 5, 6, -1]\n        [-3, 1, 2, -2, 3, 4, 5, 6, -1]\n        [-3, 1, -2, 2, 3, 4, 5, 6, -1]\n        [-3, -2, 1, 2, 3, 4, 5, 6, -1]\n        [-3, -2, 1, 2, 3, 4, 5, -1, 6]\n        [-3, -2, 1, 2, 3, 4, -1, 5, 6]\n        [-3, -2, 1, 2, 3, -1, 4, 5, 6]\n        [-3, -2, 1, 2, -1, 3, 4, 5, 6]\n        [-3, -2, 1, -1, 2, 3, 4, 5, 6]\n        [-3, -2, -1, 1, 2, 3, 4, 5, 6]', 'input: |\n        1 2 3 4 5 6 7 -7 -6 -5 -4 -3 -2\n    output: |\n        [1, 2, 3, 4, 5, 6, -7, 7, -6, -5, -4, -3, -2]\n        [1, 2, 3, 4, 5, -7, 6, 7, -6, -5, -4, -3, -2]\n        [1, 2, 3, 4, -7, 5, 6, 7, -6, -5, -4, -3, -2]\n        [1, 2, 3, -7, 4, 5, 6, 7, -6, -5, -4, -3, -2]\n        [1, 2, -7, 3, 4, 5, 6, 7, -6, -5, -4, -3, -2]\n        [1, -7, 2, 3, 4, 5, 6, 7, -6, -5, -4, -3, -2]\n        [-7, 1, 2, 3, 4, 5, 6, 7, -6, -5, -4, -3, -2]\n        [-7, 1, 2, 3, 4, 5, 6, -6, 7, -5, -4, -3, -2]\n        [-7, 1, 2, 3, 4, 5, -6, 6, 7, -5, -4, -3, -2]\n        [-7, 1, 2, 3, 4, -6, 5, 6, 7, -5, -4, -3, -2]\n        [-7, 1, 2, 3, -6, 4, 5, 6, 7, -5, -4, -3, -2]\n        [-7, 1, 2, -6, 3, 4, 5, 6, 7, -5, -4, -3, -2]\n        [-7, 1, -6, 2, 3, 4, 5, 6, 7, -5, -4, -3, -2]\n        [-7, -6, 1, 2, 3, 4, 5, 6, 7, -5, -4, -3, -2]\n        [-7, -6, 1, 2, 3, 4, 5, 6, -5, 7, -4, -3, -2]\n        [-7, -6, 1, 2, 3, 4, 5, -5, 6, 7, -4, -3, -2]\n        [-7, -6, 1, 2, 3, 4, -5, 5, 6, 7, -4, -3, -2]\n        [-7, -6, 1, 2, 3, -5, 4, 5, 6, 7, -4, -3, -2]\n        [-7, -6, 1, 2, -5, 3, 4, 5, 6, 7, -4, -3, -2]\n        [-7, -6, 1, -5, 2, 3, 4, 5, 6, 7, -4, -3, -2]\n        [-7, -6, -5, 1, 2, 3, 4, 5, 6, 7, -4, -3, -2]\n        [-7, -6, -5, 1, 2, 3, 4, 5, 6, -4, 7, -3, -2]\n        [-7, -6, -5, 1, 2, 3, 4, 5, -4, 6, 7, -3, -2]\n        [-7, -6, -5, 1, 2, 3, 4, -4, 5, 6, 7, -3, -2]\n        [-7, -6, -5, 1, 2, 3, -4, 4, 5, 6, 7, -3, -2]\n        [-7, -6, -5, 1, 2, -4, 3, 4, 5, 6, 7, -3, -2]\n        [-7, -6, -5, 1, -4, 2, 3, 4, 5, 6, 7, -3, -2]\n        [-7, -6, -5, -4, 1, 2, 3, 4, 5, 6, 7, -3, -2]\n        [-7, -6, -5, -4, 1, 2, 3, 4, 5, 6, -3, 7, -2]\n        [-7, -6, -5, -4, 1, 2, 3, 4, 5, -3, 6, 7, -2]\n        [-7, -6, -5, -4, 1, 2, 3, 4, -3, 5, 6, 7, -2]\n        [-7, -6, -5, -4, 1, 2, 3, -3, 4, 5, 6, 7, -2]\n        [-7, -6, -5, -4, 1, 2, -3, 3, 4, 5, 6, 7, -2]\n        [-7, -6, -5, -4, 1, -3, 2, 3, 4, 5, 6, 7, -2]\n        [-7, -6, -5, -4, -3, 1, 2, 3, 4, 5, 6, 7, -2]\n        [-7, -6, -5, -4, -3, 1, 2, 3, 4, 5, 6, -2, 7]\n        [-7, -6, -5, -4, -3, 1, 2, 3, 4, 5, -2, 6, 7]\n        [-7, -6, -5, -4, -3, 1, 2, 3, 4, -2, 5, 6, 7]\n        [-7, -6, -5, -4, -3, 1, 2, 3, -2, 4, 5, 6, 7]\n        [-7, -6, -5, -4, -3, 1, 2, -2, 3, 4, 5, 6, 7]\n        [-7, -6, -5, -4, -3, 1, -2, 2, 3, 4, 5, 6, 7]\n        [-7, -6, -5, -4, -3, -2, 1, 2, 3, 4, 5, 6, 7]']"
+"move_three"~"# Move three
+    
+    Write a program that finds three consecutive values that break a
+    sequence and moves them one by one to their proper positions.
+    
+    The sequence always starts in order and continues in order until the first element
+    of the trio. Here's an example:
+        
+        1 2 4 90 99 101 7 14 21
+
+    Notice that the sequence started in order (1, 2, 4...) until the first
+    element that breaks the sequence is found (7). In this case, you have to move the trio 7, 14, and
+    21 to their proper places.
+    
+    Important: these 3 elements are always sorted.
+    
+    You must print the state of the array whenever there is a swap.
+   
+
+    ## Input
+
+    Your program must read a sequence of space-separated integers.
+
+    ## Output
+
+    You must print the array whenever there is a swap.
+
+    ## Example
+    
+        javac Solution.java; java Solution
+        1 2 4 90 99 101 7 14 21
+        [1, 2, 4, 90, 99, 7, 101, 14, 21]
+        [1, 2, 4, 90, 7, 99, 101, 14, 21]
+        [1, 2, 4, 7, 90, 99, 101, 14, 21]
+        [1, 2, 4, 7, 90, 99, 14, 101, 21]
+        [1, 2, 4, 7, 90, 14, 99, 101, 21]
+        [1, 2, 4, 7, 14, 90, 99, 101, 21]
+        [1, 2, 4, 7, 14, 90, 99, 21, 101]
+        [1, 2, 4, 7, 14, 90, 21, 99, 101]
+        [1, 2, 4, 7, 14, 21, 90, 99, 101]
+
+
+    ## Tip
+
+    Use Arrays.toString()
+    
+    ## Restrictions
+    
+    Your program should only manipulate the array of integers.
+
+    You can't use:
+        - insert
+        - remove
+        - pop
+        - any sorting function"~"['input: |\n        1 2 4 90 99 101 7 14 21\n    output: |\n        [1, 2, 4, 90, 99, 7, 101, 14, 21]\n        [1, 2, 4, 90, 7, 99, 101, 14, 21]\n        [1, 2, 4, 7, 90, 99, 101, 14, 21]\n        [1, 2, 4, 7, 90, 99, 14, 101, 21]\n        [1, 2, 4, 7, 90, 14, 99, 101, 21]\n        [1, 2, 4, 7, 14, 90, 99, 101, 21]\n        [1, 2, 4, 7, 14, 90, 99, 21, 101]\n        [1, 2, 4, 7, 14, 90, 21, 99, 101]\n        [1, 2, 4, 7, 14, 21, 90, 99, 101]', 'input: |\n        1 -7 -5 -2 4 90 99 101\n    output: |\n        [-7, 1, -5, -2, 4, 90, 99, 101]\n        [-7, -5, 1, -2, 4, 90, 99, 101]\n        [-7, -5, -2, 1, 4, 90, 99, 101]', 'input: |\n        1 2 3 4 5 6 -3 -2 -1\n    output: |\n        [1, 2, 3, 4, 5, -3, 6, -2, -1]\n        [1, 2, 3, 4, -3, 5, 6, -2, -1]\n        [1, 2, 3, -3, 4, 5, 6, -2, -1]\n        [1, 2, -3, 3, 4, 5, 6, -2, -1]\n        [1, -3, 2, 3, 4, 5, 6, -2, -1]\n        [-3, 1, 2, 3, 4, 5, 6, -2, -1]\n        [-3, 1, 2, 3, 4, 5, -2, 6, -1]\n        [-3, 1, 2, 3, 4, -2, 5, 6, -1]\n        [-3, 1, 2, 3, -2, 4, 5, 6, -1]\n        [-3, 1, 2, -2, 3, 4, 5, 6, -1]\n        [-3, 1, -2, 2, 3, 4, 5, 6, -1]\n        [-3, -2, 1, 2, 3, 4, 5, 6, -1]\n        [-3, -2, 1, 2, 3, 4, 5, -1, 6]\n        [-3, -2, 1, 2, 3, 4, -1, 5, 6]\n        [-3, -2, 1, 2, 3, -1, 4, 5, 6]\n        [-3, -2, 1, 2, -1, 3, 4, 5, 6]\n        [-3, -2, 1, -1, 2, 3, 4, 5, 6]\n        [-3, -2, -1, 1, 2, 3, 4, 5, 6]']"
+"sort_stack_inverting"~"# Sort Stack Inverting
+
+    We have already learned how to identify the largest element of a stack (`getMax(int index)`) or of a part of the stack. We've also
+    learned how to invert a stack or part of a stack (`invert(int index)`). In this question you will use these
+    two methods to sort a stack.
+
+    Warning: When manipulating the stack, you can only use the peek, pop, push, isEmpty, getMax(int index) and invert(int index) operations.
+    If you haven't implemented the getMax(int index) and invert(int index) methods, implement them. These two methods, in particular, can
+    use another stack as a helper.
+
+    Implement a program that, given a stack as input, sorts the values on that stack.
+    Consider that the top is at index 0, the element below it at index 1
+    and so on.
+
+    # Restrictions
+
+    **It's not allowed to acess directly the indexes of the array. ** When manipulating the stack, you can only use the operations mentioned above.
+    Copy and paste your Stack class into your solution and use this object.
+   
+    ## Input
+
+    Your program must read from the input i) the size of the stack and ii) a sequence of numbers to be added (pushed) onto that stack 
+    (the sequence is never larger than the stack size).
+
+    ## Output
+
+    Your program should print a dash (`-`) and then the sorted stack (from the top to the index passed).
+
+
+    ## Execution example
+        $ javac Solution.java; java Solution
+        5
+        1 2 24 8 -1
+        -
+        -1
+        1
+        2
+        8
+        24
+        
+        $ javac Solution.java ; java Solution
+        10
+        8 2 1 3 0 7 2 90 12 74
+        -
+        0
+        1
+        2
+        2
+        3
+        7
+        8
+        12
+        74
+        90"~"['input: |\n        10\n        8 2 1 3 0 7 2 90 12 74\n    output: |\n        -\n        0\n        1\n        2\n        2\n        3\n        7\n        8\n        12\n        74\n        90', 'input: |\n        5\n        1 2 24 8 -1\n    output: |\n        -\n        -1\n        1\n        2\n        8\n        24']"
+"plates_sorting"~"# Plates Sorting
+
+    The DETRAN (Departamento de Trânsito) needs to keep a record of the fines imposed on cars that pass through red lights, identifying them by their unique license plate. 
+One of
+    DETRAN employee suggested to a program be implemented to sort the license plates
+    by number only, as he was carrying out a study to identify the relationship
+    the relationship between the position of a number on the license plate and the occurrence of fines.
+
+    You should write a program that takes in the license plates in the format AAA-9999,
+    and outputs an array with the license plates sorted **only by their numbers**, in ascending and stable. 
+As we're talking about a large number of license plates, your solution needs to be linear in terms of execution time.
+
+    ## Input
+
+    You will be given n plates separated by commas, in the format AAA-9999.
+
+    ## Output
+
+    Your program should print the license plates sorted by number in ascending order,
+    stable and separated by a comma and a space.
+
+    ## Example of execution
+    $ javac Solution.java; java Solution
+    JCB-8599,NEH-6731,IKZ-8333,MVW-9463,MWW-3683,MWD-3386,MUB-3143,LWJ-5599,HQZ-7220
+    MUB-3143, MWD-3386, MWW-3683, LWJ-5599, NEH-6731, HQZ-7220, IKZ-8333, JCB-8599, MVW-9463
+
+    $ javac Solution.java; java Solution
+    NEH-6731,IKZ-8333,HQZ-7220,JCB-8333
+    NEH-6731, HQZ-7220, IKZ-8333, JCB-8333
+
+    ## Restrictions
+
+    You must use the radix sort algorithm."~"['input: |\n      JCB-8599,NEH-6731,IKZ-8333,MVW-9463,MWW-3683,MWD-3386,MUB-3143,LWJ-5599,HQZ-7220\n    output: |\n      MUB-3143, MWD-3386, MWW-3683, LWJ-5599, NEH-6731, HQZ-7220, IKZ-8333, JCB-8599, MVW-9463', 'input: |\n        NEH-6731,IKZ-8333,HQZ-7220,JCB-8333\n    output: |\n        NEH-6731, HQZ-7220, IKZ-8333, JCB-8333', 'input: |\n        JJI-7913,JMQ-6019,JIA-6751,HOX-6130,KEB-6061,ICA-2077,MNZ-7322,HGY-0265,KAH-9907,IJL-0730,LWG-7034,ALP-3816,NFB-0011,MYB-2457,NCQ-6100,HZQ-9578\n    output: |\n        NFB-0011, HGY-0265, IJL-0730, ICA-2077, MYB-2457, ALP-3816, JMQ-6019, KEB-6061, NCQ-6100, HOX-6130, JIA-6751, LWG-7034, MNZ-7322, JJI-7913, HZQ-9578, KAH-9907', 'input: |\n        JJI-1913,JMQ-6019,JIA-6751,HOX-6019,KEB-6019\n    output: |\n        JJI-1913, JMQ-6019, HOX-6019, KEB-6019, JIA-6751', 'input: |\n        JMQ-6019,JIA-6019,HOX-6019,KEB-6019\n    output: |\n        JMQ-6019, JIA-6019, HOX-6019, KEB-6019']"
+"brackets"~"# Brackets
+
+    Write a program that reads a sequence of parentheses from the input 
+    and check if the sequence is mathematically valid (well-formed).
+
+    ## Input
+    
+    Your program will read only one line of standard input. This line consists of a string with several parentheses.
+
+    ## Output
+    
+    Your program should print Y if the sequence is mathematically valid and N otherwise. 
+
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        (())
+        S
+
+
+        javac Solucao.java; java Solucao
+        ))((
+        N"~"['input: |\n        (())\n    output: |\n        S', 'input: |\n        ))((\n    output: |\n        N', 'input: |\n        (((((\n    output: |\n        N', 'input: |\n        )))))\n    output: |\n        N', 'input: |\n        ()\n    output: |\n        S', 'input: |\n        )\n    output: |\n        N', 'input: |\n        (\n    output: |\n        N', 'input: |\n        ((()))\n    output: |\n        S', 'input: |\n        (((()))\n    output: |\n        N', 'input: |\n        (((())))\n    output: |\n        S', 'input: |\n        (()))\n    output: |\n        N']"
+"stable_partition"~"# Stable Partitioning
+    
+    Implement a program that reads a sequence of integers from the standard input and partitions this sequence using the first element as a pivot. Partitioning must be done following two constraints:
+
+        - All elements to the left of the pivot are less than or equal to the pivot and all elements to the right are greater than it;
+        - The partitioning must maintain the original order of the elements (except, of course, the pivot). That is, the smallest elements must come in the same sequence as they were in the original array. Likewise the largest must come in the same sequence as they were in the original array.
+
+    ## Input
+
+    Your program should output a line containing a sequence of space-separated integers. 
+
+    ## Output
+
+    Your program should print the sequence partitioned by the first element of the array and 
+    repeating the original order of the elements. 
+
+    Tip: Use Arrays.toString() to format the output.
+
+    ## Restrictions
+
+    The sequence **may not be sorted at any time**. You may not use any collection from the Collections Framework. You must use arrays.
+
+    ## Execution examples
+
+        javac MySolution.java; java MySolution
+        7 1 3 8 19 18 2
+        [1, 3, 2, 7, 8, 19, 18]
+
+    Note that 1, 3 and 2 respect the order of the original sequence. The same goes for 8, 19 and 18."~"['input: |\n        7 1 3 8 19 18 2\n    output: |\n        [1, 3, 2, 7, 8, 19, 18]', 'input: |\n        1 1 1\n    output: |\n        [1, 1, 1]', 'input: |\n        0 1 2 3 4 5 6 7 8 9 10\n    output: |\n        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]', 'input: |\n        6 2 5 75 24 5 3 6457 4 1 52 34\n    output: |\n        [2, 5, 5, 3, 4, 1, 6, 75, 24, 6457, 52, 34]', 'input: |\n        8 1 4 3 2 7 3 65 9 43 6 3 12 5 6 8\n    output: |\n        [1, 4, 3, 2, 7, 3, 6, 3, 5, 6, 8, 8, 65, 9, 43, 12]', 'input: |\n         3 4 9 7 2 8 1 12\n    output: |\n        [2, 1, 3, 4, 9, 7, 8, 12]']"
+"hoare_partitioning"~"# Partitioning using Hoare's strategy
+    
+    The strategy that Hoare (described in Cormen) suggests for partitioning an array is a little different and
+    different and certainly more efficient than Lomuto's, as it makes fewer changes.
+
+    Implement this partitioning strategy as described in Cormen.
+
+    Tip: Consult Cormen or wikipedia for a reference on how to 
+    implement this type of partitioning.
+
+
+    ## Input
+
+    Your program should have one line containing a sequence of space-separated integers. 
+
+    ## Output
+
+    Your program should print the state of the array when you run the
+    partitioning once.
+
+    Tip: Use Arrays.toString() to format the output.
+
+    ## Execution examples
+
+        javac MySolution.java; java MySolution
+        4 11 -2 3 9 19 2
+        [2, 3, -2, 11, 9, 19, 4]
+
+        javac MySolution.java ; java MySolution
+        9 1 2 3 7 11 -3
+        [-3, 1, 2, 3, 7, 11, 9]"~"['input: |\n        4 11 -2 3 9 19 2\n    output: |\n        [2, 3, -2, 11, 9, 19, 4]', 'input: |\n        9 1 2 3 7 11 -3\n    output: |\n        [-3, 1, 2, 3, 7, 11, 9]', 'input: |\n        1 1 1\n    output: |\n        [1, 1, 1]', 'input: |\n        9 8 7 4\n    output: |\n        [4, 8, 7, 9]']"
+"lomuto_partitioning"~"# Partitioning using Lomuto's strategy
+    
+    Lomuto's partitioning strategy is simple. The first element is chosen as the pivot and two control variables are used: **i**, which represents the final position of the pivot and **j** which scans the array from position 1 to its end. Whenever the value at position j is less than the value of the pivot, i is updated and the values of positions i and j are swapped. At the end, swap the position of the pivot to the value in position **i**.
+
+    Implement a program that reads a sequence of integers from the standard input and partitions this sequence using Lomuto's strategy.
+
+    The partitioning must be done following two restrictions:
+
+        - All elements to the left of the pivot are less than or equal to the pivot and all elements to the right of the pivot are greater than it.
+
+    ## Input
+
+    Your program must have one line containing a sequence of space-separated integers. 
+
+    ## Output
+
+    Your program must print the state of the array at each swap (even when you swap
+    element by itself). In addition, 
+    must print the state of the array at the end of execution.
+
+    Tip: Use Arrays.toString() to format the output.
+
+    ## Execution examples
+
+        javac MinhaSolucao.java; java MinhaSolucao
+        4 11 -2 3 9 19 2
+        [4, -2, 11, 3, 9, 19, 2]
+        [4, -2, 3, 11, 9, 19, 2]
+        [4, -2, 3, 2, 9, 19, 11]
+        [2, -2, 3, 4, 9, 19, 11]
+        [2, -2, 3, 4, 9, 19, 11]
+
+        javac MinhaSolucao.java ; java MinhaSolucao
+        9 1 2 3 7 11 -3
+        [9, 1, 2, 3, 7, 11, -3]
+        [9, 1, 2, 3, 7, 11, -3]
+        [9, 1, 2, 3, 7, 11, -3]
+        [9, 1, 2, 3, 7, 11, -3]
+        [9, 1, 2, 3, 7, -3, 11]
+        [-3, 1, 2, 3, 7, 9, 11]
+        [-3, 1, 2, 3, 7, 9, 11]"~"['input: |\n        4 11 -2 3 9 19 2\n    output: |\n        [4, -2, 11, 3, 9, 19, 2]\n        [4, -2, 3, 11, 9, 19, 2]\n        [4, -2, 3, 2, 9, 19, 11]\n        [2, -2, 3, 4, 9, 19, 11]\n        [2, -2, 3, 4, 9, 19, 11]', 'input: |\n        9 1 2 3 7 11 -3\n    output: |\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, -3, 11]\n        [-3, 1, 2, 3, 7, 9, 11]\n        [-3, 1, 2, 3, 7, 9, 11]', 'input: |\n        9 1 2 3 7 11 -3\n    output: |\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, 11, -3]\n        [9, 1, 2, 3, 7, -3, 11]\n        [-3, 1, 2, 3, 7, 9, 11]\n        [-3, 1, 2, 3, 7, 9, 11]', 'input: |\n        1 1 1\n    output: |\n        [1, 1, 1]\n        [1, 1, 1]', 'input: |\n        9 8 7 4\n    output: |\n        [9, 8, 7, 4]\n        [9, 8, 7, 4]\n        [9, 8, 7, 4]\n        [4, 8, 7, 9]\n        [4, 8, 7, 9]']"
+"lomuto_partitioning_last"~"# Partitioning using Lomuto's strategy on the last element
+    
+    Lomuto's partitioning strategy is simple. The first element is chosen as the pivot and
+    two control variables are used: **i**, which represents the final position of the pivot and **j** which
+    scans the array from position 1 to its end. Whenever the value at position j is less than the value
+    of the pivot, i is updated and the values of positions i and j are swapped. At the end, swap the
+    position with the value in position **i**.
+
+    In this exercise, you should follow a very similar strategy, but considering the 
+    last element with the pivot and comparing and swapping it with the elements before it. 
+
+    Important. You can't take the last element, put it in the first position and perform the
+    the partitioning we already know. You have to compare it with the previous ones and follow
+    the strategy.
+
+    Implement a program that reads a sequence of integers from the standard input and partitions this sequence
+    using Lomuto's strategy, but considering the last element as the pivot.
+
+    The partitioning must be done following two restrictions:
+
+        - All elements to the left of the pivot are less than or equal to the pivot and all elements to the right are greater than it;
+
+    ## Input
+
+    Your program must have a line containing a sequence of space-separated integers.    
+
+        ## Output
+
+    Your program should print the state of the array each time it is swapped (even when you swap
+    an element by itself). In addition, 
+    must print the state of the array at the end of execution.
+
+    Tip: Use Arrays.toString() to format the output.
+
+    ## Execution examples
+        javac MinhaSolucao.java; java MinhaSolucao
+        9 5 1 8 2 6
+        [9, 5, 1, 2, 8, 6]
+        [2, 5, 1, 9, 8, 6]
+        [2, 5, 1, 6, 8, 9]
+        [2, 5, 1, 6, 8, 9]
+
+        javac MinhaSolucao.java ; java MinhaSolucao
+        9 -1 2 3 7 11 -3
+        [9, -1, 2, 3, 7, 11, -3]
+        [9, -1, 2, 3, 7, 11, -3]
+        [9, -1, 2, 3, 7, 11, -3]
+        [9, -1, 2, 3, 7, 11, -3]
+        [9, -1, 2, 3, 7, 11, -3]
+        [9, -1, 2, 3, 7, 11, -3]
+        [-3, -1, 2, 3, 7, 11, 9]
+        [-3, -1, 2, 3, 7, 11, 9]"~"['input: |\n        9 5 1 8 2 6\n    output: |\n        [9, 5, 1, 2, 8, 6]\n        [2, 5, 1, 9, 8, 6]\n        [2, 5, 1, 6, 8, 9]\n        [2, 5, 1, 6, 8, 9]', 'input: |\n        9 -1 2 3 7 11 -3\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [-3, -1, 2, 3, 7, 11, 9]\n        [-3, -1, 2, 3, 7, 11, 9]\n\n    output: |\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [9, -1, 2, 3, 7, 11, -3]\n        [-3, -1, 2, 3, 7, 11, 9]\n        [-3, -1, 2, 3, 7, 11, 9]', 'input: |\n        1\n    output: |\n        [1]\n        [1]', 'input: |\n        1 2 3\n    output: |\n        [1, 2, 3]\n        [1, 2, 3]']"
+"stack_with_array"~"# Stack with Array
+
+    Implement a stack with limited capacity using an array.
+
+    ## Input
+
+    Your program must read from the input the size of the stack and a series of operations 
+    (pop, push, peek and print). 
+    The reading of operations should be terminated with the word `“end”`.
+
+    ## Output
+
+    Your program should print the contents of the stack whenever a **print** operation is read.
+    If the stack is empty, print `“empty”`.
+    
+    Your program should print the element at the top of the stack when it reads the **peek** operation.
+ 
+    If the stack is empty and the **pop** operation is read, print `“empty”`.
+
+    If the stack is full and the **push** operation is read, print `“full”`.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3
+        print
+        empty
+        push 2
+        peek
+        2
+        push 5
+        peek
+        5
+        print
+        2 5 
+        pop
+        print
+        2 
+        push 11
+        push 18
+        push 20
+        full
+        print
+        2 11 18
+        pop
+        pop
+        pop
+        pop
+        empty
+        end
+
+    ## Restrictions and Notes
+
+    You can't use any collection or method from the Collections framework. 
+    Your implementation must be based on arrays.
+
+    Tip: Create the Stack class to organize your code. However, remember that there can't be another
+    class in your file. Therefore, your main must be in this class.
+    
+    Remember: tst will only test the input and output of your program. This means
+    means that you must build the main that reads the data from the standard input, manipulates its stack and
+    prints what is expected at the output."~"['input: |\n        3\n        print\n        push 2\n        peek\n        push 5\n        peek\n        print\n        pop\n        print\n        push 11\n        push 18\n        push 20\n        print\n        pop\n        pop\n        pop\n        pop\n        end\n    output: |\n        empty\n        2\n        5\n        2 5\n        2\n        full\n        2 11 18\n        empty', 'input: |\n        5\n        push 1\n        push 2\n        push 3\n        print\n        end\n    output: |\n        1 2 3', 'input: |\n        3\n        push 1\n        push 2\n        push 3\n        pop\n        print\n        push 4\n        push 5\n        end\n    output: |\n        1 2\n        full', 'input: |\n        5\n        push 1\n        push 2\n        push 3\n        push 4\n        push 5\n        push 6\n        push 7\n        push 8\n        pop\n        peek\n        push 6\n        print\n        end\n    output: |\n        full\n        full\n        full\n        4\n        1 2 3 4 6', 'input: |\n        2\n        push 1\n        print\n        print\n        end\n    output: |\n        1\n        1']"
+"reverse_polish"~"# Solving equations written in reverse Polish notation
+
+      Write a program that reads an expression in reverse Polish notation and prints its result on the output.
+
+      **Tip: ** The use of a stack can make your solution easier.
+
+      ## Input
+
+      Your program should read only one line of input. 
+      This line will contain an expression in reverse Polish notation.
+      The elements of the expression are space-spaced.
+      The numbers are integers only.
+
+      ## Output
+
+      Your program should print only one line in the output with the result of the equation in float.
+  
+      ## Example of execution
+
+          $ javac Solution.java ; java Solution
+          5 1 2 + 4 * + 3 -
+          14.0"~"['input: |\n      5 1 2 + 4 * + 3 -\n  output: |\n      14.0', 'input: | \n      0 0 +\n  output: |\n      0.0', 'input: | \n      1 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 0 + 0 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1 + *\n  output: |\n      2025.0', 'input: | \n      1 2 + 3 - 4 + 5 - 6 + 7 - 8 + 9 - 0 9 + 8 - 7 + 6 - 5 + 4 - 3 + 2 - 1 + *\n  output: |\n      -15.0', 'input: |\n      2 2 * 2 * 2 * 2 * 16 / \n  output: |\n      2.0', 'input: |\n      9 9 * 9 / 3 / \n  output: |\n      3.0']"
+"element_positions"~"# Positions of an element in a sequence
+    
+    Write a program that prints the positions (indices) of an element 
+    in a given sequence of integers.
+    
+    ## Input
+    
+    The program must read from the input an integer N and a sequence of integers.
+    
+    ## Output
+    
+    The program should print the positions (separated by a space) 
+    where the element is in the sequence. 
+    If the element is not in the sequence read, print -1.
+    
+    ## Example of execution
+    
+        python solution.py
+        7
+        1 5 3 2 88 9 2
+        -1
+    
+        python solution.py
+        7
+        1 7 5 7 2 88 9 2
+        1 3"~"['input: |\n        7\n        1 5 3 2 88 9 2\n    type: io\n    output: |\n        -1', 'input: |\n        7\n        1 7 5 7 2 88 9 2\n    type: io\n    output: |\n        1 3', 'input: |\n        -5\n        1 -2 -5 -8 -9 12\n    type: io\n    output: |\n        2', 'input: |\n        4\n        4 4 4\n    type: io\n    output: |\n        0 1 2', 'input: |\n        500\n        499 -500\n    type: io\n    output: |\n        -1', 'input: |\n        4\n        2\n    type: io\n    output: |\n        -1', 'input: |\n        2\n        1 1 1 1 1 1 2\n    type: io\n    output: |\n        6']"
+"recursive_power"~"# Recursive Power
+
+    Implement a program that reads two integers i and j and prints on the output i raised to j.
+
+    Your program must use recursion!
+
+    ## Input
+
+    Your program must read two integers from the input (each on one line).
+
+    ## Output
+
+    Your program must print the result of i to the power of j.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3
+        2
+        9 
+
+
+        $ javac Solution.java; java Solution
+        5
+        2
+        25
+
+    ## Constraints
+
+    You must use recursion."~"['input: |\n        3\n        2\n    output: |\n        9', 'input: |\n        5\n        2\n    output: |\n        25', 'input: |\n        1\n        1\n    output: |\n        1', 'input: |\n        1\n        0\n    output: |\n        1', 'input: |\n        3\n        3\n    output: |\n        27']"
+"predecessor_bst"~"# BST predecessor
+
+    The predecessor of a value in a BST is, among the values smaller than it present in the tree, the largest.
+    Implement a program that prints the path taken to find the predecessor of a value read from the
+    standard input.
+
+    ## Input
+
+    Your program should read two lines from the standard input. The first line
+    will contain (in order) the elements that should be added to the tree.
+    The second line contains the value whose predecessor should be printed.
+
+    You can assume that there will be no repeated elements in the tree.
+    You can assume that the value exists in the tree, but you **cannot** assume 
+    that there is a predecessor for it.
+
+
+    ## Output
+
+    Your program should print the path taken to find the predecessor. If there is no
+    successor, print the path to the last node visited.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10
+        [10, 8, 9]
+
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        25
+        [25, 20]"~"['input: |\n        10 8 1 9 20 18 25\n        10\n    output: |\n        [10, 8, 9]', 'input: |\n        10 8 1 9 20 18 25\n        25\n    output: |\n        [25, 20]', 'input: |\n        90 100 120 110 70 85 71\n        90\n    output: |\n        [90, 70, 85]', 'input: |\n        90 100 120 110 70 85 71\n        85\n    output: |\n        [85, 71]', 'input: |\n        90 100 120 110 70 85 71\n        110\n    output: |\n        [110, 120, 100]']"
+"number_larger_elements_bst"~"# Number of larger elements bst
+
+    Write a program that reads the numbers to be added to a BST and a number N and
+    determine the number of elements greater than N in the tree.
+
+    ## Input
+
+    Your program should read two lines of standard input. 
+    The first contains (in order) the elements to be added
+    in the tree. The second line contains an integer N.
+
+
+    You can assume that there will be no repeated elements in the tree.
+    You **must not** assume that N is present in the tree.
+
+    ## Output
+
+    Your program should print in preorder the tree read and should print how many
+    elements greater than N are present in the tree.
+
+    ## Execution examples
+
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10
+        [10, 8, 1, 9, 20, 18, 25]
+        3"~"['input: |\n        10 8 1 9 20 18 25\n        10\n    output: |\n        [10, 8, 1, 9, 20, 18, 25]\n        3', 'input: |\n        1 2 3 4 5 6 7 8\n        1\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        7', 'input: |\n        1 2 3 4 5 6 7 8\n        3\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        5', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        100\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        8', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        90\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        9', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        400\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        0', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        150\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        7', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        80\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        11', '""input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        1\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        12', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        210\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        5', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        130\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        8']"
+"number_smaller_elements_bst"~"# Number of smaller elements bst
+
+    Write a program that reads the numbers to be added to a BST and a number N and
+    determine the number of elements smaller than N in the tree.
+
+    ## Input
+
+    Your program should read two lines of standard input. 
+    The first contains (in order) the elements to be added
+    in the tree. The second line contains an integer N.
+
+
+    You can assume that there will be no repeated elements in the tree.
+    You **must not** assume that N is present in the tree.
+
+    ## Output
+
+    Your program should print in preorder the tree read and should print how many
+    elements smaller than N are present in the tree.
+
+    ## Execution examples
+
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10
+        [10, 8, 1, 9, 20, 18, 25]
+        3"~"['input: |\n        10 8 1 9 20 18 25\n        10\n    output: |\n        [10, 8, 1, 9, 20, 18, 25]\n        3', 'input: |\n        1 2 3 4 5 6 7 8\n        1\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        0', 'input: |\n        1 2 3 4 5 6 7 8\n        3\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        2', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        100\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        3', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        90\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        2', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        400\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        11', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        150\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        4', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        80\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        0', '""input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        1\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        0', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        210\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        7', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        130\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        4']"
+"quick_sort_step_by_step"~"# Quick Sort step by step
+    
+    Implement the Quick Sort as we saw in class (always choosing the first element as the pivot).
+    
+    ## Input
+    
+    Your program should read from the input only one line containing a sequence of space-separated integers.
+    
+    ## Output
+    
+    Your program should print the contents of the array after each execution of the of the partitioning. 
+    
+    ## Execution examples
+    
+        $ javac Solution.java; java Solution
+        3 1 8 4
+        1 3 8 4
+        1 3 4 8
+        $
+    
+    
+        $ javac Solution.java; java Solution
+        1 7 2 6 3
+        1 7 2 6 3
+        1 3 2 6 7
+        1 2 3 6 7
+        $
+        
+        
+    
+    
+    ## Restrictions
+    
+    You cannot use any collection or method from the Collections framework. 
+    Your implementation must be based on arrays."~"['input: |\n        3 1 8 4\n    type: io\n    output: |\n        1 3 8 4\n        1 3 4 8', 'input: |\n        1 7 2 6 3\n    type: io\n    output: |\n        1 7 2 6 3\n        1 3 2 6 7\n        1 2 3 6 7', 'input: |\n        1 1 1 1 1\n    type: io\n    output: |\n        1 1 1 1 1\n        1 1 1 1 1\n        1 1 1 1 1\n        1 1 1 1 1', 'input: |\n        1 2\n    type: io\n    output: |\n        1 2', 'input: |\n        4 3 2 1\n    type: io\n    output: |\n        1 3 2 4\n        1 3 2 4\n        1 2 3 4', 'input: |\n        8 2 6 1 9 0\n    type: io\n    output: |\n        0 2 6 1 8 9\n        0 2 6 1 8 9\n        0 1 2 6 8 9']"
+"radix_sort"~"# Radix Sort
+    
+    Write a program that sorts a sequence of numbers following
+    the Radix Sort strategy. You should use counting sort
+    as the digit-sorting routine.
+   
+    ## Input
+
+    Your program should read two lines of standard input. The first
+    is a sequence of space-separated integers and the 
+    second an integer **d** representing the number of digits
+    of the elements read. 
+    
+    Important: You can assume that all the values to be
+    have the same number **d** of digits.
+
+    **In the solution we saw in class, counting sort ordered
+    values between 1 and k. However, note that radix applies counting sort to its digits.
+    You can't assume that the digits are between 1 and 9. You must assume
+    that the digits are between 0 and 9. Therefore, you will need to make small
+    modifications to the counting sort algorithm we've seen.
+
+    ## Output
+
+    Your program should print the partial results of the sort. In other words, 
+    print the array whenever the counting sort routine on a given
+    digit ends.
+    
+    
+
+    ## Examples
+    
+        javac Solution.java; java Solution
+        8936 1238 5434 7564 3244 4532 7456 4235 9853 2736
+        4
+        [4532, 9853, 5434, 7564, 3244, 4235, 8936, 7456, 2736, 1238]
+        [4532, 5434, 4235, 8936, 2736, 1238, 3244, 9853, 7456, 7564]
+        [4235, 1238, 3244, 5434, 7456, 4532, 7564, 2736, 9853, 8936]
+        [1238, 2736, 3244, 4235, 4532, 5434, 7456, 7564, 8936, 9853]
+
+        
+
+    ## Tip
+
+    Use Arrays.toString().
+    
+    ## Restrictions
+    
+    It is not allowed to use Arrays.sort or any ready-made
+    method from sorting libraries. If you need to, implement it.
+
+    Your program should only manipulate the array of integers. You can't use functions like:
+    
+        - insert
+        - remove
+        - pop
+        - any sorting function that you haven't made yourself"~"['input: |\n        8936 1238 5434 7564 3244 4532 7456 4235 9853 2736\n        4\n    output: |\n        [4532, 9853, 5434, 7564, 3244, 4235, 8936, 7456, 2736, 1238]\n        [4532, 5434, 4235, 8936, 2736, 1238, 3244, 9853, 7456, 7564]\n        [4235, 1238, 3244, 5434, 7456, 4532, 7564, 2736, 9853, 8936]\n        [1238, 2736, 3244, 4235, 4532, 5434, 7456, 7564, 8936, 9853]', 'input: |\n        327 123\n        3\n    output: |\n        [123, 327]\n        [123, 327]\n        [123, 327]', 'input: |\n        102 498 423 709 673\n        3\n    output: |\n        [102, 423, 673, 498, 709]\n        [102, 709, 423, 673, 498]\n        [102, 423, 498, 673, 709]']"
+"radix_sort_two_digits"~"# Radix Sort Two Digits
+    
+    Write a program that sorts a sequence of numbers following
+    the Radix Sort strategy. You should use counting sort
+    as the primary sorting routine. However, instead of sorting
+    digit by digit, you will sort every pair of digits.
+   
+    ## Input
+
+    Your program should read two lines of standard input. The first
+    is a sequence of space-separated integers and the 
+    second an integer **d** representing the number of digits
+    of the elements read. 
+    
+    Important: You can assume that all the values to be
+    have the same number **d** of digits. You can also assume
+    that **d** is even. In addition, to make the implementation easier, you can consider
+    that there will be no number with 0 in its composition.
+
+    ## Output
+
+    Your program should print the partial results of the sort. In other words, 
+    print the array whenever the counting sort routine on a given
+    pair of digits ends. Here's an example of sorting the 
+    following array [7843, 5374, 2344, 8543].
+
+    On the first run of the counting sort, it must take into account
+    43, 74, 44 and 43, which are the numbers formed by concatenating the first two digits (furthest to the right)
+    of each number.
+
+    Next, it must take into account the numbers 78, 53, 23 and 85, which are the numbers formed by concatenating 
+    of digits 3 and 4 (furthest to the right) of each number.
+    
+        ## Example
+    
+        javac Solution.java; java Solution
+        7843 5374 2344 8543
+        4
+        [7843, 8543, 2344, 5374]
+        [2344, 5374, 7843, 8543]
+
+    ## Tip
+
+    Use Arrays.toString().
+    
+    ## Restrictions
+    
+    It is not allowed to use Arrays.sort or any ready-made
+    method from sorting libraries. If you need to, implement it.
+
+    Your program should only manipulate the array of integers. You can't use functions like:
+    
+        - insert
+        - remove
+        - pop
+        - any sorting function that you haven't made yourself"~"['input: |\n        7843 5374 2344 8543\n        4\n    output: |\n        [7843, 8543, 2344, 5374]\n        [2344, 5374, 7843, 8543]', 'input: |\n        743625 129846 352349 987654 296483 627435\n        6\n    output: |\n        [743625, 627435, 129846, 352349, 987654, 296483]\n        [352349, 743625, 296483, 627435, 987654, 129846]\n        [129846, 296483, 352349, 627435, 743625, 987654]', 'input: |\n        11 22 99 77 44\n        2\n    output: |\n        [11, 22, 44, 77, 99]']"
+"radix_sort_three_digits"~"# Radix Sort Three Digits
+    
+    Write a program that sorts a sequence of numbers following
+    the Radix Sort strategy. You should use counting sort
+    as the primary sorting routine. However, instead of sorting
+    digit by digit, you will sort every trio of digits.
+   
+    ## Input
+
+    Your program should read two lines of standard input. The first
+    is a sequence of space-separated integers and the 
+    second an integer **d** representing the number of digits
+    of the elements read. 
+    
+    Important: You can assume that all the values to be
+    have the same number **d** of digits. You can also assume
+    that **d** is a multiple of 3. Also, to make the implementation easier, you can consider
+    that there will be no number with 0 in its composition.
+
+    ## Output
+
+    Your program should print the partial results of the sort. In other words, 
+    print the array whenever the counting sort routine on a given
+    trio of digits ends. Here's an example of sorting the 
+    following array [784367437, 374212343, 234493756, 785437436].
+
+    On the first run of the counting sort, it must take into account
+    437, 343, 757 and 436, which are the numbers formed by concatenating the first three digits ( furthest to the right)
+    of each number.
+
+     Then you have to take into account the numbers 367, 212, 493 and 437, which are the numbers formed by concatenating 
+    the digits 4, 5 and 6 (furthest to the right) of each number.
+
+    ## Example
+    
+        javac Solution.java; java Solution
+        784367437 374212343 234493756 785437436
+        9
+        [374212343, 785437436, 784367437, 234493756]
+        [374212343, 784367437, 785437436, 234493756]
+        [234493756, 374212343, 784367437, 785437436]
+
+    ## Tip
+
+    Use Arrays.toString().
+    
+    ## Restrictions
+    
+    It is not allowed to use Arrays.sort or any
+    method from sorting libraries. If you need to, implement it.
+
+    Your program should only manipulate the array of integers. You can't use functions like:
+    
+        - insert
+        - remove
+        - pop
+        - any sorting function that you haven't made yourself"~"['input: |\n        784367437 374212343 234493756 785437436\n        9\n    output: |\n        [374212343, 785437436, 784367437, 234493756]\n        [374212343, 784367437, 785437436, 234493756]\n        [234493756, 374212343, 784367437, 785437436]', 'input: |\n        123 746 342\n        3\n    output: |\n        [123, 342, 746]', 'input: |\n        983465 754638 982344 765428\n        6\n    output: |\n        [982344, 765428, 983465, 754638]\n        [754638, 765428, 982344, 983465]']"
+"removal_bst"~"# Removal in Binary Search Trees
+
+    Write a program that reads the numbers to be added to a BST and
+    the numbers to be removed (in sequence) from that tree. Your program should print
+    the state of the tree (pre-order) at each removal.
+
+    **The removal of a node with two children must always be carried out using
+    the **successor** of the node to be removed.
+
+    ## Input
+
+    Your program should read two lines of input. 
+    The first line will contain (in order) the elements that should be added to the tree.
+    The second will contain the elements to be removed from the tree. It is important to note
+    that the elements must be removed in sequence, i.e. the first element is removed from the original
+    from the original tree, then remove the second element from the resulting tree, and so on.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    You **can't** assume that the elements to be removed will be in the tree. At each
+    attempt to remove an element that is not in the tree, just print
+    the contents of the tree in preorder.
+
+    ## Output
+
+    Your program should print the pre-order routing at each removal (or attempted removal).
+    If the tree is empty after removal, print `null`.
+    
+        ## Exemplos de execução
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        18 20 10
+        [10, 8, 1, 9, 20, 25]
+        [10, 8, 1, 9, 25]
+        [25, 8, 1, 9]
+
+        $ javac Solution.java; java Solution
+        1 2 3 4 5
+        5 4 3 2 1
+        [1, 2, 3, 4]
+        [1, 2, 3]
+        [1, 2]
+        [1]
+        null"~"['input: |\n        10 8 1 9 20 18 25\n        18 20 10\n    output: |\n        [10, 8, 1, 9, 20, 25]\n        [10, 8, 1, 9, 25]\n        [25, 8, 1, 9]', 'input: |\n        1 2 3 4 5\n        5 4 3 2 1\n    output: |\n        [1, 2, 3, 4]\n        [1, 2, 3]\n        [1, 2]\n        [1]\n        null', 'input: |\n        90 70 100 80 120 71 85 110\n        100 80 93198\n    output: |\n        [90, 70, 80, 71, 85, 120, 110]\n        [90, 70, 85, 71, 120, 110]\n        [90, 70, 85, 71, 120, 110]']"
+"remove_index_linkedlist"~"# Remove Index LinkedList
+
+    Write a program that removes a node from a LinkedList. The node to be
+    removed is at the index passed as a parameter in the standard input.
+    
+    ## Input
+    
+    Your program will read a sequence of integers that should be added (addLast) to a LinkedList. It should then read an
+    integer representing the index `i` of the element to be removed.
+
+    You can assume that the index `i` is valid.
+  
+    ## Output
+    
+    In the output, your program should print the list after the node has been removed.
+    
+    ## Restrictions and Remarks
+    
+    - You are not allowed to use auxiliary structures.
+    - You must use your LinkedList implementation. That is, your addLast, your remove, your toString etc.
+    
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        1 13 3 4 5
+        1
+        1 3 4 5
+
+        javac Solution.java; java Solution
+        9 7 3 5 4 3
+        3
+        9 7 3 4 3"~"['input: |\n        1 13 3 4 5\n        1\n    output: |\n        1 3 4 5', 'input: |\n        9 7 3 5 4 3\n        3\n    output: |\n        9 7 3 4 3', 'input: |\n        9 7 3 5 4 3\n        0\n    output: |\n        7 3 5 4 3', 'input: |\n        9 7 3 5 4 3\n        5\n    output: |\n        9 7 3 5 4', 'input: |\n        9 4 3 2 6 5 4 2 3\n        4\n    output: |\n        9 4 3 2 5 4 2 3']"
+"rotations_bst"~"# Rotations in Binary Search Trees
+
+
+    Write a program that reads three numbers to be added to a BST and
+    apply the necessary rotation(s) to balance the tree.
+
+    ## Input
+
+    Your program should read a line containing the three numbers to be added (in sequence) to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the rotation(s) performed on the tree and the pre-order routing for each rotation.
+    If no rotation is required, just print **balanced**.
+
+    ## Execution examples
+    
+        $ javac Solution.java; java Solution
+        10 8 1
+        rot_rigth(10)
+        [8, 1, 10]
+
+        $ javac Solution.java; java Solution
+        10 8 9
+        rot_left(8)
+        [10, 9, 8]
+        rot_rigth(10)
+        [9, 8, 10]
+
+        $ javac Solution.java; java Solution
+        10 8 12
+        balanced"~"['input: |\n        10 8 1\n    output: |\n        rot_rigth(10)\n        [8, 1, 10]', 'input: |\n        10 8 9\n    output: |\n        rot_left(8)\n        [10, 9, 8]\n        rot_rigth(10)\n        [9, 8, 10]', 'input: |\n        10 8 12\n    output: |\n        balanced', 'input: |\n        12 143 9000\n    output: |\n        rot_left(12)\n        [143, 12, 9000]', 'input: |\n        12 15 13\n    output: |\n        rot_right(15)\n        [12, 13, 15]\n        rot_left(12)\n        [13, 12, 15]']"
+"recursive_selection_sort"~"# Selection Sort recursive
+    
+    Write a recursive program that sorts an array of integers using selection sort. 
+
+    Your program should print the status of the array each time it is modified. Remember that in 
+    Selection Sort, we change the array when we find the smallest element and place it in its 
+    position.
+    
+    ## Input
+    
+    Your program will only read one line of input, which consists of a list of space-separated integers.
+    
+    ## Output
+    
+    In the output, print the array with each change. Your program
+    should stop as soon as it prints the sorted sequence.
+
+    ## Restrictions
+
+    Your program must use recursion.    
+
+    ## Tip
+
+    Print the array with `Arrays.toString(array)`.
+    
+    ## Execution examples
+    
+        javac Solucao.java; java Solucao
+        1 2 3 4 6 5 
+        [1, 2, 3, 4, 6, 5]
+        [1, 2, 3, 4, 6, 5]
+        [1, 2, 3, 4, 6, 5]
+        [1, 2, 3, 4, 6, 5]
+        [1, 2, 3, 4, 5, 6]
+        
+        javac Solucao.java; java Solucao
+        7 2 3 1 5
+        [1, 2, 3, 7, 5]
+        [1, 2, 3, 7, 5]
+        [1, 2, 3, 7, 5]
+        [1, 2, 3, 5, 7]"~"['input: |\n        1 2 3 4 6 5\n    output: |\n        [1, 2, 3, 4, 6, 5]\n        [1, 2, 3, 4, 6, 5]\n        [1, 2, 3, 4, 6, 5]\n        [1, 2, 3, 4, 6, 5]\n        [1, 2, 3, 4, 5, 6]', 'input: |\n        7 2 3 1 5\n    output: |\n        [1, 2, 3, 7, 5]\n        [1, 2, 3, 7, 5]\n        [1, 2, 3, 7, 5]\n        [1, 2, 3, 5, 7]', 'input: |\n        9 3 1 88 2\n    output: |\n        [1, 3, 9, 88, 2]\n        [1, 2, 9, 88, 3]\n        [1, 2, 3, 88, 9]\n        [1, 2, 3, 9, 88]']"
+"selection_sort_step_by_step"~"# Selection Sort step by step
+    
+    Write a program that sorts an array of integers using selection sort.
+    Your program should print the status of the array at the end of iteration.
+    
+    
+    ## Input
+    
+    Your program will only read one line of input, which consists of a list of space-separated integers.
+    
+    ## Output
+    
+    In the output, print the input array at each end of iteration. Your program should stop as soon as it prints
+    the sorted sequence.
+    
+    ## Tip
+    
+    Use `Arrays.toString(array)` to print the array.
+    
+    ## Execution examples
+    
+        javac Solucao.java; java Solucao
+        5 0 6 2
+        [0, 5, 6, 2]
+        [0, 2, 6, 5]
+        [0, 2, 5, 6]
+    
+        javac Solution.java; java Solution
+        4 3 2 1
+        [1, 3, 2, 4]
+        [1, 2, 3, 4]"~"['input: |\n        5 0 6 2\n    type: io\n    output: |\n        [0, 5, 6, 2]\n        [0, 2, 6, 5]\n        [0, 2, 5, 6]', 'input: |\n        4 3 2 1\n    type: io\n    output: |\n        [1, 3, 2, 4]\n        [1, 2, 3, 4]', 'input: |\n        1 22 5 34 0 12\n    type: io\n    output: |\n        [0, 22, 5, 34, 1, 12]\n        [0, 1, 5, 34, 22, 12]\n        [0, 1, 5, 12, 22, 34]', 'input: |\n        36 2 6 3 2 15 0\n    type: io\n    output: |\n        [0, 2, 6, 3, 2, 15, 36]\n        [0, 2, 2, 3, 6, 15, 36]']"
+"without_pair"~"# Without pair
+    
+    Write a program that, given an unordered array, identifies the only element of that array whose frequency is 1. 
+    You can assume that all the elements have a frequency of 2, except for the element you have to identify.
+    
+    ## Input
+    
+    Your program will only read one line of input, which consists of a list of space-separated integers.
+    
+    ## Output
+    
+    In the output, only the single element that appears only once in the array should be printed.
+    
+    ## Execution examples
+    
+        javac Solucao.java; java Solucao
+        1 2 3 2 1
+        3
+    
+        javac Solucao.java; java Solucao
+        1 7 2 2 9 1 9
+        7"~"['input: |\n        1 2 3 2 1\n    type: io\n    output: |\n        3', 'input: |\n        1 7 2 2 9 1 9\n    type: io\n    output: |\n        7', 'input: |\n        1 1 2 2 3\n    type: io\n    output: |\n        3', 'input: |\n        1\n    type: io\n    output: |\n        1']"
+"sum_leaves"~"# Sum leaves in Binary Search Trees
+
+    Implement a program that adds up the values of all the leaves in a binary search tree.
+
+    ## Input
+
+    Your program should read only one line of input. 
+    This line will contain (in order) the elements that should be added to the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+
+    ## Output
+
+    Your program should print the sum of the values of all the leaves in the tree.
+
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        53"~"['input: |\n        10 8 1 9 20 18 25\n    output: |\n        53', 'input: |\n        10 8\n    output: |\n        8', 'input: |\n        10 8 9\n    output: |\n        9', 'input: |\n        10 8 9 12\n    output: |\n        21', 'input: |\n        10 8 9 12 11\n    output: |\n        20', 'input: |\n        10 8 9 12 11 13\n    output: |\n        33']"
+"stooge_sort"~"# Stooge Sort
+
+    Implement Stooge Sort. 
+
+    ## Input
+
+    Your program should read from the input only one line containing a sequence of space-separated integers.
+
+    ## Output
+    
+    Your program should print the sorted sequence.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        3 1 8 4 7 11 2
+        1 2 3 4 7 8 11
+
+    ## Restrictions
+
+    You cannot use any collection or method from the Collections framework. Your implementation must be based on arrays.
+    You cannot use any other sorting method."~"['input: |\n        3 1 8 4 7 11 2\n    output: |\n        1 2 3 4 7 8 11', 'input: |\n        3 2 1\n    output: |\n        1 2 3', 'input: |\n        3 2 1 1\n    output: |\n        1 1 2 3', 'input: |\n        1 1 1\n    output: |\n        1 1 1', 'input: |\n        5 3 2 1\n    output: |\n        1 2 3 5']"
+"stopwords"~"# Stop Words
+    
+    Stop words are words that are typically considered irrelevant when analyzing a text.
+    We're talking about prepositions, articles and so on. Data analysts often remove
+    these words from the text to be analyzed so that they can obtain better results in natural language processing
+    processing tasks.
+
+    Your goal here is to remove stopwords from a given text.
+    
+    ## Input
+
+    Your program should read from the standard input a string representing the text to be analyzed and 
+    a string representing the stopwords separated by spaces.
+
+    ## Output
+
+    Your program should print the original text without the stopwords.
+
+
+    ## Example of execution
+    
+        $ javac Solution.java; java Solution
+        um exemplo de exemplo de texto
+        um de
+        exemplo exemplo texto
+
+        $ javac Solution.java; java Solution
+        outro exemplo de texto para ser analisado
+        para de
+        outro exemplo texto ser analisado
+        
+    ## Remarks
+
+    - Use println to print the result.
+    - The string to be printed must not have any extra space at the beginning or end. You can
+    can use trim()."~"['input: |\n        um exemplo de exemplo de texto\n        um de\n    output: |\n        exemplo exemplo texto', 'input: |\n        outro exemplo de texto para ser analisado\n        para de\n    output: |\n        outro exemplo texto ser analisado', 'input: |\n        exemplos no extremo\n        exemplos extremo\n    output: |\n        no', 'input: |\n        sem remoção de nada\n        para\n    output: |\n        sem remoção de nada', 'input: |\n        removendo quase tudo que eh possivel\n        removendo tudo que eh possivel\n    output: |\n        quase']"
+"successor_bst"~" # BST successor
+
+    The successor of a value in a BST is, among the values greater than it present in the tree, the smallest.
+    Implement a program that prints the path taken to find the successor of a value read from the
+    standard input.
+
+    ## Input
+
+    Your program must read two lines from the standard input. The first line
+    will contain (in order) the elements that should be added to the tree.
+    The second line contains the value whose successor should be printed.
+
+    You can assume that there will be no repeated elements in the tree.
+    You can assume that the value exists in the tree, but you **cannot** assume 
+    that there is a successor for it.
+
+
+    ## Output
+
+    Your program should print the path taken to find the successor. If there is no
+    successor, print the path to the last node visited.
+
+    ## Execution example
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        10
+        [10, 20, 18]
+
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        25
+        [25, 20, 10]"~"['input: |\n        10 8 1 9 20 18 25\n        10\n    output: |\n        [10, 20, 18]', 'input: |\n        10 8 1 9 20 18 25\n        25\n    output: |\n        [25, 20, 10]', 'input: |\n        90 100 120 110 70 85 71\n        120\n    output: |\n        [120, 100, 90]', 'input: |\n        90 100 120 110 70 85 71\n        85\n    output: |\n        [85, 70, 90]', 'input: |\n        90 100 120 110 70 85 71\n        110\n    output: |\n        [110, 120]']"
+"frequency_table"~"# Frequency Table
+    
+    Write a program that calculates the frequency table of all the elements
+    of a sequence. 
+
+    **Your program must have linear complexity.
+
+    ## Input
+    
+    The program must read from the input a sequence of integers whose values
+    range from 0 to N, where N is a positive integer.
+    
+    ## Output
+    
+    The program must print on the output each element of the sequence read and its frequency
+    separated by a comma.
+    
+    ## Execution example
+    
+        javac Solution.java ; java Solution
+        1 5 3 2 88 9 2 88
+        1,1 5,1 3,1 2,2 88,2 9,1
+    
+        javac Solution.java ; java Solution
+        1 1 5 7 1
+        1,3 5,1 7,1
+
+    ## Restrictions
+
+        - It is not allowed to use any collection belonging to the Collections Framework.
+        You can only use arrays to solve the question.
+
+        - The complexity of your solution must be linear."~"['input: |\n        1 5 3 2 88 9 2 88\n    type: io\n    output: |\n        1,1 5,1 3,1 2,2 88,2 9,1', 'input: |\n        1 1 5 7 1\n    type: io\n    output: |\n        1,3 5,1 7,1', 'input: |\n        0 0 0 0 0 0 0\n    output: |\n        0,7', 'input: |\n        9 1 2 5 4 7\n    output: |\n        9,1 1,1 2,1 5,1 4,1 7,1', 'input: |\n        89 89 89 89 89 89\n    output: |\n        89,6']"
+"hash_table_chaining"~"# Hash Tables Chaining
+
+    Due to the nature of the hash functions we use to build Hash Tables, collisions are
+    inevitable. That is, for a pair of objects with different keys, there is a possibility that their
+    their hashes are the same and, consequently, these objects will be mapped to the same
+    position in the table.
+
+    One of the ways to resolve collisions is, instead of storing the <key, value> pair in a
+    a position in the table, to store a queue containing all the <key, value> pairs that are
+    mapped to that position.
+
+    Implement a program that reads from the standard input operations in a 
+    hash table and prints its state whenever the put and remove operations are performed.
+    
+    The hash table should **store integer keys and values of type String** and should resolve **collisions by chaining**. 
+
+    Your table should have the following functions:
+
+        - put <key> <value>
+        - remove <key>
+        - keys
+        - values
+        
+
+    Important! To make testing easier, your table will always have the following hash function:
+
+        hash(key) = key % M, where M is the size of the table
+
+
+    ## Input
+
+    Your program must read from the input the size of the table and a series of operations 
+    (put, remove, keys, and values). 
+    
+            - put: adds the key,value pair to the table
+        - remove: removes the pair whose key is equal to the key passed as a parameter
+        - keys: prints the keys in the table in order. You can use Arrays.sort for this.
+        - values: prints the values in the table in order. You can use Arrays.sort for this.
+
+    Read operations must end with the word `“end”`.
+
+    ## Output
+
+    When the *keys* or *values* operation is read, it should print the keys or values in
+    ascending order.
+    
+    Whenever your program reads the put and remove operations, it should
+    must print the state of the table after executing these operations.
+
+    ## Restrictions
+
+        - Your table must be based on arrays. However, the lists within the table must be of type ArrayList.
+        - The hash function must always be the same: key % M, where M is the size of the table.
+        - Create the HashTable class to organize your code. 
+        - Create a Pair class as an abstraction for key and value.
+    
+    ## Execution example
+        $ javac Solution.java; java Solution
+        5
+        keys
+        []
+        values
+        []
+        put 10 joao
+        [[<10, joao>], [], [], [], []]
+        keys
+        [10]
+        values
+        [joao]
+        put 1 carlos
+        [[<10, joao>], [<1, carlos>], [], [], []]
+        put 11 pedro
+        [[<10, joao>], [<1, carlos>, <11, pedro>], [], [], []]
+        put 14 liu
+        [[<10, joao>], [<1, carlos>, <11, pedro>], [], [], [<14, liu>]]
+        remove 10
+        [[], [<1, carlos>, <11, pedro>], [], [], [<14, liu>]]
+        put 1 leticia
+        [[], [<1, leticia>, <11, pedro>], [], [], [<14, liu>]]
+        keys
+        [1, 11, 14]
+        values
+        [leticia, liu, pedro]
+        end"~"['input: |\n        5\n        keys\n        values\n        put 10 joao\n        keys\n        values\n        put 1 carlos\n        put 11 pedro\n        put 14 liu\n        remove 10\n        put 1 leticia\n        keys\n        values\n        end\n    output: |\n        []\n        []\n        [[<10, joao>], [], [], [], []]\n        [10]\n        [joao]\n        [[<10, joao>], [<1, carlos>], [], [], []]\n        [[<10, joao>], [<1, carlos>, <11, pedro>], [], [], []]\n        [[<10, joao>], [<1, carlos>, <11, pedro>], [], [], [<14, liu>]]\n        [[], [<1, carlos>, <11, pedro>], [], [], [<14, liu>]]\n        [[], [<1, leticia>, <11, pedro>], [], [], [<14, liu>]]\n        [1, 11, 14]\n        [leticia, liu, pedro]', 'input: |\n        5\n        put 1 joao\n        put 1 carlos\n        remove 10\n        remove 1\n        remove 1\n        put 0 joao\n        put 11 alice\n        put 21 leticia\n        put 31 aalice\n        keys\n        values\n        end\n    output: |\n        [[], [<1, joao>], [], [], []]\n        [[], [<1, carlos>], [], [], []]\n        [[], [<1, carlos>], [], [], []]\n        [[], [], [], [], []]\n        [[], [], [], [], []]\n        [[<0, joao>], [], [], [], []]\n        [[<0, joao>], [<11, alice>], [], [], []]\n        [[<0, joao>], [<11, alice>, <21, leticia>], [], [], []]\n        [[<0, joao>], [<11, alice>, <21, leticia>, <31, aalice>], [], [], []]\n        [0, 11, 21, 31]\n        [aalice, alice, joao, leticia]', 'input: |\n        3\n        put 0 joao\n        put 1 maria\n        put 2 pedro\n        put 4 leticia\n        put 5 zeze\n        put 6 luciano\n        put 7 mirosmar\n        keys\n        values\n        end\n    output: |\n        [[<0, joao>], [], []]\n        [[<0, joao>], [<1, maria>], []]\n        [[<0, joao>], [<1, maria>], [<2, pedro>]]\n        [[<0, joao>], [<1, maria>, <4, leticia>], [<2, pedro>]]\n        [[<0, joao>], [<1, maria>, <4, leticia>], [<2, pedro>, <5, zeze>]]\n        [[<0, joao>, <6, luciano>], [<1, maria>, <4, leticia>], [<2, pedro>, <5, zeze>]]\n        [[<0, joao>, <6, luciano>], [<1, maria>, <4, leticia>, <7, mirosmar>], [<2, pedro>, <5, zeze>]]\n        [0, 1, 2, 4, 5, 6, 7]\n        [joao, leticia, luciano, maria, mirosmar, pedro, zeze]']"
+"hash_table_probing"~"# Hash Tables Probing
+
+    Due to the nature of the hash functions we use to build Hash Tables, collisions are
+    inevitable. That is, for a pair of objects with different keys, there is a possibility that their
+    their hashes are the same and, consequently, these objects will be mapped to the same
+    position in the table.
+
+    One of the ways of resolving collisions is that if the key hash is mapped to an already occupied position, the 
+    position, the insertion algorithm looks for another free position to insert the <key, value> pair.
+    pair <key, value>. This strategy is called open addressing collision resolution. 
+    In particular, when the attempt is always to check the next position in the table, it is said that
+    the strategy uses linear probing.
+
+    Implement a program that reads from the standard input operations in a 
+    hash table and prints its state whenever the put and remove operations are performed.
+    
+    The hash table should **store integer keys and values of type String** and should resolve 
+    **collisions by open addressing and linear probing**. 
+
+    Your table should have the following functions:
+
+        - put <key> <value>
+        - remove <key>
+        - keys
+        - values
+        
+
+    **To make testing easier, your table will always have the following *base* hash function:
+
+        hash(key) = key % M, where M is the size of the table
+            **If the table is already completely full during an insertion, 
+    simply do not add the new pair. However, even if the operation is not performed,
+    print the contents of the table.
+
+     Rehash is a topic for another question :)
+
+    ## Input
+
+    Your program should read from the input the size of the table and a series of operations 
+    (put, remove, keys, and values). 
+
+        - put: adds the key,value pair to the table
+        - remove: removes the pair whose key is equal to the key passed as a parameter
+        - keys: prints the keys in the table in order. You can use Arrays.sort for this.
+        - values: prints the values in the table in order. You can use Arrays.sort for this.
+
+    Read operations must end with the word `“end”`.
+
+    ## Output
+
+    Your program should always print the contents of the table after the put and remove operations have been performed.
+    When the *keys* or *values* operation is read, it should print the keys or values in
+    ascending order.
+    
+    ## Restrictions
+
+        - Your table must be based on arrays. 
+        - The hash function must always be the same (except for probing): key % M, 
+        where M is the size of the table.
+        - Create the HashTable class to organize your code. 
+        - Create a Pair class as an abstraction for key and value. 
+        
+    ## Execution example    
+        $ javac Solution.java; java Solution
+        5
+        put 0 joao
+        [<0, joao>, null, null, null, null]
+        put 4 leticia
+        [<0, joao>, null, null, null, <4, leticia>]
+        put 20 carlos
+        [<0, joao>, <20, carlos>, null, null, <4, leticia>]
+        put 0 pedro
+        [<0, pedro>, <20, carlos>, null, null, <4, leticia>]
+        remove 20
+        [<0, pedro>, null, null, null, <4, leticia>]
+        keys
+        [0, 4]
+        values
+        [leticia, pedro]
+        end"~"['input: |\n        5\n        put 0 joao\n        put 4 leticia\n        put 20 carlos\n        put 0 pedro\n        remove 20\n        keys\n        values\n        end\n    output: |\n        [<0, joao>, null, null, null, null]\n        [<0, joao>, null, null, null, <4, leticia>]\n        [<0, joao>, <20, carlos>, null, null, <4, leticia>]\n        [<0, pedro>, <20, carlos>, null, null, <4, leticia>]\n        [<0, pedro>, null, null, null, <4, leticia>]\n        [0, 4]\n        [leticia, pedro]', 'input: |\n        3\n        remove 9\n        put 6 joao\n        put 7 julia\n        put 8 july\n        put 9 joca\n        remove 6\n        put 9 joca\n        end\n    output: |\n        [null, null, null]\n        [<6, joao>, null, null]\n        [<6, joao>, <7, julia>, null]\n        [<6, joao>, <7, julia>, <8, july>]\n        [<6, joao>, <7, julia>, <8, july>]\n        [null, <7, julia>, <8, july>]\n        [<9, joca>, <7, julia>, <8, july>]', 'input: |\n        3\n        put 0 joao\n        put 6 july\n        put 0 july\n        put 6 joao\n        remove 0\n        remove 6\n        end\n    output: |\n        [<0, joao>, null, null]\n        [<0, joao>, <6, july>, null]\n        [<0, july>, <6, july>, null]\n        [<0, july>, <6, joao>, null]\n        [null, <6, joao>, null]\n        [null, null, null]', 'input: |\n        3\n        put 0 joao\n        put 1 carlos\n        put 2 pedro\n        put 0 joao\n        put 66 djavan\n        remove 0\n        remove 1\n        remove 2\n        remove 3\n        put 66 djavan\n        end\n\n    output: |\n        [<0, joao>, null, null]\n        [<0, joao>, <1, carlos>, null]\n        [<0, joao>, <1, carlos>, <2, pedro>]\n        [<0, joao>, <1, carlos>, <2, pedro>]\n        [<0, joao>, <1, carlos>, <2, pedro>]\n        [null, <1, carlos>, <2, pedro>]\n        [null, null, <2, pedro>]\n        [null, null, null]\n        [null, null, null]\n        [<66, djavan>, null, null]']"
+"master_theorem"~"# Master theorem
+
+    Write a program that, given a recurrence relation, 
+    applies the master theorem to determine its asymptotic class.
+
+    The master theorem can be applied to functions in the following format:
+
+        T(n) = a '*' T(n/b) + theta(n'**'ord)
+
+    where **a** is the number of recursive calls, 
+    **b** is the size of each subproblem and **ord** is the order of the function added to each recursive step.
+
+    ## Input
+
+    Your program receives 3 integer values consisting of a, b and ord. 
+
+    ## Output
+
+    Your program must apply the rules of the master theorem and print the theta of the recurrence relation.
+
+    ## Execution examples
+
+        javac Solucao.java; java Solucao
+        4 2 3
+        T(n) = theta(n**3)
+
+        javac Solucao.java; java Solucao
+        9 3 2
+        T(n) = theta(n**2 * log n)
+
+        javac Solution.java; java Solution
+        3 3 1
+        T(n) = theta(n**1 * log n)"~"['input: |\n        4 2 3\n    output: |\n        T(n) = theta(n**3)', 'input: |\n        9 3 2\n    output: |\n        T(n) = theta(n**2 * log n)', 'input: |\n        8 8 3\n    output: |\n        T(n) = theta(n**3)', 'input: |\n        3 3 1\n    output: |\n        T(n) = theta(n**1 * log n)', 'input: |\n        27 3 3\n    output: |\n        T(n) = theta(n**3 * log n)']"
+"top_n"~"# Top-n
+    
+    Write a program that prints the  **n** largest elements of a sequence.
+
+    ## Input
+
+    Your program must read two lines from the standard input. The first
+    is a sequence of space-separated integers and the 
+    second is an integer **n** representing the number of elements
+    to be printed.
+
+    Important: you can consider that n is always greater than or equal to 1 and less than or
+    equal to the number of elements in the sequence.
+
+    ## Output
+
+    Your program should print the n largest elements of the sequence read in descending order.
+
+    ## Example
+    
+        javac Solution.java; java Solution
+        9 3 1 7 34 22 101 7 300 1 45
+        3
+        300 101 45
+
+        javac Solution.java; java Solution
+        9 3 1 7 34 22 101 7 300 1 45
+        4
+        300 101 45 34
+
+    ## Tip
+
+    Use Arrays.toString().
+    
+    ## Restrictions
+    
+    You may not use auxiliary arrays.
+
+    You may not use Arrays.sort or any ready-made
+    method from sorting libraries. If you need to, implement it.
+
+    Your program should only manipulate the array of integers. You can't use functions like:
+    
+        - insert
+        - remove
+        - pop
+        - any sorting function"~"['input: |\n        9 3 1 7 34 22 101 7 300 1 45\n        3\n    output: |\n        300 101 45', 'input: |\n        9 3 1 7 34 22 101 7 300 1 45\n        4\n    output: |\n        300 101 45 34', 'input: |\n        1 2 3\n        3\n    output: |\n        3 2 1', 'input: |\n        1 9 3 2\n        1\n    output: |\n        9']"
+"tower_of_hanoi"~"# Tower of Hanoi
+
+    Tower of Hanoi is a strategic game that has 3 vertical rods/pins (A, B and C) that work like batteries.
+    
+    On the first pin (A) we have disks arranged in increasing diameter (the smallest at the top).
+    The aim of the game is to pass these disks to the last pin (C) with the help of the central pin (B).
+
+    However, the game has some restrictions on movement:
+
+        - only one disk can be moved at a time;
+        - only the disk at the top of each peg can be chosen to be moved (i.e. stacked);
+        - a disk with a larger diameter can never be above a disk with a smaller diameter.
+
+    ## Input
+    Your program should only read the number of discs on the first pin.
+
+    ## Output
+
+    Your program should display each movement of the disks, including disk origin and destination.
+
+    ## Execution example
+
+            $ javac Solution.java; java Solution
+            2
+            Moves disk 1 from stem A to stem B
+            Moves disk 2 from stem A to stem C
+            Moves disk 1 from stem B to stem C"~"['input: |\n        2\n    type: io\n    output: |\n        Moves disk 1 from stem A to stem B\n        Moves disk 2 from stem A to stem C\n        Moves disk 1 from stem B to stem C', 'input: |\n        3\n    type: io\n    output: |\n        Moves disk 1 from stem A to stem C\n        Moves disk 2 from stem A to stem B\n        Moves disk 1 from stem C to stem B\n        Moves disk 3 from stem A to stem C\n        Moves disk 1 from stem B to stem A\n        Moves disk 2 from stem B to stem C\n        Moves disk 1 from stem A to stem C', 'input: |\n        4\n    type: io\n    output: |\n        Moves disk 1 from stem A to stem B\n        Moves disk 2 from stem A to stem C\n        Moves disk 1 from stem B to stem C\n        Moves disk 3 from stem A to stem B\n        Moves disk 1 from stem C to stem A\n        Moves disk 2 from stem C to stem B\n        Moves disk 1 from stem A to stem B\n        Moves disk 4 from stem A to stem C\n        Moves disk 1 from stem B to stem C\n        Moves disk 2 from stem B to stem A\n        Moves disk 1 from stem C to stem A\n        Moves disk 3 from stem B to stem C\n        Moves disk 1 from stem A to stem B\n        Moves disk 2 from stem A to stem C\n        Moves disk 1 from stem B to stem C', 'input: |\n        5\n    type: io\n    output: |\n        Moves disk 1 from stem A to stem C\n        Moves disk 2 from stem A to stem B\n        Moves disk 1 from stem C to stem B\n        Moves disk 3 from stem A to stem C\n        Moves disk 1 from stem B to stem A\n        Moves disk 2 from stem B to stem C\n        Moves disk 1 from stem A to stem C\n        Moves disk 4 from stem A to stem B\n        Moves disk 1 from stem C to stem B\n        Moves disk 2 from stem C to stem A\n        Moves disk 1 from stem B to stem A\n        Moves disk 3 from stem C to stem B\n        Moves disk 1 from stem A to stem C\n        Moves disk 2 from stem A to stem B\n        Moves disk 1 from stem C to stem B\n        Moves disk 5 from stem A to stem C\n        Moves disk 1 from stem B to stem A\n        Moves disk 2 from stem B to stem C\n        Moves disk 1 from stem A to stem C\n        Moves disk 3 from stem B to stem A\n        Moves disk 1 from stem C to stem B\n        Moves disk 2 from stem C to stem A\n        Moves disk 1 from stem B to stem A\n        Moves disk 4 from stem B to stem C\n        Moves disk 1 from stem A to stem C\n        Moves disk 2 from stem A to stem B\n        Moves disk 1 from stem C to stem B\n        Moves disk 3 from stem A to stem C\n        Moves disk 3 from stem A to stem C\n        Moves disk 1 from stem B to stem A\n        Moves disk 2 from stem B to stem C\n        Moves disk 1 from stem A to stem C']"
+"three_n_plus_one"~"# 3N + 1
+
+    Consider the following strategy for generating a sequence of 
+    numbers from an integer N:
+
+        - If N is even, divide by 2.
+        - If N is odd, multiply by 3 and add 1.
+        - Replace N with the generated number and repeat this process until the generated number is 1.
+
+    For example, for N = 22, we have the following generated sequence:
+        - 22 11 34 17 52 26 13 40 20 10 5 16 8 4 2 1
+
+    Note: This is a classic programming problem. 
+    It is the subject of several books on the subject. Therefore, it is not 
+    authored by the teachers responsible for the tst.
+
+    It is conjectured (there is no proof yet) that for any integer, 
+    the sequence always ends in 1. However, it is known that for any integer
+    between 1 and 1,000,000 this is true.
+
+    ## Input
+
+    Your program should read from the input two integers (one per line)
+    i and j, both smaller than 1,000,000.
+
+    ## Output
+
+    In the output, you should print only the size of the longest sequence generated by the
+    numbers between i and j (including both).
+
+
+    ## Running example
+    
+        $ javac Solution.java; java Solution
+        2
+        6
+        9
+        $
+
+
+       $ javac Solution.java; java Solution
+        1
+        10
+        20"~"['input: |\n        2\n        6\n    output: |\n        9', 'input: |\n        1\n        10\n    output: |\n        20', 'input: |\n        100\n        200\n    output: |\n        125', 'input: |\n        201\n        210\n    output: |\n        89', 'input: |\n        900\n        1000\n    output: |\n        174']"
+"trim_linked_list"~"# Trim LinkedList
+
+    Write a program to remove the ends of a LinkedList. 
+    The number of ends to be removed is passed as an argument on the command line.
+  
+    ## Input
+    
+    Your program will read a sequence of integers to be added (addLast) 
+    to a LinkedList. Then, it should read an integer representing the amount
+    of ends that should be removed from the list.
+    
+    ## Output
+    
+    In the output, your program should print the list after removing the nodes. 
+    If the list is empty, it should print **empty**.
+
+    For example, if you pass 1 on the command line, your program should remove
+    the first and last elements. If you pass 2, the first, second, last and penultimate elements should be removed, and so on.
+    
+    ## Restrictions and Remarks
+    
+    - It is not allowed to use auxiliary structures.
+    - You must use your LinkedList implementation. 
+      That is, your addLast, your remove, your toString etc.
+    
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        1 13 3 4 5 3 6
+        1
+        13 3 4 5 3
+        
+
+        javac Solution.java; java Solution
+        3 3
+        1
+        empty"~"['input: |\n        1 13 3 4 5 3 6\n        1\n    output: |\n        13 3 4 5 3', 'input: |\n        3 3\n        1\n    output: |\n        empty', 'input: |\n        9 7 3 5 4 3\n        0\n    output: |\n        9 7 3 5 4 3', 'input: |\n        9 7 3 5 4 3\n        3\n    output: |\n        empty', 'input: |\n        3 4 3 2 6 5 4 2 3\n        2\n    output: |\n        3 2 6 5 4']"
+"swap_neighbors"~"# Swap Neighbors
+
+    Write a program that reads a sequence of integers and swaps the neighboring elements.
+    If the length of the sequence is odd, swap the neighbors and keep the last element in
+    position.
+
+
+    ## Input
+    
+    Your program will read a sequence and store it in an array of integers.
+
+    ## Output
+    
+    In the output, your program should print the array resulting from swapping the neighboring elements.
+    Tip: use Arrays.toString() to format the output.
+
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        1 13 3 4 5
+        [13, 1, 4, 3, 5]
+
+        javac Solucao.java; java Solucao
+        1 7
+        [7, 1]
+
+    ## Constraints
+
+    The algorithm must be in-place. That is, it is not allowed to use any other auxiliary array to swap
+    the elements."~"['input: |\n        1 13 3 4 5\n    output: |\n        [13, 1, 4, 3, 5]', 'input: |\n        1 7\n    output: |\n        [7, 1]', 'input: |\n        9 6 3\n    output: |\n        [6, 9, 3]', 'input: |\n        1 1 1 1 1 1\n    output: |\n        [1, 1, 1, 1, 1, 1]', 'input: |\n        1\n    output: |\n        [1]']"
+"swap_neighbors_linked_list"~"# Swap Neighbors LinkedList
+
+    Write a program that swaps neighbors nodes of a LinkedList. You can't swap the values, you have to swap the nodes, i.e. manipulate
+    the `next` and `prev` references for the swap.
+  
+    ## Input
+    
+    Your program will read a sequence of integers that must be added (addLast) to a LinkedList. Then, it must read an
+    integer representing the `i` index of the element to be swapped. You should swap elements at index `i` and `i+1` only.
+
+    You can assume that the indexes `i` and `i+1` are valid indexes.
+  
+    ## Output
+    
+    In the output, your program should print the list after swapping the nodes at indices `i` and `i+1`.
+    
+    ## Restrictions and Remarks
+    
+    - You are not allowed to use auxiliary structures.
+    - You must use your LinkedList implementation.
+    
+    ## Execution example
+
+        javac Solucao.java; java Solucao
+        1 13 3 4 5
+        1
+        1 3 13 4 5
+
+        javac Solution.java; java Solution
+        9 7 3 5 4 3
+        3
+        9 7 3 4 5 3"~"['input: |\n        1 13 3 4 5\n        1\n    output: |\n        1 3 13 4 5', 'input: |\n        9 7 3 5 4 3\n        3\n    output: |\n        9 7 3 4 5 3', 'input: |\n        9 7 3 5 4 3\n        0\n    output: |\n        7 9 3 5 4 3', 'input: |\n        9 7 3 5 4 3\n        4\n    output: |\n        9 7 3 5 3 4']"
+"nearest_value_bst"~"# Nearest value in a binary search tree
+
+    Write a program that reads the numbers to be added in a BST and
+    a number N for which you want to find the value closest to it in the tree.
+
+    ## Restrictions
+    
+        - It is not allowed to search for successors or predecessors. Even if it were, N 
+        does not have to be a value present in the tree.
+        - The implementation must be O(h). That is, you can't go through
+        the entire tree to find the element.
+
+    ## Input
+
+    Your program must read two lines of input. 
+    The first line will contain (in order) the elements that should be added to the tree.
+    The second will contain a value N (not necessarily present in the tree). 
+
+    Your program must find the value closest to N in the tree.
+
+    You can assume that there will be no repeated elements in the tree.
+    You can assume that no two values will be tied.
+
+    ## Output
+
+    Initially, your program must print out the pre-order routing of the tree read. Then, 
+    print the value closest to N in the tree.
+    See the execution examples below.
+
+    ## Execution examples
+    
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        23
+        [10, 8, 1, 9, 20, 18, 25]
+        25
+
+        $ javac Solution.java; java Solution
+        10 8 1 9 20 18 25
+        17
+        [10, 8, 1, 9, 20, 18, 25]
+        18"~"['input: |\n        10 8 1 9 20 18 25\n        23\n    output: |\n        [10, 8, 1, 9, 20, 18, 25]\n        25', 'input: |\n        10 8 1 9 20 18 25\n        17\n    output: |\n        [10, 8, 1, 9, 20, 18, 25]\n        18', 'input: |\n        1 2 3 4 5 6 7 8\n        9\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        8', 'input: |\n        1 2 3 4 5 6 7 8\n        0\n    output: |\n        [1, 2, 3, 4, 5, 6, 7, 8]\n        1', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        301\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        300', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        321\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        320', 'input: |\n        100 80 200 90 150 300 85 170 400 350 320 330\n        149\n    output: |\n        [100, 80, 90, 85, 200, 150, 170, 300, 400, 350, 320, 330]\n        150']"
+"circular_vector"~"# Circular vector
+
+    Write a program that prints a vector in a circular fashion. 
+    Your program must receive a sequence of values and an integer N and must print the N positions of the sequence read. 
+    Naturally, N can be larger than the size of the sequence read. 
+
+    In such cases, you must restart the printout again from the beginning of the vector.
+
+    ## Input
+
+    Your program will receive a sequence of space-separated values on the first line and, on the second line, 
+    a value N that tells you how many elements should be printed.
+
+    ## Output
+
+    Your program should print the number sequence with N elements in a circular fashion. 
+    That is, when the last element is printed, it should go back to the first and 
+    continue until it reaches N printed elements.
+
+    ## Execution examples
+
+        javac Solucao.java; java Solucao
+        4 5 6 1
+        6
+        4 5 6 1 4 5
+
+        javacSolucao.java; java Solucao
+        3 4 2
+        8
+        3 4 2 3 4 2 3 4"~"['input: |\n        4 5 6 1\n        6\n    output: |\n        4 5 6 1 4 5', 'input: |\n        3 4 2\n        8\n    output: |\n        3 4 2 3 4 2 3 4', 'input: |\n        1\n        4\n    output: |\n        1 1 1 1', 'input: |\n        3 5 6 8 1 2\n        3\n    output: |\n        3 5 6', 'input: |\n        9 4 5 6 5\n        10\n    output: |\n        9 4 5 6 5 9 4 5 6 5']"
+"warm_up_dsa"~"# Warm up Data Structures and Algorithms
+
+    Write a program that reads an integer N and a sequence of integers and multiplies
+    each element of this sequence by N.
+
+    ## Input
+
+    Your program should read two lines. On the first line, it should read an integer N. On the second,
+    a sequence of space-separated integers.
+
+    ## Output
+    
+    Your program must print the sequence of integers resulting from multiplying
+    between N and each element of the original sequence.
+    
+    ## Examples
+    
+        javac Solucao.java; java Solucao
+        2
+        2 4 6
+        4 8 12
+
+        javac Solution.java; java Solution
+        7
+        2 1 3
+        14 7 21"~"['input: |\n        2\n        2 4 6\n    output: |\n        4 8 12', 'input: |\n        7\n        2 1 3\n    output: |\n        14 7 21', 'input: |\n        3\n        3\n    output: |\n        9', 'input: |\n        10\n        10 20 30\n    output: |\n        100 200 300', 'input: |\n        -1\n        1 2 3 4\n    output: |\n        -1 -2 -3 -4', 'input: |\n        -1\n        -1 2\n    output: |\n        1 -2']"
+"word_cloud"~"# Word Cloud
+    
+    Word cloud is a graphic way of displaying the words in a given text. 
+    In it, the words take on a size proportional to their frequency in the original text. So,
+    a library that designs a wordcloud must use as information each word
+    contained in the text under analysis and its respective frequency.
+
+
+    Your goal in this question is to provide the necessary information for the word cloud builder, i.e, 
+    the words and their respective frequencies. 
+    To do this, implement a program that receives a String representing the text to be analyzed and returns this information.
+
+    Important: i) consider that the string passed as a parameter is large and an O(n**2) algorithm would be impractical and 
+    ii) you must choose the appropriate data structure for calculating the frequency based on what we have seen in class.
+
+    ## Input
+
+    Your program should read from the standard input the text to be analyzed and a sequence of word queries
+    until the word `end` is read. For each query, your program should print the frequency of the term
+    queried.
+
+    You can assume that the word `end` is not part of the text to be analyzed.
+
+    ## Output
+
+    Your program should print its frequency for each term in the analyzed text. 
+    
+        ## Example of execution
+        $ javac Solution.java; java Solution
+        um exemplo de exemplo de texto
+        um
+        1
+        exemplo
+        2
+        texto
+        1
+        de
+        2
+        end"~"['input: |\n        um exemplo de exemplo de texto\n        um\n        exemplo\n        texto\n        de\n        end\n    output: |\n        1\n        2\n        1\n        2', 'input: |\n        um exemplo com freq um\n        um\n        exemplo\n        com\n        freq\n        um\n        end\n    output: |\n        2\n        1\n        1\n        1\n        2', 'input: |\n        mais mais mais mais mais mais mai\n        mais\n        mai\n        end\n    output: |\n        6\n        1', 'input: |\n        para para nao nao para nao\n        para\n        para\n        nao\n        nao\n        end\n    output: |\n        3\n        3\n        3\n        3']"

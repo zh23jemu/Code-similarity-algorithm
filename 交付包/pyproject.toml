@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "code-similarity-algorithm"
+version = "0.1.0"
+description = "基于弱监督训练建模的 Java 代码相似度检测实验项目"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "joblib>=1.3",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
