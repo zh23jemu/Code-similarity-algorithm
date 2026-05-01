@@ -8,11 +8,15 @@ __pycache__/
 htmlcov/
 outputs/
 outputs_*/
+docx_render_check*/
+docx_render_check_*.pdf
 *.joblib
 *.pkl
 *.log
 .env
 .env.*
+~$*.docx
+*备份.docx
 代码文件功能说明.md
 代码相似度检测_项目代码包_*.zip
 .vscode/
