@@ -13,6 +13,8 @@ outputs_*/
 *.log
 .env
 .env.*
+代码文件功能说明.md
+代码相似度检测_项目代码包_*.zip
 .vscode/
 .idea/
 Thumbs.db
