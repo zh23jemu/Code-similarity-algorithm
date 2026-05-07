@@ -62,6 +62,27 @@ py -3.11 -m venv .venv
 
 其中，`--high-threshold` 是弱监督正样本阈值，基础相似度高于该值的代码对会被标为相似；`--low-threshold` 是弱监督负样本阈值，基础相似度低于该值的代码对会被标为不相似。
 
+### 3.1 启动本地前端检测页面
+
+如果你想演示“前端输入两段代码，后端调用项目现有检测逻辑并返回结果”的流程，可以直接启动本地 Web 服务。页面会读取当前输出目录下的模型文件，并支持一键检测两段 Java 代码的相似度。
+
+```powershell
+.venv\Scripts\python.exe -m similarity serve-webui --output-dir outputs --port 8000
+```
+
+启动后在浏览器打开：
+
+```text
+http://127.0.0.1:8000/
+```
+
+说明：
+
+- 默认读取 `outputs` 目录下的 `model.joblib`。
+- 页面支持切换 `outputs` 与 `outputs_cross_user`。
+- 如果你重新训练模型，只需要刷新浏览器并重新加载状态，不需要重新生成 HTML。
+- 如果模型文件不存在，页面会提示你先执行 `train` 或 `run-pipeline`。
+
 ### 4. 比较两个 Java 文件
 
 如果已经训练好模型，可以直接比较两个 Java 文件的相似度：

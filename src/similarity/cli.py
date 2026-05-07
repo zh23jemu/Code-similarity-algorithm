@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+import pandas as pd
+
 from .analysis import build_paper_tables
 from .data import inspect_dataset, load_submissions
 from .experiments import run_comparison_experiment
@@ -12,6 +14,7 @@ from .pairs import build_pair_frame, iter_activity_pairs
 from .report import write_html_report, write_json
 from .review import create_review_sample, summarize_manual_review
 from .strict_eval import run_ablation_experiment, run_question_split_experiment
+from .webapp import run_webui_server
 
 
 def _print_json(data: dict[str, object]) -> None:
@@ -95,7 +98,21 @@ def command_predict(args: argparse.Namespace) -> None:
     similar = scored[scored["model_similarity"] >= args.threshold].sort_values("model_similarity", ascending=False)
     similar_path = output_dir / "similar_pairs.csv"
     similar.to_csv(similar_path, index=False, encoding="utf-8-sig")
-    write_html_report(output_dir / "report.html", similar, metrics=None, top_k=args.top_k)
+    write_html_report(
+        output_dir / "report.html",
+        similar,
+        metrics=None,
+        top_k=args.top_k,
+        run_config={
+            "command": "predict",
+            "data_dir": str(args.data_dir),
+            "model": str(args.model),
+            "threshold": args.threshold,
+            "max_pairs_per_question": args.max_pairs_per_question,
+            "question_id": args.question_id,
+            "cross_user_only": args.cross_user_only,
+        },
+    )
     _print_json({"scored_pairs": str(scored_path), "similar_pairs": str(similar_path), "count": int(len(similar))})
 
 
@@ -116,20 +133,19 @@ def command_run_pipeline(args: argparse.Namespace) -> None:
     similar_path = output_dir / "similar_pairs.csv"
     similar.to_csv(similar_path, index=False, encoding="utf-8-sig")
 
-    write_html_report(output_dir / "report.html", similar, metrics=result.metrics, top_k=args.top_k)
-    write_json(
-        output_dir / "run_config.json",
-        {
-            "command": "run-pipeline",
-            "data_dir": str(args.data_dir),
-            "high_threshold": args.high_threshold,
-            "low_threshold": args.low_threshold,
-            "similarity_threshold": args.threshold,
-            "max_pairs_per_question": args.max_pairs_per_question,
-            "model_type": args.model_type,
-            "question_id": args.question_id,
-        },
-    )
+    run_config = {
+        "command": "run-pipeline",
+        "data_dir": str(args.data_dir),
+        "high_threshold": args.high_threshold,
+        "low_threshold": args.low_threshold,
+        "similarity_threshold": args.threshold,
+        "max_pairs_per_question": args.max_pairs_per_question,
+        "model_type": args.model_type,
+        "question_id": args.question_id,
+        "cross_user_only": args.cross_user_only,
+    }
+    write_json(output_dir / "run_config.json", run_config)
+    write_html_report(output_dir / "report.html", similar, metrics=result.metrics, top_k=args.top_k, run_config=run_config)
     _print_json(
         {
             "training_pairs": str(training_pairs_path),
@@ -275,6 +291,17 @@ def command_build_paper_tables(args: argparse.Namespace) -> None:
     _print_json(manifest)
 
 
+def command_serve_webui(args: argparse.Namespace) -> None:
+    """启动本地前端检测页面，支持输入两段代码后一键检测相似度。"""
+
+    run_webui_server(
+        root_dir=Path.cwd(),
+        output_dir=args.output_dir,
+        host=args.host,
+        port=args.port,
+    )
+
+
 def command_reproduce_paper(args: argparse.Namespace) -> None:
     """一键复现论文主要实验与统计表。"""
 
@@ -366,6 +393,19 @@ def command_reproduce_paper(args: argparse.Namespace) -> None:
     )
     command_build_paper_tables(table_args)
 
+    # 在人工复核摘要和论文统计表准备完成后，重新生成一次答辩看板，
+    # 让最终 report.html 能展示更完整的复核与分布信息。
+    similar_frame = _read_csv(cross_user_output / "similar_pairs.csv")
+    metrics_data = json.loads((cross_user_output / "metrics.json").read_text(encoding="utf-8"))
+    run_config = json.loads((cross_user_output / "run_config.json").read_text(encoding="utf-8"))
+    write_html_report(
+        cross_user_output / "report.html",
+        similar_frame,
+        metrics=metrics_data,
+        top_k=args.top_k,
+        run_config=run_config,
+    )
+
     _print_json(
         {
             "pipeline_dir": str(cross_user_output),
@@ -448,12 +488,31 @@ def build_parser() -> argparse.ArgumentParser:
     table_parser.add_argument("--output-dir", default="paper_tables")
     table_parser.set_defaults(func=command_build_paper_tables)
 
+    serve_webui_parser = subparsers.add_parser("serve-webui", help="启动本地代码相似度检测前端页面")
+    serve_webui_parser.add_argument("--output-dir", default="outputs", help="默认读取的输出目录")
+    serve_webui_parser.add_argument("--host", default="127.0.0.1", help="服务监听地址")
+    serve_webui_parser.add_argument("--port", type=int, default=8000, help="服务端口")
+    serve_webui_parser.set_defaults(func=command_serve_webui)
+
+    # 兼容之前的命令名，避免已有使用方式失效。
+    serve_dashboard_parser = subparsers.add_parser("serve-dashboard", help="兼容旧命令名，启动本地代码相似度检测前端页面")
+    serve_dashboard_parser.add_argument("--output-dir", default="outputs", help="默认读取的输出目录")
+    serve_dashboard_parser.add_argument("--host", default="127.0.0.1", help="服务监听地址")
+    serve_dashboard_parser.add_argument("--port", type=int, default=8000, help="服务端口")
+    serve_dashboard_parser.set_defaults(func=command_serve_webui)
+
     reproduce_parser = subparsers.add_parser("reproduce-paper", help="一键复现论文主要实验与统计表")
     _add_common_training_args(reproduce_parser)
     reproduce_parser.add_argument("--threshold", type=float, default=0.90)
     reproduce_parser.add_argument("--top-k", type=int, default=100)
     reproduce_parser.set_defaults(func=command_reproduce_paper)
     return parser
+
+
+def _read_csv(path: str | Path):
+    """读取命令行阶段生成的 CSV，用于组合后续报告流程。"""
+
+    return pd.read_csv(path, encoding="utf-8-sig")
 
 
 def _add_common_training_args(parser: argparse.ArgumentParser) -> None:
