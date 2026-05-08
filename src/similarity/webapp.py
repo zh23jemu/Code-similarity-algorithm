@@ -47,6 +47,20 @@ def _resolve_model_path(root_dir: Path, output_dir: str, model_path: str | None 
     return (_resolve_output_dir(root_dir, output_dir) / "model.joblib").resolve()
 
 
+def _list_java_files(root_dir: Path) -> list[str]:
+    """列出项目根目录下可用于比较的 Java 文件。"""
+
+    return sorted(
+        [
+            item.name
+            for item in root_dir.iterdir()
+            if item.is_file()
+            and item.suffix.lower() == ".java"
+            and not item.name.startswith("~$")
+        ]
+    )
+
+
 def build_status_payload(root_dir: str | Path, output_dir: str = "outputs", model_path: str | None = None) -> dict[str, object]:
     """构建前端页面需要的模型状态、参数和样本摘要。"""
 
@@ -96,6 +110,7 @@ def build_status_payload(root_dir: str | Path, output_dir: str = "outputs", mode
         "modelLoaded": resolved_model_path.exists(),
         "modelPath": str(resolved_model_path.relative_to(root_path)) if resolved_model_path.is_relative_to(root_path) else str(resolved_model_path),
         "outputDir": str(output_path.relative_to(root_path)) if output_path.is_relative_to(root_path) else str(output_path),
+        "javaFiles": _list_java_files(root_path),
         "metrics": metrics,
         "runConfig": run_config,
         "summaryItems": summary_items,
@@ -129,6 +144,42 @@ def build_compare_payload(code_a: str, code_b: str, model_path: str | Path) -> d
         "features": feature_rows,
         "raw": result,
     }
+
+
+def build_file_compare_payload(root_dir: str | Path, file_a: str, file_b: str, model_path: str | Path) -> dict[str, object]:
+    """读取两个 Java 文件并执行相似度检测。"""
+
+    root_path = Path(root_dir).resolve()
+    path_a = (root_path / file_a).resolve()
+    path_b = (root_path / file_b).resolve()
+    if root_path not in path_a.parents and path_a != root_path:
+        raise ValueError("文件 A 不在项目根目录内。")
+    if root_path not in path_b.parents and path_b != root_path:
+        raise ValueError("文件 B 不在项目根目录内。")
+    if not path_a.exists():
+        raise FileNotFoundError(f"文件 A 不存在: {file_a}")
+    if not path_b.exists():
+        raise FileNotFoundError(f"文件 B 不存在: {file_b}")
+    code_a = path_a.read_text(encoding="utf-8", errors="ignore")
+    code_b = path_b.read_text(encoding="utf-8", errors="ignore")
+    payload = build_compare_payload(code_a, code_b, model_path)
+    payload["files"] = {"file_a": file_a, "file_b": file_b}
+    return payload
+
+
+def build_uploaded_file_compare_payload(
+    file_a_name: str,
+    file_a_content: str,
+    file_b_name: str,
+    file_b_content: str,
+    model_path: str | Path,
+) -> dict[str, object]:
+    """基于浏览器上传的两个 Java 文件内容执行相似度检测。"""
+
+    payload = build_compare_payload(file_a_content, file_b_content, model_path)
+    payload["files"] = {"file_a": file_a_name, "file_b": file_b_name}
+    payload["mode"] = "upload"
+    return payload
 
 
 def get_compare_webui_html() -> str:
@@ -222,13 +273,22 @@ def get_compare_webui_html() -> str:
     }
     .layout {
       display: grid;
-      grid-template-columns: minmax(300px, 0.74fr) minmax(620px, 1.42fr) minmax(240px, 0.52fr);
+      grid-template-columns: minmax(320px, 0.84fr) minmax(680px, 1.46fr);
       gap: 18px;
       align-items: start;
+    }
+    .left-stack {
+      display: grid;
+      gap: 18px;
+      align-content: start;
     }
     .panel {
       padding: 22px;
       min-width: 0;
+    }
+    .stack {
+      display: grid;
+      gap: 18px;
     }
     .panel h3 {
       margin: 0 0 16px;
@@ -451,50 +511,77 @@ def get_compare_webui_html() -> str:
       </section>
 
       <section class="layout">
-        <section class="panel">
-          <h3>检测任务配置</h3>
-          <div class="config-list">
-            <div class="field">
-              <label for="output-dir">输出目录</label>
-              <select id="output-dir">
-                <option value="outputs">outputs</option>
-                <option value="outputs_cross_user">outputs_cross_user</option>
-              </select>
+        <div class="left-stack">
+          <section class="panel">
+            <h3>检测任务配置</h3>
+            <div class="config-list">
+              <div class="field">
+                <label for="output-dir">输出目录</label>
+                <select id="output-dir">
+                  <option value="outputs">outputs</option>
+                  <option value="outputs_cross_user">outputs_cross_user</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="model-path">模型文件路径</label>
+                <input id="model-path" type="text" placeholder="默认自动使用输出目录下的 model.joblib">
+              </div>
             </div>
-            <div class="field">
-              <label for="model-path">模型文件路径</label>
-              <input id="model-path" type="text" placeholder="默认自动使用输出目录下的 model.joblib">
-            </div>
-          </div>
-          <div class="button-row">
-            <button class="btn secondary" id="reload-status" type="button">重载模型状态</button>
-            <button class="btn primary" id="run-compare" type="button">一键检测</button>
-            <button class="btn secondary" id="fill-demo" type="button">填充示例</button>
-          </div>
-          <div class="config-meta" id="config-meta"></div>
-        </section>
+            <div class="config-meta" id="config-meta"></div>
+          </section>
 
-        <section class="panel">
-          <h3>代码输入 / 文件检测</h3>
-          <div class="code-grid">
-            <div class="field">
-              <label for="code-a">代码 A</label>
-              <textarea id="code-a" placeholder="请粘贴第一段 Java 代码"></textarea>
-            </div>
-            <div class="field">
-              <label for="code-b">代码 B</label>
-              <textarea id="code-b" placeholder="请粘贴第二段 Java 代码"></textarea>
-            </div>
-          </div>
-          <p class="helper">前端页面用于触发命令与展示交互；真实检测由后端调用项目现有的 Python 预测逻辑完成。建议先训练好模型，再在这里粘贴两段 Java 代码进行对比。</p>
-          <div id="compare-error"></div>
-          <div id="compare-result" class="empty-box">点击“一键检测”后，这里会展示模型相似度、基础规则相似度以及各项特征分数。</div>
-        </section>
+          <section class="panel">
+            <h3>模型与样本状态</h3>
+            <div class="stats-grid" id="summary-stats"></div>
+          </section>
+        </div>
 
-        <section class="panel">
-          <h3>模型与样本状态</h3>
-          <div class="stats-grid" id="summary-stats"></div>
-        </section>
+        <div class="stack">
+          <section class="panel">
+            <h3>代码输入 / 文件检测</h3>
+            <div class="code-grid">
+              <div class="field">
+                <label for="code-a">代码 A</label>
+                <textarea id="code-a" placeholder="请粘贴第一段 Java 代码"></textarea>
+              </div>
+              <div class="field">
+                <label for="code-b">代码 B</label>
+                <textarea id="code-b" placeholder="请粘贴第二段 Java 代码"></textarea>
+              </div>
+            </div>
+            <p class="helper">前端页面用于触发命令与展示交互；真实检测由后端调用项目现有的 Python 预测逻辑完成。建议先训练好模型，再在这里粘贴两段 Java 代码进行对比。</p>
+            <div class="button-row">
+              <button class="btn secondary" id="fill-demo" type="button">填充示例</button>
+              <button class="btn primary" id="run-compare" type="button">一键检测</button>
+            </div>
+            <div id="compare-error"></div>
+            <div id="compare-result" class="empty-box">点击“一键检测”后，这里会展示模型相似度、基础规则相似度以及各项特征分数。</div>
+          </section>
+
+          <section class="panel">
+            <h3>文件比较</h3>
+            <div class="code-grid">
+              <div class="field">
+                <label for="file-a-input">文件 A</label>
+                <input id="file-a-input" type="file" accept=".java" style="display:none;">
+                <button class="btn secondary" id="choose-file-a" type="button">选择文件 A</button>
+                <div class="helper" id="file-a-name">未选择文件</div>
+              </div>
+              <div class="field">
+                <label for="file-b-input">文件 B</label>
+                <input id="file-b-input" type="file" accept=".java" style="display:none;">
+                <button class="btn secondary" id="choose-file-b" type="button">选择文件 B</button>
+                <div class="helper" id="file-b-name">未选择文件</div>
+              </div>
+            </div>
+            <p class="helper">这里会打开本地文件选择框，你可以直接选中任意两个 `.java` 文件进行比较，不需要下拉列表。</p>
+            <div class="button-row">
+              <button class="btn primary" id="run-file-compare" type="button">文件一键比较</button>
+            </div>
+            <div id="file-compare-error"></div>
+            <div id="file-compare-result" class="empty-box">选择两个 Java 文件后点击“文件一键比较”，这里会展示文件相似度结果。</div>
+          </section>
+        </div>
       </section>
     </main>
   </div>
@@ -503,6 +590,7 @@ def get_compare_webui_html() -> str:
     const state = {
       status: null,
       compare: null,
+      fileCompare: null,
     };
 
     function escapeHtml(value) {
@@ -618,6 +706,40 @@ def get_compare_webui_html() -> str:
       `;
     }
 
+    function renderFileCompareResult() {
+      const container = document.getElementById("file-compare-result");
+      const errorBox = document.getElementById("file-compare-error");
+      errorBox.innerHTML = "";
+
+      if (!state.fileCompare) {
+        container.className = "empty-box";
+        container.innerHTML = "选择两个 Java 文件后点击“文件一键比较”，这里会展示文件相似度结果。";
+        return;
+      }
+
+      const summary = state.fileCompare.summary;
+      const features = state.fileCompare.features || [];
+      const files = state.fileCompare.files || {};
+      container.className = "result-card";
+      container.innerHTML = `
+        <div class="result-head">
+          <div>
+            <div class="result-score">${escapeHtml(formatMetric(summary.model_similarity))}</div>
+            <div class="result-sub">文件判断：${escapeHtml(scoreTone(summary.model_similarity))}</div>
+          </div>
+          <div class="result-sub">${escapeHtml(files.file_a || "")} vs ${escapeHtml(files.file_b || "")}</div>
+        </div>
+        <table class="feature-table">
+          <thead>
+            <tr><th>特征项</th><th>数值</th></tr>
+          </thead>
+          <tbody>
+            ${features.map((item) => `<tr><td>${escapeHtml(item.label)}</td><td>${escapeHtml(formatMetric(item.value))}</td></tr>`).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
     async function loadStatus() {
       const outputDir = document.getElementById("output-dir").value;
       const modelPath = document.getElementById("model-path").value.trim();
@@ -661,24 +783,84 @@ def get_compare_webui_html() -> str:
       }
     }
 
+    async function runFileCompare() {
+      const fileAInput = document.getElementById("file-a-input");
+      const fileBInput = document.getElementById("file-b-input");
+      const selectedFileA = fileAInput.files && fileAInput.files[0];
+      const selectedFileB = fileBInput.files && fileBInput.files[0];
+      const outputDir = document.getElementById("output-dir").value;
+      const modelPath = document.getElementById("model-path").value.trim();
+      const errorBox = document.getElementById("file-compare-error");
+
+      if (!selectedFileA || !selectedFileB) {
+        errorBox.innerHTML = '<div class="error-box">请先选择两个 Java 文件，再执行文件比较。</div>';
+        return;
+      }
+
+      const fileAContent = await selectedFileA.text();
+      const fileBContent = await selectedFileB.text();
+
+      const button = document.getElementById("run-file-compare");
+      button.disabled = true;
+      button.textContent = "比较中...";
+      try {
+        state.fileCompare = await requestJson("/api/compare-files", {
+          method: "POST",
+          body: JSON.stringify({
+            file_a: selectedFileA.name,
+            file_b: selectedFileB.name,
+            file_a_content: fileAContent,
+            file_b_content: fileBContent,
+            output_dir: outputDir,
+            model_path: modelPath || null,
+          }),
+        });
+        renderFileCompareResult();
+      } catch (error) {
+        errorBox.innerHTML = `<div class="error-box">${escapeHtml(error.message)}</div>`;
+      } finally {
+        button.disabled = false;
+        button.textContent = "文件一键比较";
+      }
+    }
+
     function fillDemo() {
       document.getElementById("code-a").value = `public class SumA {\n    public static int sum(int n) {\n        int s = 0;\n        for (int i = 1; i <= n; i++) {\n            s += i;\n        }\n        return s;\n    }\n}`;
       document.getElementById("code-b").value = `public class SumB {\n    public static int sum(int n) {\n        int result = 0;\n        for (int i = 1; i <= n; i++) {\n            result = result + i;\n        }\n        return result;\n    }\n}`;
     }
 
+    function bindFileNamePreview() {
+      const inputA = document.getElementById("file-a-input");
+      const inputB = document.getElementById("file-b-input");
+      document.getElementById("choose-file-a").addEventListener("click", () => inputA.click());
+      document.getElementById("choose-file-b").addEventListener("click", () => inputB.click());
+      inputA.addEventListener("change", () => {
+        const file = inputA.files && inputA.files[0];
+        document.getElementById("file-a-name").textContent = file ? file.name : "未选择文件";
+      });
+      inputB.addEventListener("change", () => {
+        const file = inputB.files && inputB.files[0];
+        document.getElementById("file-b-name").textContent = file ? file.name : "未选择文件";
+      });
+    }
+
     function bindEvents() {
-      document.getElementById("reload-status").addEventListener("click", loadStatus);
       document.getElementById("run-compare").addEventListener("click", runCompare);
       document.getElementById("fill-demo").addEventListener("click", fillDemo);
+      document.getElementById("run-file-compare").addEventListener("click", runFileCompare);
       document.getElementById("output-dir").addEventListener("change", async () => {
         state.compare = null;
+        state.fileCompare = null;
         renderCompareResult();
+        renderFileCompareResult();
         await loadStatus();
       });
     }
 
     bindEvents();
+    bindFileNamePreview();
     renderCompareResult();
+    renderFileCompareResult();
     loadStatus().catch((error) => {
       document.getElementById("compare-error").innerHTML = `<div class="error-box">初始化状态失败：${escapeHtml(error.message)}</div>`;
     });
@@ -732,14 +914,6 @@ def run_webui_server(
 
         def do_POST(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
-            if parsed.path != "/api/compare":
-                self._send_bytes(
-                    HTTPStatus.NOT_FOUND,
-                    _json_bytes({"error": "未找到对应资源"}),
-                    "application/json; charset=utf-8",
-                )
-                return
-
             try:
                 length = int(self.headers.get("Content-Length", "0"))
                 body = self.rfile.read(length) if length > 0 else b"{}"
@@ -752,19 +926,8 @@ def run_webui_server(
                 )
                 return
 
-            code_a = str(payload.get("code_a", "")).strip()
-            code_b = str(payload.get("code_b", "")).strip()
             current_output = str(payload.get("output_dir", output_dir) or output_dir)
             current_model = payload.get("model_path")
-
-            if not code_a or not code_b:
-                self._send_bytes(
-                    HTTPStatus.BAD_REQUEST,
-                    _json_bytes({"error": "请同时提供代码 A 和代码 B。"}),
-                    "application/json; charset=utf-8",
-                )
-                return
-
             resolved_model = _resolve_model_path(root_path, current_output, str(current_model).strip() if current_model else None)
             if not resolved_model.exists():
                 self._send_bytes(
@@ -774,17 +937,60 @@ def run_webui_server(
                 )
                 return
 
-            try:
-                result = build_compare_payload(code_a, code_b, resolved_model)
-            except Exception as exc:  # pragma: no cover
-                self._send_bytes(
-                    HTTPStatus.INTERNAL_SERVER_ERROR,
-                    _json_bytes({"error": f"执行代码相似度检测失败: {exc}"}),
-                    "application/json; charset=utf-8",
-                )
+            if parsed.path == "/api/compare":
+                code_a = str(payload.get("code_a", "")).strip()
+                code_b = str(payload.get("code_b", "")).strip()
+                if not code_a or not code_b:
+                    self._send_bytes(
+                        HTTPStatus.BAD_REQUEST,
+                        _json_bytes({"error": "请同时提供代码 A 和代码 B。"}),
+                        "application/json; charset=utf-8",
+                    )
+                    return
+                try:
+                    result = build_compare_payload(code_a, code_b, resolved_model)
+                except Exception as exc:  # pragma: no cover
+                    self._send_bytes(
+                        HTTPStatus.INTERNAL_SERVER_ERROR,
+                        _json_bytes({"error": f"执行代码相似度检测失败: {exc}"}),
+                        "application/json; charset=utf-8",
+                    )
+                    return
+                self._send_bytes(HTTPStatus.OK, _json_bytes(result), "application/json; charset=utf-8")
                 return
 
-            self._send_bytes(HTTPStatus.OK, _json_bytes(result), "application/json; charset=utf-8")
+            if parsed.path == "/api/compare-files":
+                file_a = str(payload.get("file_a", "")).strip()
+                file_b = str(payload.get("file_b", "")).strip()
+                file_a_content = str(payload.get("file_a_content", "")).strip()
+                file_b_content = str(payload.get("file_b_content", "")).strip()
+                if not file_a or not file_b:
+                    self._send_bytes(
+                        HTTPStatus.BAD_REQUEST,
+                        _json_bytes({"error": "请同时选择文件 A 和文件 B。"}),
+                        "application/json; charset=utf-8",
+                    )
+                    return
+                try:
+                    if file_a_content and file_b_content:
+                        result = build_uploaded_file_compare_payload(file_a, file_a_content, file_b, file_b_content, resolved_model)
+                    else:
+                        result = build_file_compare_payload(root_path, file_a, file_b, resolved_model)
+                except Exception as exc:  # pragma: no cover
+                    self._send_bytes(
+                        HTTPStatus.BAD_REQUEST,
+                        _json_bytes({"error": str(exc)}),
+                        "application/json; charset=utf-8",
+                    )
+                    return
+                self._send_bytes(HTTPStatus.OK, _json_bytes(result), "application/json; charset=utf-8")
+                return
+
+            self._send_bytes(
+                HTTPStatus.NOT_FOUND,
+                _json_bytes({"error": "未找到对应资源"}),
+                "application/json; charset=utf-8",
+            )
 
         def log_message(self, format: str, *args: object) -> None:  # noqa: A003
             """保持服务端安静，避免终端被每次刷新刷屏。"""
