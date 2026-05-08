@@ -870,6 +870,30 @@ def get_compare_webui_html() -> str:
 """
 
 
+def get_homepage_html() -> str:
+    """读取项目根目录的首页文件，作为 WebUI 的默认入口页面。"""
+
+    homepage_path = Path(__file__).resolve().parents[2] / "index_optimized_tabs.html"
+    if homepage_path.exists():
+        return homepage_path.read_text(encoding="utf-8")
+    return """<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>代码相似度检测系统</title>
+</head>
+<body>
+  <main style="max-width:760px;margin:80px auto;padding:24px;font-family:Arial,sans-serif;">
+    <h1>代码相似度检测系统</h1>
+    <p>首页文件暂未找到，请检查项目根目录是否存在 <code>index_optimized_tabs.html</code>。</p>
+    <p><a href="/compare">进入“比较两个java文件”页面</a></p>
+  </main>
+</body>
+</html>
+"""
+
+
 def run_webui_server(
     root_dir: str | Path,
     output_dir: str = "outputs",
@@ -879,7 +903,8 @@ def run_webui_server(
     """启动本地前端检测页面 Web 服务。"""
 
     root_path = Path(root_dir).resolve()
-    page_html = get_compare_webui_html().encode("utf-8")
+    homepage_html = get_homepage_html().encode("utf-8")
+    compare_html = get_compare_webui_html().encode("utf-8")
 
     class WebUiHandler(BaseHTTPRequestHandler):
         """提供前端页面、模型状态接口和代码对比接口。"""
@@ -889,7 +914,10 @@ def run_webui_server(
         def do_GET(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
             if parsed.path == "/":
-                self._send_bytes(HTTPStatus.OK, page_html, "text/html; charset=utf-8")
+                self._send_bytes(HTTPStatus.OK, homepage_html, "text/html; charset=utf-8")
+                return
+            if parsed.path == "/compare":
+                self._send_bytes(HTTPStatus.OK, compare_html, "text/html; charset=utf-8")
                 return
             if parsed.path == "/api/status":
                 params = parse_qs(parsed.query)

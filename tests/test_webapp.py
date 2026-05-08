@@ -7,6 +7,7 @@ from similarity.pairs import build_pair_frame, iter_activity_pairs
 from similarity.webapp import (
     build_compare_payload,
     build_file_compare_payload,
+    get_homepage_html,
     build_status_payload,
     build_uploaded_file_compare_payload,
 )
@@ -131,3 +132,12 @@ def test_cli_registers_serve_webui_command():
     assert args.output_dir == "outputs_cross_user"
     assert args.port == 8123
     assert callable(args.func)
+
+
+def test_homepage_contains_compare_link():
+    """验证首页文件已作为入口页，并提供跳转到现有检测页的按钮。"""
+
+    html = get_homepage_html()
+
+    assert "比较两个 Java 文件" in html
+    assert 'window.location.href = "/compare"' in html

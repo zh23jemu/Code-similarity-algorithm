@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>代码相似度检测系统</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft YaHei", Arial, sans-serif; }
+    body { background: #f4f7fb; color: #1f2937; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 236px; background: #fff; border-right: 1px solid #e5e7eb; padding: 24px 18px; position: sticky; top: 0; height: 100vh; }
+    .logo { font-size: 21px; font-weight: 800; color: #1d4ed8; margin-bottom: 8px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 30px; line-height: 1.4; }
+    .nav-item { padding: 13px 14px; margin-bottom: 10px; border-radius: 10px; color: #374151; cursor: pointer; font-size: 15px; transition: .2s; }
+    .nav-item.active, .nav-item:hover { background: #eaf2ff; color: #1d4ed8; font-weight: 700; }
+    .main { flex: 1; padding: 28px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; gap: 16px; }
+    .topbar h1 { font-size: 26px; color: #111827; }
+    .topbar p { margin-top: 6px; color: #64748b; font-size: 14px; }
+    .status-badge { padding: 9px 16px; border-radius: 999px; background: #dcfce7; color: #15803d; font-weight: 700; font-size: 14px; white-space: nowrap; }
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn .18s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05); }
+    .card h2 { font-size: 18px; margin-bottom: 14px; color: #1d4ed8; }
+    .card h3 { font-size: 15px; margin-bottom: 10px; color: #334155; }
+    .span-4 { grid-column: span 4; } .span-5 { grid-column: span 5; } .span-6 { grid-column: span 6; } .span-7 { grid-column: span 7; } .span-8 { grid-column: span 8; } .span-12 { grid-column: span 12; }
+    label { display: block; margin-bottom: 7px; font-size: 14px; color: #374151; }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 9px; margin-bottom: 14px; font-size: 14px; outline: none; background: #fff; }
+    textarea { min-height: 180px; resize: vertical; font-family: Consolas, Monaco, monospace; line-height: 1.5; }
+    input:focus, select:focus, textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    button { border: none; padding: 11px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 700; transition: .2s; }
+    button:hover { transform: translateY(-1px); opacity: .92; }
+    .primary { background: #2563eb; color: #fff; } .success { background: #10b981; color: #fff; } .warning { background: #f97316; color: #fff; } .purple { background: #7c3aed; color: #fff; } .gray { background: #e5e7eb; color: #374151; }
+    .code-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 10px; }
+    .step { text-align: center; padding: 13px 8px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; font-size: 13px; color: #334155; }
+    .step.done { background: #ecfdf5; border-color: #86efac; color: #166534; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .metric { background: #f8fafc; border-radius: 12px; padding: 14px; text-align: center; border: 1px solid #eef2f7; }
+    .metric span { font-size: 13px; color: #64748b; }
+    .metric strong { display: block; font-size: 24px; color: #2563eb; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+    th, td { padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+    th { background: #f1f5f9; color: #374151; }
+    .command-panel { margin-top: 20px; }
+    .command-box { background: #0f172a; color: #e5e7eb; border-radius: 14px; padding: 18px; font-family: Consolas, Monaco, monospace; font-size: 14px; line-height: 1.7; white-space: pre-wrap; min-height: 96px; overflow-x: auto; }
+    .hint { color: #6b7280; font-size: 13px; margin-top: -6px; margin-bottom: 12px; line-height: 1.6; }
+    .mini-list { list-style: none; display: grid; gap: 10px; color: #475569; font-size: 14px; line-height: 1.6; }
+    .mini-list li { padding: 10px 12px; border-radius: 10px; background: #f8fafc; border: 1px solid #edf2f7; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 999px; background: #eaf2ff; color: #1d4ed8; font-size: 12px; font-weight: 700; margin-right: 6px; }
+    @media (max-width: 1100px) { .layout { display: block; } .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid #e5e7eb; } .nav-item { display: inline-block; margin-right: 8px; } .grid, .code-panel, .steps, .metric-grid { grid-template-columns: 1fr; } .span-4, .span-5, .span-6, .span-7, .span-8, .span-12 { grid-column: span 1; } .topbar { align-items: flex-start; flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">代码相似度检测系统</div>
+      <div class="subtitle">Code Similarity Detection Platform<br>轻量级命令生成与功能展示页面</div>
+      <div class="nav-item active" data-page="detect" onclick="showPage('detect')">相似度检测</div>
+      <div class="nav-item" data-page="data" onclick="showPage('data')">数据管理</div>
+      <div class="nav-item" data-page="training" onclick="showPage('training')">模型训练</div>
+      <div class="nav-item" data-page="evaluation" onclick="showPage('evaluation')">实验评估</div>
+      <div class="nav-item" data-page="review" onclick="showPage('review')">人工复核</div>
+      <div class="nav-item" data-page="report" onclick="showPage('report')">报告中心</div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1 id="pageTitle">Java 代码相似度检测</h1>
+          <p id="pageDesc">配置参数并生成对应 src.similarity 命令，在终端中执行真实检测流程。</p>
+        </div>
+        <div class="status-badge">CLI Entry: python -m src.similarity</div>
+      </div>
+
+      <section id="detect" class="page active">
+        <div class="grid">
+          <div class="card span-4">
+            <h2>检测任务配置</h2>
+            <label>数据集目录</label><input id="dataDir" value="dataset" />
+            <label>输出目录</label><input id="outputDir" value="outputs" />
+            <label>题目 ID / Activity</label><input id="questionId" placeholder="留空表示全部题目" />
+            <label>模型类型</label>
+            <select id="modelType"><option value="random_forest">Random Forest</option><option value="logistic_regression">Logistic Regression</option></select>
+            <label>每题最大代码对数量</label><input id="maxPairs" type="number" value="2000" />
+            <label>高阈值 high_threshold</label><input id="highThreshold" type="number" step="0.01" value="0.90" />
+            <label>低阈值 low_threshold</label><input id="lowThreshold" type="number" step="0.01" value="0.75" />
+            <label>输出相似度阈值 threshold</label><input id="threshold" type="number" step="0.01" value="0.90" />
+            <div class="button-row"><button class="primary" onclick="setCommand('inspect')">查看数据集</button><button class="success" onclick="setCommand('pipeline')">一键检测</button><button class="gray" onclick="resetForm()">重置参数</button></div>
+          </div>
+          <div class="card span-8">
+            <h2>代码输入 / 文件检测</h2>
+            <div class="code-panel">
+              <div><label>代码 A</label><textarea>public class Main {
+  public static int sum(int n) {
+    int s = 0;
+    for (int i = 1; i <= n; i++) { s += i; }
+    return s;
+  }
+}</textarea></div>
+              <div><label>代码 B</label><textarea>public class Main {
+  public static int sum(int n) {
+    int result = 0;
+    for (int i = 1; i <= n; i++) { result = result + i; }
+    return result;
+  }
+}</textarea></div>
+            </div>
+            <p class="hint">当前首页用于项目展示。“比较两个 Java 文件”会跳转到实际检测页面；其余按钮仍保留附件原始展示逻辑。</p>
+            <div class="button-row"><button class="primary" onclick="goToComparePage()">比较两个 Java 文件</button><button class="gray" onclick="setCommand('predict')">批量预测</button><button class="success" onclick="setCommand('pipelineSmall')">小规模测试</button></div>
+          </div>
+          <div class="card span-12">
+            <h2>检测流程状态</h2>
+            <div class="steps"><div class="step done">1 数据读取</div><div class="step done">2 代码预处理</div><div class="step done">3 特征提取</div><div class="step done">4 弱监督标注</div><div class="step">5 模型预测</div><div class="step">6 报告输出</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="data" class="page">
+        <div class="grid">
+          <div class="card span-5">
+            <h2>数据集管理</h2>
+            <p class="hint">对应 data.py 中的数据读取、字段检查、提交记录封装和题目分组逻辑。</p>
+            <label>数据集目录</label><input id="dataDir2" value="dataset" oninput="syncValue('dataDir2','dataDir')" />
+            <div class="button-row"><button class="primary" onclick="setCommand('inspect')">生成数据概况命令</button></div>
+          </div>
+          <div class="card span-7">
+            <h2>数据文件要求</h2>
+            <ul class="mini-list">
+              <li><span class="tag">java_submissions.csv</span>用于读取提交编号、用户、题目和 Java 源码。</li>
+              <li><span class="tag">distribution_per_question.csv</span>用于统计题目提交数量分布。</li>
+              <li><span class="tag">tst_questions.csv</span>用于补充题目信息统计。</li>
+            </ul>
+          </div>
+          <div class="card span-12"><h2>数据统计展示</h2><div class="metric-grid"><div class="metric"><span>Submissions</span><strong>16074</strong></div><div class="metric"><span>Activities</span><strong>99</strong></div><div class="metric"><span>Users</span><strong>270</strong></div><div class="metric"><span>Largest Activity</span><strong>930</strong></div></div></div>
+        </div>
+      </section>
+
+      <section id="training" class="page">
+        <div class="grid">
+          <div class="card span-6"><h2>模型训练</h2><p class="hint">对应 train 命令：构造弱监督样本，训练 Random Forest 或 Logistic Regression，并保存模型与指标。</p><div class="button-row"><button class="success" onclick="setCommand('train')">生成训练命令</button><button class="primary" onclick="setCommand('pipeline')">生成一键检测命令</button></div></div>
+          <div class="card span-6"><h2>训练产物</h2><ul class="mini-list"><li><span class="tag">training_pairs.csv</span>弱监督训练样本和特征表。</li><li><span class="tag">model.joblib</span>训练后的模型文件。</li><li><span class="tag">metrics.json</span>准确率、精确率、召回率、F1 和 AUC 等指标。</li></ul></div>
+          <div class="card span-12"><h2>样本状态</h2><div class="metric-grid"><div class="metric"><span>Positive</span><strong>1,250</strong></div><div class="metric"><span>Negative</span><strong>3,780</strong></div><div class="metric"><span>Unlabeled</span><strong>2,430</strong></div><div class="metric"><span>Total</span><strong>7,460</strong></div></div></div>
+        </div>
+      </section>
+
+      <section id="evaluation" class="page">
+        <div class="grid">
+          <div class="card span-4"><h2>模型对比</h2><p class="hint">对比规则基线、逻辑回归和随机森林。</p><button class="purple" onclick="setCommand('compareModels')">生成模型对比命令</button></div>
+          <div class="card span-4"><h2>特征消融实验</h2><p class="hint">验证 base_similarity、Token、序列和结构特征贡献。</p><button class="purple" onclick="setCommand('ablation')">生成消融实验命令</button></div>
+          <div class="card span-4"><h2>严格泛化实验</h2><p class="hint">按题目划分训练集与测试集，默认移除 base_similarity。</p><button class="purple" onclick="setCommand('questionSplit')">生成严格泛化命令</button></div>
+          <div class="card span-12"><h2>实验指标展示</h2><table><thead><tr><th>Method</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr></thead><tbody><tr><td>Rule Baseline</td><td>1.000</td><td>1.000</td><td>1.000</td><td>1.000</td><td>1.000</td></tr><tr><td>Random Forest</td><td>0.999</td><td>0.999</td><td>1.000</td><td>0.999</td><td>0.999</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="review" class="page">
+        <div class="grid">
+          <div class="card span-6"><h2>人工复核样本</h2><p class="hint">从高相似结果中生成可人工填写的复核表，支持 Top + Random 或高/中/低分层抽样。</p><div class="button-row"><button class="success" onclick="setCommand('reviewSample')">生成复核样本命令</button><button class="purple" onclick="setCommand('summarizeReview')">统计复核结果命令</button></div></div>
+          <div class="card span-6"><h2>复核字段</h2><ul class="mini-list"><li><span class="tag">review_decision</span>similar / not_similar / uncertain</li><li><span class="tag">reviewer</span>复核人</li><li><span class="tag">review_note</span>复核说明</li></ul></div>
+          <div class="card span-12"><h2>高相似代码对示例</h2><table><thead><tr><th>Activity</th><th>Submission A</th><th>Submission B</th><th>Model Similarity</th><th>Base Similarity</th></tr></thead><tbody><tr><td>queue_with_array</td><td>sub_001</td><td>sub_045</td><td>0.91</td><td>0.89</td></tr><tr><td>warm_up_dsa</td><td>sub_003</td><td>sub_067</td><td>0.88</td><td>0.84</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="report" class="page">
+        <div class="grid">
+          <div class="card span-6"><h2>报告生成</h2><p class="hint">输出 report.html、CSV、JSON 和论文统计表，便于论文截图、实验复现和结果归档。</p><div class="button-row"><button class="warning" onclick="setCommand('paperTables')">生成论文表格命令</button><button class="warning" onclick="setCommand('reproduce')">一键复现实验命令</button></div></div>
+          <div class="card span-6"><h2>核心输出文件</h2><ul class="mini-list"><li><span class="tag">similar_pairs.csv</span>最终高相似代码对。</li><li><span class="tag">scored_pairs.csv</span>全部候选代码对打分结果。</li><li><span class="tag">report.html</span>静态可视化报告。</li><li><span class="tag">paper_tables/</span>论文统计表。</li></ul></div>
+          <div class="card span-12"><h2>结果查看建议</h2><p class="hint">运行命令后，优先打开 outputs/report.html 查看可视化结果；若要写论文表格，可使用 build-paper-tables 命令生成 CSV。</p></div>
+        </div>
+      </section>
+
+      <section class="command-panel">
+        <div class="card">
+          <h2>命令生成结果</h2>
+          <pre id="commandBox" class="command-box">点击左侧 Tab 和页面按钮后，这里会显示对应 src/similarity/cli.py 的命令示例。</pre>
+          <div class="button-row"><button class="gray" onclick="copyCommand()">复制命令</button><button class="gray" onclick="clearCommand()">清空</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pageInfo = {
+      detect: ["Java 代码相似度检测", "配置参数并生成对应 src.similarity 命令，在终端中执行真实检测流程。"],
+      data: ["数据管理", "展示数据集结构、统计入口和数据读取命令。"],
+      training: ["模型训练", "生成弱监督样本，训练模型，并保存模型与评价指标。"],
+      evaluation: ["实验评估", "生成模型对比、特征消融和严格泛化实验命令。"],
+      review: ["人工复核", "生成复核样本表，并统计人工确认率、否定率和不确定率。"],
+      report: ["报告中心", "整理检测结果、可视化报告和论文统计表。"]
+    };
+
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+      document.querySelectorAll(".nav-item").forEach(item => item.classList.remove("active"));
+      document.querySelector(`.nav-item[data-page="${pageId}"]`).classList.add("active");
+      document.getElementById("pageTitle").textContent = pageInfo[pageId][0];
+      document.getElementById("pageDesc").textContent = pageInfo[pageId][1];
+    }
+
+    function getValue(id, fallback) {
+      const el = document.getElementById(id);
+      return el && el.value ? el.value : fallback;
+    }
+
+    function getConfig() {
+      return {
+        dataDir: getValue("dataDir", "dataset"),
+        outputDir: getValue("outputDir", "outputs"),
+        questionId: getValue("questionId", "").trim(),
+        modelType: getValue("modelType", "random_forest"),
+        maxPairs: getValue("maxPairs", "2000"),
+        high: getValue("highThreshold", "0.90"),
+        low: getValue("lowThreshold", "0.75"),
+        threshold: getValue("threshold", "0.90")
+      };
+    }
+
+    function commonArgs(c) {
+      let args = `--data-dir ${c.dataDir} --output-dir ${c.outputDir} --max-pairs-per-question ${c.maxPairs} --high-threshold ${c.high} --low-threshold ${c.low} --model-type ${c.modelType}`;
+      if (c.questionId) args += ` --question-id ${c.questionId}`;
+      return args;
+    }
+
+    function goToComparePage() {
+      window.location.href = "/compare";
+    }
+
+    function setCommand(type) {
+      const c = getConfig();
+      const commands = {
+        inspect: `python -m src.similarity inspect-data --data-dir ${c.dataDir}`,
+        train: `python -m src.similarity train ${commonArgs(c)} --cross-user-only`,
+        predict: `python -m src.similarity predict --data-dir ${c.dataDir} --output-dir ${c.outputDir} --model ${c.outputDir}/model.joblib --threshold ${c.threshold} --max-pairs-per-question ${c.maxPairs} --cross-user-only`,
+        pipeline: `python -m src.similarity run-pipeline ${commonArgs(c)} --threshold ${c.threshold} --top-k 100 --cross-user-only`,
+        pipelineSmall: `python -m src.similarity run-pipeline --data-dir ${c.dataDir} --output-dir outputs_test --question-id warm_up_dsa --max-pairs-per-question 20 --high-threshold ${c.high} --low-threshold ${c.low} --model-type ${c.modelType} --threshold ${c.threshold} --top-k 10 --cross-user-only`,
+        compareFiles: `python -m src.similarity compare-files left.java right.java --model ${c.outputDir}/model.joblib`,
+        compareModels: `python -m src.similarity compare-models ${commonArgs(c)} --baseline-threshold ${c.high} --cross-user-only`,
+        ablation: `python -m src.similarity ablation-experiment ${commonArgs(c)} --cross-user-only`,
+        questionSplit: `python -m src.similarity question-split-experiment ${commonArgs(c)} --cross-user-only`,
+        reviewSample: `python -m src.similarity create-review-sample --similar-pairs ${c.outputDir}/similar_pairs.csv --output ${c.outputDir}/manual_review_sample.csv --top-k 50 --random-k 50`,
+        summarizeReview: `python -m src.similarity summarize-review --review-sample ${c.outputDir}/manual_review_sample.csv --output-dir ${c.outputDir}`,
+        paperTables: `python -m src.similarity build-paper-tables --data-dir ${c.dataDir} --training-pairs ${c.outputDir}/training_pairs.csv --comparison-metrics ${c.outputDir}/comparison_metrics.csv --similar-pairs ${c.outputDir}/similar_pairs.csv --review-summary ${c.outputDir}/manual_review_summary.csv --output-dir paper_tables`,
+        reproduce: `python -m src.similarity reproduce-paper ${commonArgs(c)} --threshold ${c.threshold} --top-k 100`
+      };
+      document.getElementById("commandBox").textContent = commands[type] || "未找到对应命令。";
+    }
+
+    function copyCommand() {
+      const text = document.getElementById("commandBox").textContent;
+      navigator.clipboard.writeText(text).then(() => alert("命令已复制"));
+    }
+
+    function clearCommand() {
+      document.getElementById("commandBox").textContent = "已清空。请选择功能按钮生成命令。";
+    }
+
+    function resetForm() {
+      document.getElementById("dataDir").value = "dataset";
+      document.getElementById("outputDir").value = "outputs";
+      document.getElementById("questionId").value = "";
+      document.getElementById("modelType").value = "random_forest";
+      document.getElementById("maxPairs").value = "2000";
+      document.getElementById("highThreshold").value = "0.90";
+      document.getElementById("lowThreshold").value = "0.75";
+      document.getElementById("threshold").value = "0.90";
+      document.getElementById("commandBox").textContent = "参数已重置。点击按钮后，这里会显示对应 src/similarity/cli.py 的命令示例。";
+    }
+
+    function syncValue(fromId, toId) {
+      const from = document.getElementById(fromId);
+      const to = document.getElementById(toId);
+      if (from && to) to.value = from.value;
+    }
+  </script>
+</body>
+</html>
